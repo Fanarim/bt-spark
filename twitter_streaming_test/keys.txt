@@ -1,0 +1,5 @@
+consumerKey=vsFXbOa0zCGESXkArqe7GNKyA
+consumerSecret=ZFFxOWOY4m8NVyoO9kQ4FcibDbhVw5gRf6f4kTmJJaXpSox7mb
+accessToken=37232208-BsaG8JeNLPHaXcvaqqLO2RKImGTachmvFUpLClSrv
+accessTokenSecret=me9G6RDhouDguDId0urGmMS7rs5J27bocm6T2yF6AC2Bw
+
