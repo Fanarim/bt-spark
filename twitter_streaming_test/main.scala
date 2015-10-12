@@ -144,10 +144,20 @@ object TwitterDataCollector {
 		//------------------------------------------------------------------------------------
 		// Spark stream setup
 		// new Twitter stream
-		val ssc = new StreamingContext("spark://10.0.2.15:7077", "Twitter Streaming", Seconds(30))
+		val ssc = new StreamingContext("local[2]", "Twitter Streaming", Seconds(5))
 		val stream = TwitterUtils.createStream(ssc, None)
 
-		
+		val hashTags = stream.flatMap(status => status.getText.split(" ").filter(_.startsWith("#")))
+
+		val topCounts10 = hashTags.map((_, 1)).reduceByKeyAndWindow(_ + _, Seconds(10))
+                     .map{case (topic, count) => (count, topic)}
+                     .transform(_.sortByKey(false))
+	
+		topCounts10.foreachRDD(rdd => {
+      			val topList = rdd.take(10)
+		        println("\nPopular topics in last 10 seconds (%s total):".format(rdd.count()))
+		        topList.foreach{case (count, tag) => println("%s (%s tweets)".format(tag, count))}
+		})
 		
 		//val tweets = ssc.twitterStream()
 
