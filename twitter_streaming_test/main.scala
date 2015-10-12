@@ -3,9 +3,12 @@ import scala.collection.mutable.HashMap
 
 import org.apache.log4j.Logger
 import org.apache.log4j.Level
-import org.apache.hadoop.io.compress.DefaultCodec
+//import org.apache.hadoop.io.compress.DefaultCodec
 import org.apache.spark.streaming._
 import twitter4j._
+import org.apache.spark.SparkContext._
+import org.apache.spark.SparkConf
+import org.apache.spark.streaming.twitter._
 
 object TwitterDataCollector {
 	def main(args: Array[String]){
@@ -46,11 +49,11 @@ object TwitterDataCollector {
 		val accessTokenSecret = "me9G6RDhouDguDId0urGmMS7rs5J27bocm6T2yF6AC2Bw"
 
 		val map = new HashMap[String, String]
-		map ++= Array(("consumerKey", consumerKey),
-			       ("consumerSecret", consumerSecret),
-			       ("accessToken", accessToken),
-			       ("accessTokenSecret", accessTokenSecret))
-		val configKeys = Seq(consumerKey, consumerSecret, accessToken, accessTokenSecret)
+		map ++= Map("consumerKey" -> consumerKey,
+			    "consumerSecret" -> consumerSecret,
+			    "accessToken" -> accessToken,
+			    "accessTokenSecret" -> accessTokenSecret)
+		val configKeys = Seq("consumerKey", "consumerSecret", "accessToken", "accessTokenSecret")
 
 		// setup Twitter OAuth
 		println("Setting up Twitter OAuth")
@@ -65,8 +68,9 @@ object TwitterDataCollector {
 	
 		//------------------------------------------------------------------------------------
 	
-		// create a spark streaming context
-		val ssc = new StreamingContext("local[12]", "Twitter Streaming", Seconds(30))
+				
+	
+		
 
 		// enable meta-data cleaning in Spark so that this program can run forever
 		System.setProperty("spark.cleaner.tt1", (batchInterval * 5).toString)	
@@ -140,27 +144,33 @@ object TwitterDataCollector {
 		//------------------------------------------------------------------------------------
 		// Spark stream setup
 		// new Twitter stream
-		val tweets = ssc.twitterStream()
+		val ssc = new StreamingContext("spark://10.0.2.15:7077", "Twitter Streaming", Seconds(30))
+		val stream = TwitterUtils.createStream(ssc, None)
+
+		
+		
+		//val tweets = ssc.twitterStream()
 
 		// format each tweet
-		val formattedTweets = tweets.map(s => formatStatus(s))
+		//val formattedTweets = tweets.map(s => formatStatus(s))
 
 		// group into larger batches
-		val batchedTweets = formattedTweets.window(Seconds(batchInterval), Seconds(batchInterval))
+		//val batchedTweets = formattedTweets.window(Seconds(batchInterval), Seconds(batchInterval))
 
 		// coalesce each batch into fixed number of files
-		val coalesced = batchedTweets.transform(rdd => rdd.coalesce(outputBatchFiles))
+		//val coalesced = batchedTweets.transform(rdd => rdd.coalesce(outputBatchFiles))
 
 		// save to output directory
-		coalesced.foreach((rdd, time) => {
-			val outPartitionFolder = outDateFormat.format(new Date(time.miliseconds))
-			rdd.saveAsTextFile("%s%s".format(outputDir, outPartitionFolder), classOf[DefaultCodec])
-		})
+		//coalesced.foreach((rdd, time) => {
+		//	val outPartitionFolder = outDateFormat.format(new Date(time.miliseconds))
+		//	rdd.saveAsTextFile("%s%s".format(outputDir, outPartitionFolder), classOf[DefaultCodec])
+		//})
 
 
 		//------------------------------------------------------------------------------------
 		// Start streaming
-		ssc.checkpoint(tmpDir)
+		//ssc.checkpoint(tmpDir)
 		ssc.start()
+		ssc.awaitTermination()
 	}
 }
