@@ -1,3 +1,6 @@
 twitter_streaming_test/target/
 twitter_streaming_test/project/
 twitter_streaming_test/.main.scala.swp
+stream_analysis/target/
+stream_analysis/project/
+stream_analysis/.main.scala.swp

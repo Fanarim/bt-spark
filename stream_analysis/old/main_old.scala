@@ -6,14 +6,16 @@ import org.apache.log4j.Level
 //import org.apache.hadoop.io.compress.DefaultCodec
 import org.apache.spark.streaming._
 import twitter4j._
+import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
 import org.apache.spark.streaming.twitter._
+import org.apache.spark.sql._
 
 object TwitterDataCollector {
 	def main(args: Array[String]){
 		// setup level of messages that should be displayed in console
-		Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
-		Logger.getLogger("org.apache.spark.storage.BlockManager").setLevel(Level.WARN)
+		Logger.getLogger("org.apache.spark").setLevel(Level.ERROR)
+		Logger.getLogger("org.apache.spark.storage.BlockManager").setLevel(Level.ERROR)
 
 		//------------------------------------------------------------------------------------
 		// setup Twitter credentials
@@ -48,9 +50,42 @@ object TwitterDataCollector {
 
 		//------------------------------------------------------------------------------------
 		// Spark stream setup
+
+		val sc = new SparkContext("local[3]", "Twitter Streaming")
+
 		// new Twitter stream
-		val ssc = new StreamingContext("local[4]", "Twitter Streaming", Seconds(5)) // local[4] = compute localy, use 4 cores
+		val ssc = new StreamingContext(sc, Seconds(5)) // local[4] = compute localy, use 4 cores
 		val stream = TwitterUtils.createStream(ssc, None) // None = default Twitter4j authentication method
+
+		// new SQL context
+		val sqlContext = new SQLContext(sc)
+
+		// deprecated
+		// val df = sqlContext.load("jdbc", Map(
+		// 	"url" -> "jdbc:mariadb://localhost:3306/spark_streaming?user=root&password=root",
+		// 	"driver" -> "org.mariadb.jdbc.Driver",
+		// 	"dbtable" -> "tweets"	)
+		// )
+
+		// first option
+		// val df = sqlContext.read.format("jdbc").options( Map(
+		// 	"url" -> "jdbc:mariadb://localhost:3306/spark_streaming?user=root&password=root",
+		// 	"driver" -> "org.mariadb.jdbc.Driver",
+		// 	"dbtable" -> "tweets"	)
+		// ).load()
+
+		// better option
+		val DBUrl = "jdbc:mysql://localhost:3306/spark_streaming?user=root&password=root"
+		val prop = new java.util.Properties
+		prop.setProperty("driver", "com.mysql.jdbc.Driver")
+
+		val df = sqlContext.read.jdbc( DBUrl, "tweets", prop)
+
+		df.show()
+		df.printSchema()
+
+		//TODO write to DB
+		df.write.jdbc(DBUrl, "tweets2", prop)
 
 		val hashTags = stream.flatMap(status => status.getText.split(" ").filter(_.startsWith("#")))
 
@@ -64,7 +99,8 @@ object TwitterDataCollector {
 		        topList.foreach{case (count, tag) => println("%s (%s tweets)".format(tag, count))}
 		})
 
-		// val tweets = stream.map(status => status.getText())
+		// val tweets = stream.map(status => List(status.getUser().getScreenName(), status.getText()))
+
 		// tweets.saveAsTextFiles("/tmp/tweetlog/time", "tweetlog")
 		//------------------------------------------------------------------------------------
 		// Start streaming
