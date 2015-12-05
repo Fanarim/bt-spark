@@ -1,25 +1,26 @@
 import java.util.Date
 import scala.collection.mutable.HashMap
-
 import org.apache.log4j.Logger
 import org.apache.log4j.Level
-// import org.slf4j.Logger
-// import org.slf4j.LoggerFactory
-// import org.apache.hadoop.io.compress.DefaultCodec
 import org.apache.spark.streaming._
-import twitter4j._
+import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
 import org.apache.spark.streaming.twitter._
-import slick.driver.MySQLDriver.api._
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.collection.mutable.ArrayBuffer
+import org.apache.spark.sql._
+import twitter4j._
 
 object TwitterDataCollector {
 	def main(args: Array[String]){
 		// setup level of messages that should be displayed in console
 		Logger.getLogger("org.apache.spark").setLevel(Level.ERROR)
 		Logger.getLogger("org.apache.spark.storage.BlockManager").setLevel(Level.ERROR)
+		
+		// setup spark
+		val sc = new SparkContext("local[2]", "Stream analysis Twitter")
+ 
+		val ssqlc = new SQLContext(sc)
+		import ssqlc.implicits._
+
 
 		//------------------------------------------------------------------------------------
 		// setup Twitter credentials
@@ -46,8 +47,9 @@ object TwitterDataCollector {
 		})
 
 		// setup DB
-		val tweetsTable = TableQuery[TweetWishes]
-		val db = Database.forURL("jdbc:mysql://localhost:3306/spark_streaming?user=root&password=root", driver = "com.mysql.jdbc.Driver")
+		val DBUrl = "jdbc:mysql://localhost:3306/spark_streaming?user=root&password=root"
+		val prop = new java.util.Properties
+		prop.setProperty("driver", "com.mysql.jdbc.Driver")
 
 		//------------------------------------------------------------------------------------
 
@@ -58,23 +60,23 @@ object TwitterDataCollector {
 		//------------------------------------------------------------------------------------
 		// Spark stream setup
 		// new Twitter stream
-		val ssc = new StreamingContext("local[4]", "Twitter Streaming", Seconds(5)) // local[4] = compute localy, use 4 cores
+		val ssc = new StreamingContext(sc, Seconds(5)) // local[4] = compute localy, use 4 cores
 		val stream = TwitterUtils.createStream(ssc, None) // None = default Twitter4j authentication method
 
 		val tweetWishesStream = stream.map(status => status)
 			.filter( status => ( status.getText().contains("wish") || status.getText().contains("hope")))
 			// .filter( status => ( status.getLang() == "ENGLISH")) // Twitter4j 4.0.4 only, spark using older version for now, but upgrade is planned
 
+		// print wishes and save them to db
 		tweetWishesStream.foreach{rdd =>
 			rdd.foreach{status =>
 				println("ID: " + status.getId() + "\nUSER: " + status.getUser().getName() + "\nTWEET: " +
 				status.getText() + "\nRETWEETED: " + status.isRetweet() + "\n\n")
-				val info = (status.getId().asInstanceOf[Int], status.getUser().getName(), status.getText(), status.isRetweet())
-				val insertActions = DBIO.seq{
-					tweetsTable += info
-				}
-				db.run(insertActions)
-			}
+			}	
+			val wishes_df = rdd.map(status =>
+	                        (status.getId(), status.getUser().getName(), status.getText(), status.isRetweet())
+                        	).toDF("id", "username", "tweet", "is_retweet")
+			wishes_df.write.mode(SaveMode.Append).jdbc(DBUrl, "tweet_wishes", prop)
 		}
 
 		//------------------------------------------------------------------------------------

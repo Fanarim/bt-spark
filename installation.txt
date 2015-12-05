@@ -1,0 +1,62 @@
+##################################################################################################################################
+SYSTEM CONFIGURATION #############################################################################################################
+##################################################################################################################################
+
+$ sudo apt-add-repository ppa:webupd8team/java
+$ sudo apt-get update
+$ sudo apt-get install oracle-java7-installer
+
+//To check the Java installation is successful
+$ java -version
+
+//In next step is install Scala, follow the following instructions to set up Scala. First download the Scala from here
+//Copy downloaded file to some location for example /urs/local/src, untar the file and set path variable,
+$ wget http://www.scala-lang.org/files/archive/scala-2.10.4.tgz
+$ sudo mkdir /usr/local/src/scala
+$ sudo tar xvf scala-2.10.4.tgz -C /usr/local/src/scala/
+
+$ vim .bashrc
+
+//And add following in the end of the file
+export SCALA_HOME=/usr/local/src/scala/scala-2.10.4
+export PATH=$SCALA_HOME/bin:$PATH
+
+//restart bashrc
+$ . .bashrc
+
+//To check the Scala is installed successfully
+$ scala -version
+
+//In next step install git. Spark build depends git.
+sudo apt-get install git
+
+//Finally download spark and unpack it
+$ tar xvf spark-1.1.0.tgz
+
+// install sbt
+....
+
+//Building
+$ cd spark-1.5.0
+$ sbt assembly
+
+//Building take some time. After successfully packing you can test a sample program
+$ ./bin/run-example SparkPi 10
+// add to .bashrc
+export PATH=$PATH:/path/tp/spark/bin
+##################################################################################################################################
+
+// install ssh server on master
+// create ssh keys without password
+
+// run master
+spark/sbin/start_master
+
+// run client
+spark/sbin/start_client master_url (use master_url from output of the command above)
+
+##################################################################################################################################
+
+// install mariadb
+
+##################################################################################################################################
