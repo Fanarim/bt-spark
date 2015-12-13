@@ -57,6 +57,13 @@ spark/sbin/start_client master_url (use master_url from output of the command ab
 
 ##################################################################################################################################
 
-// install mariadb
+// install mysql
 
 ##################################################################################################################################
+
+apt-get install python3-setuptools
+easy-install3 pip
+pip3.4 install flask-sqlalchemy
+pip3.4 install flask-restless
+sudo apt-get install python3-dev libmysqlclient-dev
+pip3.4 install mysqlclient
