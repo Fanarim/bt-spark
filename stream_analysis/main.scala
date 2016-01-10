@@ -14,10 +14,10 @@ object TwitterDataCollector {
 		// setup level of messages that should be displayed in console
 		Logger.getLogger("org.apache.spark").setLevel(Level.ERROR)
 		Logger.getLogger("org.apache.spark.storage.BlockManager").setLevel(Level.ERROR)
-		
+
 		// setup spark
 		val sc = new SparkContext("local[2]", "Stream analysis Twitter")
- 
+
 		val ssqlc = new SQLContext(sc)
 		import ssqlc.implicits._
 
@@ -60,7 +60,7 @@ object TwitterDataCollector {
 		//------------------------------------------------------------------------------------
 		// Spark stream setup
 		// new Twitter stream
-		val ssc = new StreamingContext(sc, Seconds(5)) // local[4] = compute localy, use 4 cores
+		val ssc = new StreamingContext(sc, Seconds(3)) // local[4] = compute localy, use 4 cores
 		val stream = TwitterUtils.createStream(ssc, None) // None = default Twitter4j authentication method
 
 		val tweetWishesStream = stream.map(status => status)
@@ -72,7 +72,7 @@ object TwitterDataCollector {
 			rdd.foreach{status =>
 				println("ID: " + status.getId() + "\nUSER: " + status.getUser().getName() + "\nTWEET: " +
 				status.getText() + "\nRETWEETED: " + status.isRetweet() + "\n\n")
-			}	
+			}
 			val wishes_df = rdd.map(status =>
 	                        (status.getId(), status.getUser().getName(), status.getText(), status.isRetweet())
                         	).toDF("id", "username", "tweet", "is_retweet")
