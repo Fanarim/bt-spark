@@ -69,7 +69,7 @@ object TwitterDataCollector {
 
 		val tweetWishesStream = stream
 			.filter( status => ( status.getText().contains("wish") || status.getText().contains("hope") || status.getText().contains("pray") ))
-			// .filter( status => ( status.getLang() == "ENGLISH")) // Twitter4j 4.0.4 only, spark using older version for now, but upgrade is planned
+			.filter( status => ( status.getLang() == "en"))
 
 		stream.count().foreachRDD( rdd => { tweetCount += rdd.first() })
 		stream.count().foreachRDD( rdd => {	tweetCountNew = rdd.first() })
