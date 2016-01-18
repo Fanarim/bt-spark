@@ -60,15 +60,24 @@ object TwitterDataCollector {
 		//------------------------------------------------------------------------------------
 		// Spark stream setup
 		// new Twitter stream
-		val ssc = new StreamingContext(sc, Seconds(3)) // local[4] = compute localy, use 4 cores
+		val ssc = new StreamingContext(sc, Seconds(2)) // local[4] = compute localy, use 4 cores
 		val stream = TwitterUtils.createStream(ssc, None) // None = default Twitter4j authentication method
 
-		val tweetWishesStream = stream.map(status => status)
-			.filter( status => ( status.getText().contains("wish") || status.getText().contains("hope")))
+		var tweetCount = 0L
+		var tweetCountNew = 0L
+		var wishCount = 0L
+
+		val tweetWishesStream = stream
+			.filter( status => ( status.getText().contains("wish") || status.getText().contains("hope") || status.getText().contains("pray") ))
 			// .filter( status => ( status.getLang() == "ENGLISH")) // Twitter4j 4.0.4 only, spark using older version for now, but upgrade is planned
 
+		stream.count().foreachRDD( rdd => { tweetCount += rdd.first() })
+		stream.count().foreachRDD( rdd => {	tweetCountNew = rdd.first() })
+		tweetWishesStream.count().foreachRDD( rdd => { wishCount += rdd.first() })
+
 		// print wishes and save them to db
-		tweetWishesStream.foreach{rdd =>
+		tweetWishesStream.foreachRDD{rdd =>
+			// printing only wishes processed on master, the others are printed to client's stdout?
 			rdd.foreach{status =>
 				println("ID: " + status.getId() + "\nUSER: " + status.getUser().getName() + "\nTWEET: " +
 				status.getText() + "\nRETWEETED: " + status.isRetweet() + "\n\n")
@@ -77,6 +86,7 @@ object TwitterDataCollector {
 	                        (status.getId(), status.getUser().getName(), status.getText(), status.isRetweet())
                         	).toDF("id", "username", "tweet", "is_retweet")
 			wishes_df.write.mode(SaveMode.Append).jdbc(DBUrl, "tweet_wishes", prop)
+			println(wishCount + " wishes out of " + tweetCount + " (" + tweetCountNew + " new)" + " total tweets. ")
 		}
 
 		//------------------------------------------------------------------------------------
