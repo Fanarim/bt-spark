@@ -2,3 +2,4 @@ stream_analysis/target/*
 stream_analysis/project/*
 stream_analysis/.main.scala.swp
 flask_api/__pycache__/*
+*/virt_env

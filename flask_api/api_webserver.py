@@ -4,6 +4,7 @@ from flask import Flask, abort, request
 from flask.ext.restless import APIManager
 from flask.ext.sqlalchemy import SQLAlchemy
 import json
+import os
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -52,4 +53,5 @@ manager.create_api(TweetWish, methods=['GET'], results_per_page=-1)
 app.after_request(add_cors_headers)
 
 if __name__ == '__main__':
-    app.run()
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
