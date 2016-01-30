@@ -8,6 +8,7 @@ import org.apache.spark.SparkContext._
 import org.apache.spark.streaming.twitter._
 import org.apache.spark.sql._
 import twitter4j._
+import scala.io.Source
 
 object TwitterDataCollector {
 	def main(args: Array[String]){
@@ -24,16 +25,24 @@ object TwitterDataCollector {
 
 		//------------------------------------------------------------------------------------
 		// setup Twitter credentials
-		val consumerKey = "vsFXbOa0zCGESXkArqe7GNKyA"
-		val consumerSecret = "ZFFxOWOY4m8NVyoO9kQ4FcibDbhVw5gRf6f4kTmJJaXpSox7mb"
-		val accessToken = "37232208-BsaG8JeNLPHaXcvaqqLO2RKImGTachmvFUpLClSrv"
-		val accessTokenSecret = "me9G6RDhouDguDId0urGmMS7rs5J27bocm6T2yF6AC2Bw"
+		val twitterLines = Source.fromFile("../twitter_cred.txt").getLines.toArray
+		val twitterConsumerKey = twitterLines(0)
+		val twitterConsumerSecret = twitterLines(1)
+		val twitterAccessToken = twitterLines(2)
+		val twitterAccessTokenSecret = twitterLines(3)
+
+		// read database credentials
+		val dbLines = Source.fromFile("../db_cred.txt").getLines.toArray
+		val dbPath = dbLines(0)
+		val dbName = dbLines(1)
+		val dbUser = dbLines(2)
+		val dbPass = dbLines(3)
 
 		val map = new HashMap[String, String]
-		map ++= Map("consumerKey" -> consumerKey,
-			    "consumerSecret" -> consumerSecret,
-			    "accessToken" -> accessToken,
-			    "accessTokenSecret" -> accessTokenSecret)
+		map ++= Map("consumerKey" -> twitterConsumerKey,
+			    "consumerSecret" -> twitterConsumerSecret,
+			    "accessToken" -> twitterAccessToken,
+			    "accessTokenSecret" -> twitterAccessTokenSecret)
 		val configKeys = Seq("consumerKey", "consumerSecret", "accessToken", "accessTokenSecret")
 
 		// setup Twitter OAuth
@@ -47,7 +56,7 @@ object TwitterDataCollector {
 		})
 
 		// setup DB
-		val DBUrl = "jdbc:mysql://localhost:3306/spark_streaming?user=root&password=root"
+		val DBUrl = "jdbc:mysql://" + dbPath + "/" + dbName + "?user=" + dbUser + "&password=" + dbPass
 		val prop = new java.util.Properties
 		prop.setProperty("driver", "com.mysql.jdbc.Driver")
 

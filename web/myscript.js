@@ -8,7 +8,7 @@ google.setOnLoadCallback(drawChart);
 // instantiates the pie chart, passes in the data and
 // draws it.
 
-var APIurl = 'http://127.0.0.1:5000/';
+var APIurl = 'http://twitter-wish-api.herokuapp.com/';
 
 getLastWishes();
 

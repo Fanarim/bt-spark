@@ -1,1 +1,1 @@
-SQLALCHEMY_DATABASE_URI = "mysql+pymysql://bfd11292171d2c:01ac3c68@us-cdbr-iron-east-03.cleardb.net/heroku_7b8da3f916871ef"
+SQLALCHEMY_DATABASE_URI = "mysql+pymysql://user_ro:ropass@tweet-wishes.cfwosdalcluk.eu-central-1.rds.amazonaws.com/tweet_wishes"
