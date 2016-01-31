@@ -10,7 +10,8 @@ import org.apache.spark.sql._
 import twitter4j._
 import scala.io.Source
 import java.util.Calendar
-import java.text.SimpleDateFormat;
+import java.util.TimeZone
+import java.text.SimpleDateFormat
 
 object TwitterDataCollector {
 	def main(args: Array[String]){
@@ -119,10 +120,11 @@ object TwitterDataCollector {
 			wishes_df.write.mode(SaveMode.Append).jdbc(DBUrl, "tweet_wishes", prop)
 			// write stats to DB
 			val timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+			timestampFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 			val currentDatetime = timestampFormat.format(Calendar.getInstance().getTime())
 			val stats = ssqlc.createDataFrame(Seq((currentDatetime, tweetCount,
 				tweetCountEnglish, wishCount)))
-				.toDF("timestamp","tweets_total","tweets_english", "wishes")
+				.toDF("datetime","tweets_total","tweets_english", "wishes")
 			stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_3s", prop)
 		}
 
