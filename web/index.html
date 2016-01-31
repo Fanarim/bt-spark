@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Twitter wishes</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.css" crossorigin="anonymous">
+
 
 </head>
 <body>
 
 <div class="container">
-  <h1>My First Bootstrap Page</h1>
-  <p>This is some text.</p>
-  <h2>Pizza chart</h2>
-  <div id="chart_div"></div>
+
+  <h1>Twitter wishes</h1>
+  <p></p>
+  <h2>Tweets analyzed in last 10 minutes</h2>
+
+<div id="statsChart"></div>
+
   <h2>Last wishes</h2>
   <ul id="last_tweets">
     <li id="last_tweet_0"></li>
@@ -24,11 +29,13 @@
     <li id="last_tweet_4"></li>
     <li id="last_tweet_5"></li>
   </ul>
+
 </div>
 
 <!--Load the AJAX API-->
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.14/d3.js"></script>
 <script type="text/javascript" src="myscript.js"></script>
 </body>
 </html>
