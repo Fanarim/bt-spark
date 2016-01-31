@@ -16,16 +16,17 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `stats_5m`
+-- Table structure for table `stats_3s`
 --
 
-DROP TABLE IF EXISTS `stats_5m`;
+DROP TABLE IF EXISTS `stats_3s`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `stats_5m` (
+CREATE TABLE `stats_3s` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `tweets_total` smallint(5) unsigned DEFAULT NULL,
   `tweets_english` smallint(5) unsigned DEFAULT NULL,
+  `wishes_total` smallint(5) unsigned DEFAULT NULL,
   PRIMARY KEY (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;

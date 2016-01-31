@@ -9,6 +9,8 @@ import org.apache.spark.streaming.twitter._
 import org.apache.spark.sql._
 import twitter4j._
 import scala.io.Source
+import java.util.Calendar
+import java.text.SimpleDateFormat;
 
 object TwitterDataCollector {
 	def main(args: Array[String]){
@@ -43,20 +45,23 @@ object TwitterDataCollector {
 			    "consumerSecret" -> twitterConsumerSecret,
 			    "accessToken" -> twitterAccessToken,
 			    "accessTokenSecret" -> twitterAccessTokenSecret)
-		val configKeys = Seq("consumerKey", "consumerSecret", "accessToken", "accessTokenSecret")
+		val configKeys = Seq("consumerKey", "consumerSecret", "accessToken",
+			"accessTokenSecret")
 
 		// setup Twitter OAuth
 		println("Setting up Twitter OAuth")
 		configKeys.foreach(key => {
 			if(!map.contains(key)) {
-				throw new Exception("Error setting OAuth authentication - value for " + key + " not found")
+				throw new Exception("Error setting OAuth authentication - value for "	+
+				  key + " not found")
 			}
 			val fullKey = "twitter4j.oauth." + key
 			System.setProperty(fullKey, map(key))
 		})
 
 		// setup DB
-		val DBUrl = "jdbc:mysql://" + dbPath + "/" + dbName + "?user=" + dbUser + "&password=" + dbPass
+		val DBUrl = "jdbc:mysql://" + dbPath + "/" + dbName + "?user=" + dbUser +
+		  "&password=" + dbPass
 		val prop = new java.util.Properties
 		prop.setProperty("driver", "com.mysql.jdbc.Driver")
 
@@ -69,33 +74,56 @@ object TwitterDataCollector {
 		//------------------------------------------------------------------------------------
 		// Spark stream setup
 		// new Twitter stream
-		val ssc = new StreamingContext(sc, Seconds(2)) // local[4] = compute localy, use 4 cores
-		val stream = TwitterUtils.createStream(ssc, None) // None = default Twitter4j authentication method
+		val ssc = new StreamingContext(sc, Seconds(3))
+		// None = default Twitter4j authentication method
+		val stream = TwitterUtils.createStream(ssc, None)
 
 		var tweetCount = 0L
-		var tweetCountNew = 0L
+		var tweetCountEnglish = 0L
 		var wishCount = 0L
 
-		val tweetWishesStream = stream
-			.filter( status => ( status.getText().contains("wish") || status.getText().contains("hope") || status.getText().contains("pray") ))
-			.filter( status => ( status.getLang() == "en"))
+		// count tweets
+		stream.count().foreachRDD( rdd => {
+			tweetCount = rdd.first()
+		})
 
-		stream.count().foreachRDD( rdd => { tweetCount += rdd.first() })
-		stream.count().foreachRDD( rdd => {	tweetCountNew = rdd.first() })
-		tweetWishesStream.count().foreachRDD( rdd => { wishCount += rdd.first() })
+		// filter English tweets only
+		var tweetWishesStream = stream.filter( status => ( status.getLang() == "en"))
 
-		// print wishes and save them to db
+		// count English tweets
+		tweetWishesStream.count().foreachRDD ( rdd => {
+			tweetCountEnglish = rdd.first()
+		})
+
+		// filter wishes
+		tweetWishesStream = tweetWishesStream
+			.filter( status => ( status.getText().contains("wish") ||
+			status.getText().contains("hope") || status.getText().contains("pray") ))
+
+		// count wishes
+		tweetWishesStream.count().foreachRDD( rdd => {
+			wishCount = rdd.first()
+		})
+
 		tweetWishesStream.foreachRDD{rdd =>
-			// printing only wishes processed on master, the others are printed to client's stdout?
+			// print wishes to STDOUT
 			rdd.foreach{status =>
-				println("ID: " + status.getId() + "\nUSER: " + status.getUser().getName() + "\nTWEET: " +
-				status.getText() + "\nRETWEETED: " + status.isRetweet() + "\n\n")
+				println("ID: " + status.getId() + "\nUSER: " + status.getUser().getName() +
+				  "\nTWEET: " + status.getText() + "\nRETWEETED: " + status.isRetweet() +
+					"\n\n")
 			}
+			// write wish to DB
 			val wishes_df = rdd.map(status =>
-	                        (status.getId(), status.getUser().getName(), status.getText(), status.isRetweet())
-                        	).toDF("id", "username", "tweet", "is_retweet")
+	      (status.getId(), status.getUser().getName(), status.getText(), status.isRetweet()))
+				.toDF("id", "username", "tweet", "is_retweet")
 			wishes_df.write.mode(SaveMode.Append).jdbc(DBUrl, "tweet_wishes", prop)
-			println(wishCount + " wishes out of " + tweetCount + " (" + tweetCountNew + " new)" + " total tweets. ")
+			// write stats to DB
+			val timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+			val currentDatetime = timestampFormat.format(Calendar.getInstance().getTime())
+			val stats = ssqlc.createDataFrame(Seq((currentDatetime, tweetCount,
+				tweetCountEnglish, wishCount)))
+				.toDF("timestamp","tweets_total","tweets_english", "wishes")
+			stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_3s", prop)
 		}
 
 		//------------------------------------------------------------------------------------
