@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.6.27, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.47, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: spark_streaming
+-- Host: tweet-wishes.cfwosdalcluk.eu-central-1.rds.amazonaws.com    Database: tweet_wishes
 -- ------------------------------------------------------
--- Server version	5.6.27-0ubuntu1
+-- Server version	5.6.23-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,17 +16,49 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `stats_3s`
+-- Table structure for table `stats_general_10m`
 --
 
-DROP TABLE IF EXISTS `stats_3s`;
+DROP TABLE IF EXISTS `stats_general_10m`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `stats_3s` (
+CREATE TABLE `stats_general_10m` (
   `datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `tweets_total` smallint(5) unsigned DEFAULT NULL,
-  `tweets_english` smallint(5) unsigned DEFAULT NULL,
-  `wishes_total` smallint(5) unsigned DEFAULT NULL,
+  `tweets_total` mediumint(9) DEFAULT NULL,
+  `tweets_english` mediumint(9) DEFAULT NULL,
+  `wishes_total` mediumint(9) DEFAULT NULL,
+  PRIMARY KEY (`datetime`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `stats_general_1d`
+--
+
+DROP TABLE IF EXISTS `stats_general_1d`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stats_general_1d` (
+  `datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `tweets_total` int(11) DEFAULT NULL,
+  `tweets_english` int(11) DEFAULT NULL,
+  `wishes_total` int(11) DEFAULT NULL,
+  PRIMARY KEY (`datetime`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `stats_general_3s`
+--
+
+DROP TABLE IF EXISTS `stats_general_3s`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stats_general_3s` (
+  `datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `tweets_total` mediumint(9) DEFAULT NULL,
+  `tweets_english` mediumint(9) DEFAULT NULL,
+  `wishes_total` mediumint(9) DEFAULT NULL,
   PRIMARY KEY (`datetime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -46,6 +78,89 @@ CREATE TABLE `tweet_wishes` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping events for database 'tweet_wishes'
+--
+/*!50106 SET @save_time_zone= @@TIME_ZONE */ ;
+/*!50106 DROP EVENT IF EXISTS `stats_general_10m_clean` */;
+DELIMITER ;;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;;
+/*!50003 SET character_set_client  = utf8 */ ;;
+/*!50003 SET character_set_results = utf8 */ ;;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;;
+/*!50003 SET @saved_time_zone      = @@time_zone */ ;;
+/*!50003 SET time_zone             = 'UTC' */ ;;
+/*!50106 CREATE*/ /*!50117 DEFINER=`user_rw`@`%`*/ /*!50106 EVENT `stats_general_10m_clean` ON SCHEDULE EVERY 1 DAY STARTS '2016-01-01 00:00:00' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Clean old data from stats_general_10m' DO delete from stats_general_10m where datetime < timestamp(utc_timestamp() - interval 3 day) */ ;;
+/*!50003 SET time_zone             = @saved_time_zone */ ;;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;;
+/*!50003 SET character_set_results = @saved_cs_results */ ;;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;;
+/*!50106 DROP EVENT IF EXISTS `stats_general_10m_to_1d` */;;
+DELIMITER ;;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;;
+/*!50003 SET character_set_client  = utf8 */ ;;
+/*!50003 SET character_set_results = utf8 */ ;;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;;
+/*!50003 SET @saved_time_zone      = @@time_zone */ ;;
+/*!50003 SET time_zone             = 'UTC' */ ;;
+/*!50106 CREATE*/ /*!50117 DEFINER=`user_rw`@`%`*/ /*!50106 EVENT `stats_general_10m_to_1d` ON SCHEDULE EVERY 1 DAY STARTS '2016-01-01 00:02:00' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Aggregate general stats 10m -> 1d' DO begin insert into stats_general_1d (tweets_total, tweets_english, wishes_total) select SUM(tweets_total), SUM(tweets_english), SUM(wishes_total) from stats_general_10m where datetime > timestamp(utc_timestamp() - interval 1 day); end */ ;;
+/*!50003 SET time_zone             = @saved_time_zone */ ;;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;;
+/*!50003 SET character_set_results = @saved_cs_results */ ;;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;;
+/*!50106 DROP EVENT IF EXISTS `stats_general_3s_clean` */;;
+DELIMITER ;;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;;
+/*!50003 SET character_set_client  = utf8 */ ;;
+/*!50003 SET character_set_results = utf8 */ ;;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;;
+/*!50003 SET @saved_time_zone      = @@time_zone */ ;;
+/*!50003 SET time_zone             = 'UTC' */ ;;
+/*!50106 CREATE*/ /*!50117 DEFINER=`user_rw`@`%`*/ /*!50106 EVENT `stats_general_3s_clean` ON SCHEDULE EVERY 10 MINUTE STARTS '2016-01-01 00:00:00' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Clean old data from stats_general_3s' DO delete from stats_general_3s where datetime < timestamp(utc_timestamp() - interval 1 hour) */ ;;
+/*!50003 SET time_zone             = @saved_time_zone */ ;;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;;
+/*!50003 SET character_set_results = @saved_cs_results */ ;;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;;
+/*!50106 DROP EVENT IF EXISTS `stats_general_3s_to_10m` */;;
+DELIMITER ;;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;;
+/*!50003 SET character_set_client  = utf8 */ ;;
+/*!50003 SET character_set_results = utf8 */ ;;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;;
+/*!50003 SET @saved_time_zone      = @@time_zone */ ;;
+/*!50003 SET time_zone             = 'UTC' */ ;;
+/*!50106 CREATE*/ /*!50117 DEFINER=`user_rw`@`%`*/ /*!50106 EVENT `stats_general_3s_to_10m` ON SCHEDULE EVERY 10 MINUTE STARTS '2016-01-01 00:01:00' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Aggregate general stats 3s -> 10m' DO begin insert into stats_general_10m (tweets_total, tweets_english, wishes_total) select SUM(tweets_total), SUM(tweets_english), SUM(wishes_total) from stats_general_3s where datetime > timestamp(utc_timestamp() - interval 10 minute); end */ ;;
+/*!50003 SET time_zone             = @saved_time_zone */ ;;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;;
+/*!50003 SET character_set_results = @saved_cs_results */ ;;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;;
+DELIMITER ;
+/*!50106 SET TIME_ZONE= @save_time_zone */ ;
+
+--
+-- Dumping routines for database 'tweet_wishes'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -56,4 +171,4 @@ CREATE TABLE `tweet_wishes` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-01-18 22:47:15
+-- Dump completed on 2016-02-14 22:13:21

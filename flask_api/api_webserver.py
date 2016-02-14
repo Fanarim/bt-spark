@@ -39,7 +39,7 @@ class TweetWishes(db.Model):
 
 
 class Stats3s(db.Model):
-    __tablename__ = 'stats_3s'
+    __tablename__ = 'stats_general_3s'
     datetime = db.Column(db.DateTime, primary_key=True)
     tweets_total = db.Column(db.Integer)
     tweets_english = db.Column(db.Integer)

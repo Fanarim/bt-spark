@@ -124,8 +124,8 @@ object TwitterDataCollector {
 			val currentDatetime = timestampFormat.format(Calendar.getInstance().getTime())
 			val stats = ssqlc.createDataFrame(Seq((currentDatetime, tweetCount,
 				tweetCountEnglish, wishCount)))
-				.toDF("datetime","tweets_total","tweets_english", "wishes")
-			stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_3s", prop)
+				.toDF("datetime","tweets_total","tweets_english", "wishes_total")
+			stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_general_3s", prop)
 		}
 
 		//------------------------------------------------------------------------------------
