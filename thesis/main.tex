@@ -1,0 +1,138 @@
+% options:
+% thesis=B bachelor's thesis
+% thesis=M master's thesis
+% czech thesis in Czech language
+% slovak thesis in Slovak language
+% english thesis in English language
+% hidelinks remove colour boxes around hyperlinks
+
+
+\documentclass[thesis=B,czech]{FITthesis}[2012/06/26]
+
+\usepackage[utf8]{inputenc} % LaTeX source encoded as UTF-8
+
+\usepackage{graphicx} %graphics files inclusion
+% \usepackage{amsmath} %advanced maths
+% \usepackage{amssymb} %additional math symbols
+
+\usepackage{dirtree} %directory tree visualisation
+
+
+
+% % list of acronyms
+% \usepackage[acronym,nonumberlist,toc,numberedsection=autolabel]{glossaries}
+% \iflanguage{czech}{\renewcommand*{\acronymname}{Seznam pou{\v z}it{\' y}ch zkratek}}{}
+% \makeglossaries
+
+\newcommand{\tg}{\mathop{\mathrm{tg}}} %cesky tangens
+\newcommand{\cotg}{\mathop{\mathrm{cotg}}} %cesky cotangens
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% ODTUD DAL VSE ZMENTE
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\department{Katedra softwarového inženýrství}
+\title{Systém pro analýzu proudu dat v reálném čase}
+\authorGN{David} %(křestní) jméno (jména) autora
+\authorFN{Viktora} %příjmení autora
+\authorWithDegrees{David Viktora} %jméno autora včetně současných akademických titulů
+\supervisor{Ing. Adam Šenk}
+\acknowledgements{Poděkování ....}
+\abstractCS{V~několika větách shrňte obsah a přínos této práce v~češtině. Po přečtení abstraktu by se čtenář měl mít čtenář dost informací pro rozhodnutí, zda chce Vaši práci číst.}
+\abstractEN{Sem doplňte ekvivalent abstraktu Vaší práce v~angličtině.}
+\placeForDeclarationOfAuthenticity{V~Praze}
+\declarationOfAuthenticityOption{4} %volba Prohlášení (číslo 1-6)
+\keywordsCS{Nahraďte seznamem klíčových slov v češtině oddělených čárkou.}
+\keywordsEN{Nahraďte seznamem klíčových slov v angličtině oddělených čárkou.}
+
+
+\begin{document}
+
+% \newacronym{CVUT}{{\v C}VUT}{{\v C}esk{\' e} vysok{\' e} u{\v c}en{\' i} technick{\' e} v Praze}
+% \newacronym{FIT}{FIT}{Fakulta informa{\v c}n{\' i}ch technologi{\' i}}
+
+\begin{introduction}
+	Úvod práce
+	
+\end{introduction}
+
+	\section{Cíle a požadavky práce}
+	\section{Struktura práce}
+%\chapter
+%\section
+%\subsection
+%
+
+
+\chapter{Úvod do problematiky}
+\section{Big data}
+\section{Způsoby zpracování velkých objemů dat}
+\section{Dostupné technologie}
+
+\chapter{Analýza}
+\section{Funkční požadavky systému}
+\section{Nefunkční požadavky}
+\section{Twitter streaming API}
+
+\chapter{Návrh}
+\section{Celkový pohled na systém}
+\section{Návrh API}
+\section{Struktura databáze}
+
+\chapter{Implementace}
+\section{Použité technologie}
+\subsection{Analýza proudu dat}
+\subsection{Databáze}
+\subsection{API webserver}
+\subsection{Webová aplikace}
+
+\chapter{Testování}
+\section{Test API endpointů}
+\section{???}
+
+\chapter{Zhodnocení výsledků}
+
+
+XXXXXXXXXXx \cite{JJ92}
+
+
+
+\begin{conclusion}
+	%sem napište závěr Vaší práce
+\end{conclusion}
+
+% TODO: Promyslet, jak presne odevzdavat citace.
+%\bibliographystyle{csn690}
+%\bibliographystyle{iso690}
+%\bibliography{ref}
+
+\appendix
+
+\chapter{Seznam použitých zkratek}
+% \printglossaries
+\begin{description}
+	\item[Item1] foo
+	\item[Item2] bar
+\end{description}
+
+\chapter{Obsah přiloženého CD}
+
+%upravte podle skutecnosti
+
+\begin{figure}
+	\dirtree{%
+		.1 readme.txt\DTcomment{stručný popis obsahu CD}.
+		.1 exe\DTcomment{adresář se spustitelnou formou implementace}.
+		.1 src.
+		.2 impl\DTcomment{zdrojové kódy implementace}.
+		.2 thesis\DTcomment{zdrojová forma práce ve formátu \LaTeX{}}.
+		.1 text\DTcomment{text práce}.
+		.2 thesis.pdf\DTcomment{text práce ve formátu PDF}.
+		.2 thesis.ps\DTcomment{text práce ve formátu PS}.
+	}
+\end{figure}
+
+\end{document}
+
+\iffalse
+\fi

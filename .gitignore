@@ -5,3 +5,5 @@ flask_api/__pycache__/*
 */virt_env
 db_cred.txt
 twitter_cred.txt
+thesis/*
+!thesis/main.tex
