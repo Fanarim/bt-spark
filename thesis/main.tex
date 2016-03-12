@@ -52,12 +52,10 @@
 % \newacronym{FIT}{FIT}{Fakulta informa{\v c}n{\' i}ch technologi{\' i}}
 
 \begin{introduction}
-	Úvod práce
+	Kratce o jednotlivých bodech zadání a struktuře prace, motivace
 	
 \end{introduction}
 
-	\section{Cíle a požadavky práce}
-	\section{Struktura práce}
 %\chapter
 %\section
 %\subsection
@@ -65,19 +63,53 @@
 
 
 \chapter{Úvod do problematiky}
-\section{Big data}
-\section{Způsoby zpracování velkých objemů dat}
-\section{Dostupné technologie}
+	V současné době generujeme obrovská množství dat - podle některých odhadů to například v roce 2012 mohlo být až 2,5 exabajtů za den\cite{citace1}. Od té doby se rychlost přibývání dat stále zvyšuje. Například nárůst objemu dat dostupných na internetu je způsoben stále větší dostupností internetu, ke kterému je v roce 2016 připojeno již XXX obyvatel planety\cite{citace2}. Roste také míra využívání internetu. Oproti dřívějšku na internetu trávíme stále více času a využíváme například sociální sítě, cloudová úložiště nebo další online služby. Také ve firemní i státní sféře výrazně roste stupeň využívání informačních technologií a v návaznosti na to objem produkovaných dat. 
+
+	S rostoucím objemem dat obecně nastává problém s jejich zpracováním, a to především se zpracováním v dostatečně krátkém, ideálně reálném, čase. Klasické technologie používané v minulosti se stále častěji ukazují jako nedostatečně rychlé a je proto nutné sáhnout po nových technologiích určených pro práci s velkými objemy dat. Touto problematikou obecně se zabývá relativně nový a často skloňovaný obor Big Data. Bez technologií pro Big Data se v dnešní době neobejdou především internetové vyhledávače nebo sociální sítě\cite{4}. Veliké možnosti jejich využití se ale nabízejí i v dalších oblastech a jejich rozvoj je předpokladem pro rozšíření tzv. Internet of Things\cite{3}. O Big Datech hovoříme v případech, ve kterých je potřeba zpracovávat objemy dat v řádech gigabajtů a více. 
+	
+	Tyto technologie je samozřejmě možné použít jak na data strukturovaná, tak především na ta nestrukturovaná. Jelikož je těch nestrukturovaných až XXXX krát více než těch strukturovaných\cite{3}, a protože je jejich zpracování zpravidla výpočetně náročnější, jsou právě technologie pro Big Data vhodnou volbou. Klasickým příkladem nestrukturovaných dat je lidská řeč v psané formě - ta rozhodně obsahuje spoustu informací, ale ve formě kterou je počítačově složité analyzovat. Jako příklad takových dat můžeme uvést právě příspěvky na sociální síti Twitter, kterými se tato práce zabývá. 
+	
+	Analýzou těchto dat se zabývají obory jako Data Mining či Natural Language Processing. Pomocí nich je často možné získat opravdu cenné informace. Například analýzou dat pohybu uživatele po webové stránce a jeho chováním můžeme odhalit nedostatky tohoto webu a jejich odstraněním zvýšit míru konverze. Hovoříme-li v kontextu sociální sítě Twitter, možnosti jsou ještě zajímavější. Na základěji příspěvků a vyplněných informací jednotlivých uživatelů můžeme například odhadovat jejich volební preference nebo nabízet velice přesně cílenou reklamu. 
+
+\section{Big data a technologie pro práci s nimi}
+	V předchozím textu byl již několikrát zmíněn pojem Big Data s vysvětlením, že se jedná o data o velikosti jednotek gigabajtů a více. To je ale velice zjednodušený popis tohoto termínu. Přesná definice však neexistuje a na celý problém se dá dívat různými způsoby. Jedna z dalších definic říká, že o Big Datech mluvíme v případě, kdy klasické databázové a softwarové nástroje kvůli objemu těchto dat selhávají\cite{http://www.webopedia.com/TERM/B/big_data.html}. 
+
+	Přestože jednotná definice neexistuje, ustálilo se několik charakteristik, která mají Big Data společná. Jedná se o takzvaná 3+1V - Volume, Velocity, Variety a později přidaná vlastnost Veracity\cite{bakalarka Customer Intelligence v kontextu BigData}. Volume popisuje samotný objem zpracovávaných dat, Velocity pak rychlost, jakou data přibývají. Charakteristikou Variety popisujeme různorodost dat a Veracity určuje úplnost a důvěryhodnost dat. Tyto charakteristiky spíše popisuje klasické problémy, se kterými se s práci s Big Daty setkáme - data však nemusí splňovat všechny tyto vlastnosti zároveň, abychom je mohli za Big Data označit. 
+	
+	První technologie pro práci s Big Daty vznikaly na přelomu tisíciletí ve společnosti Google. Právě Google v roce 2004 zveřejnil článek o technologii MapReduce\cite{https://gigaom.com/2013/03/04/the-history-of-hadoop-from-4-nodes-to-the-future-of-data/}, která se stala stavebním kamenem pro většinu dalších technologií pro práci s velkými objemy dat. MapReduce vlastně popisuje dvě nezávislé funkce. První z nich je funkce Map, ve které jsou ze vstupních dat vygenerovány dvojice klíč a hodnota. Poté co je funkce Map dokončena, její výstup je použit jako vstup do funkce Reduce. Ta pak spojí vstupní data podle klíče\cite{https://www-01.ibm.com/software/data/infosphere/hadoop/mapreduce/}. Klíčovou vlastností MapReduce modelu je možnost paralelizace Map fáze na počítačovém clusteru. Jeden z počítačů v clusteru například přijme požadavek od uživatele. Tento počítač náhodně rozdělí vstupní data všem počítačům v clusteru a vyčká na provedení Map fáze jednotlivými počítači. Výsledná data pak sám master spojí v Reduce fázi a navrátí výsledek uživateli. 
+	
+	Hadoop
+	
+	Spark
+
+%\section{Způsoby zpracování velkých objemů dat}
+%	Batchové/streamové, proc se v mem pripade hodi streamove
+
+
+
 
 \chapter{Analýza}
-\section{Funkční požadavky systému}
-\section{Nefunkční požadavky}
+\section{Metody pro analýzu textu}
+	Sentiment, ...
+
+\section{Požadavky na systém}
+	Funkční a nefunkční (co konkretne merit?, ...)
+
+\section{Dostupné technologie}
+	- dostupne technologie
+
 \section{Twitter streaming API}
+	Jak vypada API, tweet, ze API nenabizi vsechny prispevky - gnip.com
 
 \chapter{Návrh}
 \section{Celkový pohled na systém}
-\section{Návrh API}
+	jednotlive casti, propojeni, diagram 
+\section{Analýza tweetů}
+	jak bude vypadat program ve sparku
 \section{Struktura databáze}
+	schema, ...
+\section{Návrh API}
+	definice endpointů atd.
 
 \chapter{Implementace}
 \section{Použité technologie}
@@ -88,17 +120,17 @@
 
 \chapter{Testování}
 \section{Test API endpointů}
+	da se web castecne povazovat jako otestovani api?
 \section{???}
+
+\chapter{Nasazení}
 
 \chapter{Zhodnocení výsledků}
 
 
-XXXXXXXXXXx \cite{JJ92}
-
-
 
 \begin{conclusion}
-	%sem napište závěr Vaší práce
+	Zaver
 \end{conclusion}
 
 % TODO: Promyslet, jak presne odevzdavat citace.
