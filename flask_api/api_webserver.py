@@ -108,7 +108,7 @@ def last_tweets():
     return json.dumps({'wishes': serialized})
 
 
-# stats history endpoint
+# manual endpoint - stats history endpoint
 @app.route('/stats/', methods=['GET'])
 def stats_history():
     time_now = time.time()
@@ -120,7 +120,7 @@ def stats_history():
     if 'to' in request.args:
         history_to = request.args['to']
     if 'density' in request.args:
-        if request.args['density'] in ["3s", ]:
+        if request.args['density'] in ["3s", "10m", "1d"]:
             history_density = request.args['density']
         else:
             pass
@@ -129,9 +129,36 @@ def stats_history():
         stats = Stats3s.query\
             .filter(func.unix_timestamp(Stats3s.datetime) < history_to)\
             .filter(func.unix_timestamp(Stats3s.datetime) >= history_from)
+    if history_density == "10m":
+        stats = Stats3s.query\
+            .filter(func.unix_timestamp(Stats3s.datetime) < history_to)\
+            .filter(func.unix_timestamp(Stats3s.datetime) >= history_from)
+    if history_density == "1d":
+        stats = Stats3s.query\
+            .filter(func.unix_timestamp(Stats3s.datetime) < history_to)\
+            .filter(func.unix_timestamp(Stats3s.datetime) >= history_from)
 
     serialized = [item.json_dump() for item in stats]
     return json.dumps({'stats': serialized})
+
+
+# manual endpoint - single tweet with given id
+# TODO return also hashtags, mentioned user, number of retweets recorded, ...
+@app.route('/wish', methods=['GET'])
+def wish_detail():
+    if 'id' in request.args and request.args['id'].isnumeric():
+        wish_id = request.args['id']
+    else:
+        # TODO error, no tweet id given
+        pass
+    wish = TweetWishes.query.filter(TweetWishes.id == wish_id)
+    try:
+        serialized = wish[0].json_dump()
+        return json.dumps(serialized)
+    # no wish found
+    except:
+        # TODO
+        pass
 
 
 # automatic endpoint
