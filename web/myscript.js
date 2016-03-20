@@ -42,7 +42,7 @@ function getLastWishes() {
       var tweets = data.wishes;
       for (i = 0; i < 6; i++) {
         document.getElementById('last_tweet_' + i).innerHTML = "<strong>" +
-          tweets[i].username + ": </strong>" + tweets[i].tweet;
+          tweets[i].author + ": </strong>" + tweets[i].tweet_text;
       }
     }
   );

@@ -1,87 +1,173 @@
--- MySQL dump 10.13  Distrib 5.5.47, for debian-linux-gnu (x86_64)
---
--- Host: tweet-wishes.cfwosdalcluk.eu-central-1.rds.amazonaws.com    Database: tweet_wishes
--- ------------------------------------------------------
--- Server version	5.6.23-log
+-- MySQL Workbench Forward Engineering
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
---
--- Table structure for table `stats_general_10m`
---
 
-DROP TABLE IF EXISTS `stats_general_10m`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `stats_general_10m` (
-  `datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `tweets_total` mediumint(9) DEFAULT NULL,
-  `tweets_english` mediumint(9) DEFAULT NULL,
-  `wishes_total` mediumint(9) DEFAULT NULL,
-  PRIMARY KEY (`datetime`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `stats_general_1d`
---
+-- -----------------------------------------------------
+-- Schema tweet_wishes
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `tweet_wishes` DEFAULT CHARACTER SET latin1 ;
+USE `tweet_wishes` ;
 
-DROP TABLE IF EXISTS `stats_general_1d`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `stats_general_1d` (
-  `datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `tweets_total` int(11) DEFAULT NULL,
-  `tweets_english` int(11) DEFAULT NULL,
-  `wishes_total` int(11) DEFAULT NULL,
-  PRIMARY KEY (`datetime`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `stats_general_3s`
---
+-- -----------------------------------------------------
+-- Table `tweet_wishes`.`users`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tweet_wishes`.`users` ;
 
-DROP TABLE IF EXISTS `stats_general_3s`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `stats_general_3s` (
-  `datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `tweets_total` mediumint(9) DEFAULT NULL,
-  `tweets_english` mediumint(9) DEFAULT NULL,
-  `wishes_total` mediumint(9) DEFAULT NULL,
-  PRIMARY KEY (`datetime`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE IF NOT EXISTS `tweet_wishes`.`users` (
+  `username` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`username`))
+ENGINE = InnoDB;
 
---
--- Table structure for table `tweet_wishes`
---
 
-DROP TABLE IF EXISTS `tweet_wishes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tweet_wishes` (
-  `id` bigint(20) NOT NULL DEFAULT '0',
-  `username` text,
-  `tweet` text,
-  `is_retweet` tinyint(1) DEFAULT NULL,
+-- -----------------------------------------------------
+-- Table `tweet_wishes`.`tweet_wishes`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tweet_wishes`.`tweet_wishes` ;
+
+CREATE TABLE IF NOT EXISTS `tweet_wishes`.`tweet_wishes` (
+  `id` BIGINT NOT NULL,
+  `author` VARCHAR(255) NOT NULL,
+  `tweet_text` TEXT NULL DEFAULT NULL,
+  `created_at` DATETIME NULL,
+  `is_retweet` TINYINT(1) NULL DEFAULT NULL,
+  `retweet_tweet_id` BIGINT NULL,
+  `sentiment` INT NULL,
+  -- TODO uncomment after constraints are met
+  -- INDEX `fk_tweet_wishes_users_idx` (`author` ASC),
+  -- INDEX `fk_tweet_wishes_tweet_wishes1_idx` (`retweet_tweet_id` ASC),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  -- TODO uncomment after constraints are met
+  -- CONSTRAINT `fk_author`
+  --   FOREIGN KEY (`author`)
+  --   REFERENCES `tweet_wishes`.`users` (`username`)
+  --   ON DELETE NO ACTION
+  --   ON UPDATE NO ACTION,
+  -- CONSTRAINT `fk_retweet_of_tweet`
+  --   FOREIGN KEY (`retweet_tweet_id`)
+  --   REFERENCES `tweet_wishes`.`tweet_wishes` (`id`)
+  --   ON DELETE NO ACTION
+  --   ON UPDATE NO ACTION
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
---
--- Dumping events for database 'tweet_wishes'
---
+
+-- -----------------------------------------------------
+-- Table `tweet_wishes`.`tweet_mentions_user`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tweet_wishes`.`tweet_mentions_user` ;
+
+CREATE TABLE IF NOT EXISTS `tweet_wishes`.`tweet_mentions_user` (
+  `tweet_id` BIGINT NOT NULL,
+  `username` VARCHAR(255) NOT NULL
+  -- TODO uncomment after constraints are met
+  -- INDEX `fk_tweet_mentions_user_users1_idx` (`username` ASC),
+  -- CONSTRAINT `fk_tweet_mentioning_user`
+  --   FOREIGN KEY (`tweet_id`)
+  --   REFERENCES `tweet_wishes`.`tweet_wishes` (`id`)
+  --   ON DELETE NO ACTION
+  --   ON UPDATE NO ACTION,
+  -- CONSTRAINT `fk_user_mentioned`
+  --   FOREIGN KEY (`username`)
+  --   REFERENCES `tweet_wishes`.`users` (`username`)
+  --   ON DELETE NO ACTION
+  --   ON UPDATE NO ACTION
+)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `tweet_wishes`.`hashtags`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tweet_wishes`.`hashtags` ;
+
+CREATE TABLE IF NOT EXISTS `tweet_wishes`.`hashtags` (
+  `hastag` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`hastag`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `tweet_wishes`.`tweet_contains_hashtag`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tweet_wishes`.`tweet_contains_hashtag` ;
+
+CREATE TABLE IF NOT EXISTS `tweet_wishes`.`tweet_contains_hashtag` (
+  `tweet_id` BIGINT NOT NULL,
+  `hashtag` VARCHAR(255) NOT NULL
+  -- TODO uncomment after constraints are met
+  -- INDEX `fk_hashtag_idx` (`hashtag` ASC),
+  -- CONSTRAINT `fk_tweet_containining_hash`
+  --   FOREIGN KEY (`tweet_id`)
+  --   REFERENCES `tweet_wishes`.`tweet_wishes` (`id`)
+  --   ON DELETE NO ACTION
+  --   ON UPDATE NO ACTION,
+  -- CONSTRAINT `fk_hashtag_contained`
+  --   FOREIGN KEY (`hashtag`)
+  --   REFERENCES `tweet_wishes`.`hashtags` (`hastag`)
+  --   ON DELETE NO ACTION
+  --   ON UPDATE NO ACTION
+)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `tweet_wishes`.`stats_general_3s`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tweet_wishes`.`stats_general_3s` ;
+
+CREATE TABLE IF NOT EXISTS `tweet_wishes`.`stats_general_3s` (
+  `datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `tweets_total` BIGINT NULL DEFAULT NULL,
+  `tweets_english` BIGINT NULL DEFAULT NULL,
+  `wishes_total` BIGINT NULL DEFAULT NULL,
+  `sentiment_average` SMALLINT NULL,
+  PRIMARY KEY (`datetime`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `tweet_wishes`.`stats_general_10m`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tweet_wishes`.`stats_general_10m` ;
+
+CREATE TABLE IF NOT EXISTS `tweet_wishes`.`stats_general_10m` (
+  `datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `tweets_total` BIGINT NULL DEFAULT NULL,
+  `tweets_english` BIGINT NULL DEFAULT NULL,
+  `wishes_total` BIGINT NULL DEFAULT NULL,
+  `sentiment_average` SMALLINT NULL,
+  PRIMARY KEY (`datetime`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `tweet_wishes`.`stats_general_1d`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tweet_wishes`.`stats_general_1d` ;
+
+CREATE TABLE IF NOT EXISTS `tweet_wishes`.`stats_general_1d` (
+  `datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `tweets_total` BIGINT NULL DEFAULT NULL,
+  `tweets_english` BIGINT NULL DEFAULT NULL,
+  `wishes_total` BIGINT NULL DEFAULT NULL,
+  `sentiment_average` SMALLINT NULL,
+  PRIMARY KEY (`datetime`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+
+-- -----------------------------------------------------
+-- Events for database 'tweet_wishes'
+-- -----------------------------------------------------
 /*!50106 SET @save_time_zone= @@TIME_ZONE */ ;
 /*!50106 DROP EVENT IF EXISTS `stats_general_10m_clean` */;
 DELIMITER ;;
@@ -113,7 +199,7 @@ DELIMITER ;;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;;
 /*!50003 SET @saved_time_zone      = @@time_zone */ ;;
 /*!50003 SET time_zone             = 'UTC' */ ;;
-/*!50106 CREATE*/ /*!50117 DEFINER=`user_rw`@`%`*/ /*!50106 EVENT `stats_general_10m_to_1d` ON SCHEDULE EVERY 1 DAY STARTS '2016-01-01 00:02:00' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Aggregate general stats 10m -> 1d' DO begin insert into stats_general_1d (tweets_total, tweets_english, wishes_total) select SUM(tweets_total), SUM(tweets_english), SUM(wishes_total) from stats_general_10m where datetime > timestamp(utc_timestamp() - interval 1 day); end */ ;;
+/*!50106 CREATE*/ /*!50117 DEFINER=`user_rw`@`%`*/ /*!50106 EVENT `stats_general_10m_to_1d` ON SCHEDULE EVERY 1 DAY STARTS '2016-01-01 00:02:00' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Aggregate general stats 10m -> 1d' DO begin insert into stats_general_1d (tweets_total, tweets_english, wishes_total, sentiment_average) select SUM(tweets_total), SUM(tweets_english), SUM(wishes_total), AVG(sentiment_average) from stats_general_10m where datetime > timestamp(utc_timestamp() - interval 1 day); end */ ;;
 /*!50003 SET time_zone             = @saved_time_zone */ ;;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;;
@@ -149,7 +235,7 @@ DELIMITER ;;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;;
 /*!50003 SET @saved_time_zone      = @@time_zone */ ;;
 /*!50003 SET time_zone             = 'UTC' */ ;;
-/*!50106 CREATE*/ /*!50117 DEFINER=`user_rw`@`%`*/ /*!50106 EVENT `stats_general_3s_to_10m` ON SCHEDULE EVERY 10 MINUTE STARTS '2016-01-01 00:01:00' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Aggregate general stats 3s -> 10m' DO begin insert into stats_general_10m (tweets_total, tweets_english, wishes_total) select SUM(tweets_total), SUM(tweets_english), SUM(wishes_total) from stats_general_3s where datetime > timestamp(utc_timestamp() - interval 10 minute); end */ ;;
+/*!50106 CREATE*/ /*!50117 DEFINER=`user_rw`@`%`*/ /*!50106 EVENT `stats_general_3s_to_10m` ON SCHEDULE EVERY 10 MINUTE STARTS '2016-01-01 00:01:00' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Aggregate general stats 3s -> 10m' DO begin insert into stats_general_10m (tweets_total, tweets_english, wishes_total, sentiment_average) select SUM(tweets_total), SUM(tweets_english), SUM(wishes_total), AVG(sentiment_average) from stats_general_3s where datetime > timestamp(utc_timestamp() - interval 10 minute); end */ ;;
 /*!50003 SET time_zone             = @saved_time_zone */ ;;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;;
@@ -158,17 +244,8 @@ DELIMITER ;;
 DELIMITER ;
 /*!50106 SET TIME_ZONE= @save_time_zone */ ;
 
---
--- Dumping routines for database 'tweet_wishes'
---
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-02-14 22:13:21
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

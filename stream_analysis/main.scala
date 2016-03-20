@@ -107,6 +107,11 @@ object TwitterDataCollector {
 		})
 
 		tweetWishesStream.foreachRDD{rdd =>
+			// get current datetime
+			val timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+			timestampFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+			val currentDatetime = timestampFormat.format(Calendar.getInstance().getTime())
+
 			// print wishes to STDOUT
 			rdd.foreach{status =>
 				println("ID: " + status.getId() + "\nUSER: " + status.getUser().getName() +
@@ -115,16 +120,24 @@ object TwitterDataCollector {
 			}
 			// write wish to DB
 			val wishes_df = rdd.map(status =>
-	      (status.getId(), status.getUser().getName(), status.getText(), status.isRetweet()))
-				.toDF("id", "username", "tweet", "is_retweet")
+				{
+					var retweet_tweet_id = 0L
+					if(status.isRetweet()){
+						retweet_tweet_id = status.getRetweetedStatus().getId()
+					} else {
+						retweet_tweet_id = status.getId()
+					}
+		      (status.getId(), status.getUser().getName(), status.getText(),
+					timestampFormat.format(status.getCreatedAt()), status.isRetweet(), retweet_tweet_id, 0)
+				})
+				.toDF("id", "author", "tweet_text", "created_at", "is_retweet", "retweet_tweet_id",
+					"sentiment")
 			wishes_df.write.mode(SaveMode.Append).jdbc(DBUrl, "tweet_wishes", prop)
+
 			// write stats to DB
-			val timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-			timestampFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-			val currentDatetime = timestampFormat.format(Calendar.getInstance().getTime())
 			val stats = ssqlc.createDataFrame(Seq((currentDatetime, tweetCount,
-				tweetCountEnglish, wishCount)))
-				.toDF("datetime","tweets_total","tweets_english", "wishes_total")
+				tweetCountEnglish, wishCount, 0)))
+				.toDF("datetime","tweets_total","tweets_english", "wishes_total", "sentiment_average")
 			stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_general_3s", prop)
 		}
 
