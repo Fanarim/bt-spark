@@ -1,5 +1,5 @@
 import java.util.Date
-import scala.collection.mutable.HashMap
+import scala.collection.mutable._
 import org.apache.log4j.Logger
 import org.apache.log4j.Level
 import org.apache.spark.streaming._
@@ -123,6 +123,32 @@ object TwitterDataCollector {
 					"\n\n")
 			}
 
+			// create dataframe containg users TODO include mentioned users
+			val authors_saved = ssqlc.read.jdbc(DBUrl, "users", prop).registerTempTable("users")
+			val authors_current = rdd.map(status =>
+				{
+					(status.getUser().getId(),
+						status.getUser().getName(),
+						status.getUser().getBiggerProfileImageURL())
+				})
+				.toDF("id",
+					"username",
+					"profile_picture_url")
+
+			// filter only users that are not already saved
+			val authors_current_array = authors_current.distinct().collect()
+			var authors_new: collection.mutable.Seq[(Long, String, String)] = collection.mutable.Seq()
+			for(author_current <- authors_current_array){
+				if (ssqlc.sql("SELECT * FROM users WHERE id = " + author_current(0)).count() == 0){
+					authors_new = authors_new :+ (author_current(0).asInstanceOf[Long],
+						author_current(1).asInstanceOf[String],
+						author_current(2).asInstanceOf[String])
+				}
+			}
+			// convert new users to DF and write to DB
+			val authors_new_df = ssqlc.createDataFrame(authors_new).toDF("id", "username", "profile_picture_url")
+			authors_new_df.write.mode(SaveMode.Append).jdbc(DBUrl, "users", prop)
+
 			// create dataframe containing wishes
 			val wishes_df = rdd.map(status =>
 				{
@@ -136,12 +162,12 @@ object TwitterDataCollector {
 
 					// return tuple with tweet details
 		      (status.getId(),
-						status.getUser().getName(),
+						status.getUser().getId(),
 						status.getText(),
 						timestampFormat.format(status.getCreatedAt()),
 						status.isRetweet(),
 						retweet_tweet_id,
-						0)
+						0);
 				}) // convert RDD to DF
 				.toDF("id",
 					"author",

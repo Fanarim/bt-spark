@@ -19,8 +19,10 @@ USE `tweet_wishes` ;
 DROP TABLE IF EXISTS `tweet_wishes`.`users` ;
 
 CREATE TABLE IF NOT EXISTS `tweet_wishes`.`users` (
+  `id` BIGINT NOT NULL,
   `username` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`username`))
+  `profile_picture_url` TEXT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 
@@ -31,7 +33,7 @@ DROP TABLE IF EXISTS `tweet_wishes`.`tweet_wishes` ;
 
 CREATE TABLE IF NOT EXISTS `tweet_wishes`.`tweet_wishes` (
   `id` BIGINT NOT NULL,
-  `author` VARCHAR(255) NOT NULL,
+  `author` BIGINT NOT NULL,
   `tweet_text` TEXT NULL DEFAULT NULL,
   `created_at` DATETIME NULL,
   `is_retweet` TINYINT(1) NULL DEFAULT NULL,
@@ -44,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `tweet_wishes`.`tweet_wishes` (
   -- TODO uncomment after constraints are met
   -- CONSTRAINT `fk_author`
   --   FOREIGN KEY (`author`)
-  --   REFERENCES `tweet_wishes`.`users` (`username`)
+  --   REFERENCES `tweet_wishes`.`users` (`id`)
   --   ON DELETE NO ACTION
   --   ON UPDATE NO ACTION,
   -- CONSTRAINT `fk_retweet_of_tweet`
@@ -64,7 +66,7 @@ DROP TABLE IF EXISTS `tweet_wishes`.`tweet_mentions_user` ;
 
 CREATE TABLE IF NOT EXISTS `tweet_wishes`.`tweet_mentions_user` (
   `tweet_id` BIGINT NOT NULL,
-  `username` VARCHAR(255) NOT NULL
+  `user_id` VARCHAR(255) NOT NULL
   -- TODO uncomment after constraints are met
   -- INDEX `fk_tweet_mentions_user_users1_idx` (`username` ASC),
   -- CONSTRAINT `fk_tweet_mentioning_user`
@@ -73,8 +75,8 @@ CREATE TABLE IF NOT EXISTS `tweet_wishes`.`tweet_mentions_user` (
   --   ON DELETE NO ACTION
   --   ON UPDATE NO ACTION,
   -- CONSTRAINT `fk_user_mentioned`
-  --   FOREIGN KEY (`username`)
-  --   REFERENCES `tweet_wishes`.`users` (`username`)
+  --   FOREIGN KEY (`user_id`)
+  --   REFERENCES `tweet_wishes`.`users` (`id`)
   --   ON DELETE NO ACTION
   --   ON UPDATE NO ACTION
 )
