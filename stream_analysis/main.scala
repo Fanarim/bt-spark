@@ -88,20 +88,18 @@ object TwitterDataCollector {
 			tweetCount = rdd.first()
 		})
 
-		// filter English tweets only
+		// filter English tweets and count them
 		var tweetWishesStream = stream.filter( status => ( status.getLang() == "en"))
-
-		// count English tweets
 		tweetWishesStream.count().foreachRDD ( rdd => {
 			tweetCountEnglish = rdd.first()
 		})
 
-		// filter wishes
+		// filter wishes and count them
 		tweetWishesStream = tweetWishesStream
-			.filter( status => ( status.getText().contains("wish") ||
-			status.getText().contains("hope") || status.getText().contains("pray") ))
-
-		// count wishes
+			.filter( status => (
+				status.getText().contains("wish") ||
+				status.getText().contains("hope") ||
+				status.getText().contains("pray") ))
 		tweetWishesStream.count().foreachRDD( rdd => {
 			wishCount = rdd.first()
 		})
@@ -114,30 +112,56 @@ object TwitterDataCollector {
 
 			// print wishes to STDOUT
 			rdd.foreach{status =>
-				println("ID: " + status.getId() + "\nUSER: " + status.getUser().getName() +
-				  "\nTWEET: " + status.getText() + "\nRETWEETED: " + status.isRetweet() +
+				println("ID: " +
+					status.getId() +
+					"\nUSER: " +
+					status.getUser().getName() +
+				  "\nTWEET: " +
+					status.getText() +
+					"\nRETWEETED: " +
+					status.isRetweet() +
 					"\n\n")
 			}
-			// write wish to DB
+
+			// create dataframe containing wishes
 			val wishes_df = rdd.map(status =>
 				{
+					// get ID of original tweet if this is retweet, otherwise set own ID
 					var retweet_tweet_id = 0L
 					if(status.isRetweet()){
 						retweet_tweet_id = status.getRetweetedStatus().getId()
 					} else {
 						retweet_tweet_id = status.getId()
 					}
-		      (status.getId(), status.getUser().getName(), status.getText(),
-					timestampFormat.format(status.getCreatedAt()), status.isRetweet(), retweet_tweet_id, 0)
-				})
-				.toDF("id", "author", "tweet_text", "created_at", "is_retweet", "retweet_tweet_id",
+
+					// return tuple with tweet details
+		      (status.getId(),
+						status.getUser().getName(),
+						status.getText(),
+						timestampFormat.format(status.getCreatedAt()),
+						status.isRetweet(),
+						retweet_tweet_id,
+						0)
+				}) // convert RDD to DF
+				.toDF("id",
+					"author",
+					"tweet_text",
+					"created_at",
+					"is_retweet",
+					"retweet_tweet_id",
 					"sentiment")
+
+			// write wishes to DB
 			wishes_df.write.mode(SaveMode.Append).jdbc(DBUrl, "tweet_wishes", prop)
 
 			// write stats to DB
 			val stats = ssqlc.createDataFrame(Seq((currentDatetime, tweetCount,
 				tweetCountEnglish, wishCount, 0)))
-				.toDF("datetime","tweets_total","tweets_english", "wishes_total", "sentiment_average")
+				.toDF("datetime",
+							"tweets_total",
+							"tweets_english",
+							"wishes_total",
+							"sentiment_average")
 			stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_general_3s", prop)
 		}
 
