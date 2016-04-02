@@ -129,8 +129,8 @@ object TwitterWishesAnalysis {
 					"\n\n")
 			}
 
-			// create dataframe containg users TODO include mentioned users
-			val authors_saved = ssqlc.read.jdbc(DBUrl, "users", prop).registerTempTable("users")
+			// create dataframe containg tweet authors
+			val users_saved = ssqlc.read.jdbc(DBUrl, "users", prop).registerTempTable("users")
 			val authors_current = rdd.map(status =>
 				{
 					(status.getUser().getId(),
@@ -141,10 +141,26 @@ object TwitterWishesAnalysis {
 					"username",
 					"profile_picture_url")
 
+			// create dataframe containing mentioned users
+			var mentioned_current_rdd = rdd.flatMap(status =>
+				{
+					var tweet_mention_entities = status.getUserMentionEntities()
+					for(entity <- tweet_mention_entities) yield {
+						(entity.getId(), entity.getName(), "")
+					}
+				}
+			)
+			var mentioned_current = mentioned_current_rdd.collect()
+				.toSeq
+				.toDF("id", "username", "profile_picture_url")
+
+			// join dataframe with tweet authors and mentioned users
+			var users_current = authors_current.unionAll(mentioned_current)
+
 			// filter only users that are not already saved
-			val authors_current_array = authors_current.distinct().collect()
+			val users_current_array = users_current.distinct().collect()
 			var authors_new: collection.mutable.Seq[(Long, String, String)] = collection.mutable.Seq()
-			for(author_current <- authors_current_array){
+			for(author_current <- users_current_array){
 				if (ssqlc.sql("SELECT * FROM users WHERE id = " + author_current(0)).count() == 0){
 					authors_new = authors_new :+ (author_current(0).asInstanceOf[Long],
 						author_current(1).asInstanceOf[String],
@@ -185,6 +201,8 @@ object TwitterWishesAnalysis {
 
 			// write wishes to DB
 			wishes_df.write.mode(SaveMode.Append).jdbc(DBUrl, "tweet_wishes", prop)
+
+			// TODO save tweet_mentiones_user data to DB
 
 			// write stats to DB
 			val stats = ssqlc.createDataFrame(Seq((currentDatetime, tweetCount,
