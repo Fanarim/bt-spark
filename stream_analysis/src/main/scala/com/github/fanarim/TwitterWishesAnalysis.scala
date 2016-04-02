@@ -1,8 +1,11 @@
+package com.github.fanarim
+
 import java.util.Date
 import scala.collection.mutable._
 import org.apache.log4j.Logger
 import org.apache.log4j.Level
 import org.apache.spark.streaming._
+import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
 import org.apache.spark.streaming.twitter._
@@ -13,14 +16,15 @@ import java.util.Calendar
 import java.util.TimeZone
 import java.text.SimpleDateFormat
 
-object TwitterDataCollector {
+object TwitterWishesAnalysis {
 	def main(args: Array[String]){
 		// setup level of messages that should be displayed in console
 		Logger.getLogger("org.apache.spark").setLevel(Level.ERROR)
 		Logger.getLogger("org.apache.spark.storage.BlockManager").setLevel(Level.ERROR)
 
 		// setup spark
-		val sc = new SparkContext("local[2]", "Stream analysis Twitter")
+		val conf = new SparkConf().setAppName("Twitter Wishes Analysis")
+		val sc = new SparkContext(conf)
 
 		val ssqlc = new SQLContext(sc)
 		import ssqlc.implicits._
@@ -69,8 +73,10 @@ object TwitterDataCollector {
 		//------------------------------------------------------------------------------------
 
 		// enable meta-data cleaning in Spark so that this program can run forever
-		System.setProperty("spark.cleaner.tt1", "30")
-		System.setProperty("spark.cleaner.delay", "30")
+		System.setProperty("spark.cleaner.tt1", "5")
+		System.setProperty("spark.cleaner.delay", "5")
+		System.setProperty("spark.executor.memory","4g")
+		System.setProperty("spark.driver.memory","4g")
 
 		//------------------------------------------------------------------------------------
 		// Spark stream setup
@@ -184,10 +190,10 @@ object TwitterDataCollector {
 			val stats = ssqlc.createDataFrame(Seq((currentDatetime, tweetCount,
 				tweetCountEnglish, wishCount, 0)))
 				.toDF("datetime",
-							"tweets_total",
-							"tweets_english",
-							"wishes_total",
-							"sentiment_average")
+					"tweets_total",
+					"tweets_english",
+					"wishes_total",
+					"sentiment_average")
 			stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_general_3s", prop)
 		}
 
