@@ -15,6 +15,7 @@ import scala.io.Source
 import java.util.Calendar
 import java.util.TimeZone
 import java.text.SimpleDateFormat
+import com.github.fanarim.sentiment.SentimentAnalysis._
 
 object TwitterWishesAnalysis {
 	def main(args: Array[String]){
@@ -222,7 +223,7 @@ object TwitterWishesAnalysis {
 						timestampFormat.format(status.getCreatedAt()),
 						status.isRetweet(),
 						retweet_tweet_id,
-						0);
+						getAverageSentiment(status.getText()));
 				}) // convert RDD to DF
 				.toDF("id",
 					"author",

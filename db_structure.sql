@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `tweet_wishes`.`tweet_wishes` (
   `created_at` DATETIME NULL,
   `is_retweet` TINYINT(1) NULL DEFAULT NULL,
   `retweet_tweet_id` BIGINT NULL,
-  `sentiment` INT NULL,
+  `sentiment` DOUBLE NULL,
   -- TODO uncomment after constraints are met
   -- INDEX `fk_tweet_wishes_users_idx` (`author` ASC),
   -- INDEX `fk_tweet_wishes_tweet_wishes1_idx` (`retweet_tweet_id` ASC),

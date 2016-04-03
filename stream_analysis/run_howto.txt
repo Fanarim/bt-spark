@@ -1,10 +1,10 @@
 # create jar
 $ cd stream_analysis
-$ sbt assembly
+$ JAVA_OPTS=-Xmx1524M sbt assembly
 
 # start spark master and slave
 $ (spark_dir)/sbin/start_master
 $ (spark_dir)/sbin/start_slave (master_url)
 
 # submit the spark job
-$ (spark_dir)/bin/spark-submit --class com.github.fanarim.TwitterWishesAnalysis --master (master_url:port) target/scala-2.10/Tweets_stream_analysis-assembly-0.1.jar
+$ (spark_dir)/bin/spark-submit --class com.github.fanarim.TwitterWishesAnalysis --executor-memory 4G --master (master_url:port) target/scala-2.10/Tweets_stream_analysis-assembly-0.1.jar
