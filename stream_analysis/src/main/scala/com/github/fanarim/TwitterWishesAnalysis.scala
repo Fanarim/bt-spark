@@ -154,10 +154,10 @@ object TwitterWishesAnalysis {
 			)
 			val mentioned_current = mentioned_current_rdd.collect()
 				.toSeq
-				.toDF("tweetId", "id", "username", "profile_picture_url")
+				.toDF("tweet_id", "id", "username", "profile_picture_url")
 
 			val mentioned_current_users = mentioned_current.select("id", "username", "profile_picture_url")
-			val mentioned_current_relations = mentioned_current.select("tweetId" ,"id")
+			val mentioned_current_relations = mentioned_current.select("tweet_id" ,"id")
 
 			// join dataframe with tweet authors and mentioned users
 			val users_current = authors_current.unionAll(mentioned_current_users)
@@ -181,13 +181,15 @@ object TwitterWishesAnalysis {
 				{
 					var tweet_hashtag_entities = status.getHashtagEntities()
 					for(entity <- tweet_hashtag_entities) yield {
-						Tuple1(entity.getText())
+						Tuple2(status.getId(), entity.getText())
 					}
 				}
 			)
-			var hashtags_current = hashtags_current_rdd.collect()
+			val hashtags_current_relations = hashtags_current_rdd.collect()
 				.toSeq
-				.toDF("hashtag")
+				.toDF("tweet_id", "hashtag")
+
+			val hashtags_current = hashtags_current_relations.select("hashtag")
 
 			// filter only hashtags that are not already saved
 			val hashtags_current_array = hashtags_current.distinct().collect()
@@ -236,7 +238,8 @@ object TwitterWishesAnalysis {
 			// save tweet_mentions_user data to DB
 			mentioned_current_relations.write.mode(SaveMode.Append).jdbc(DBUrl, "tweet_mentions_user", prop)
 
-			// TODO save tweet_contains_hashtag data to DB
+			// save tweet_contains_hashtag data to DB
+			hashtags_current_relations.write.mode(SaveMode.Append).jdbc(DBUrl, "tweet_contains_hashtag", prop)
 
 			// write stats to DB
 			val stats = ssqlc.createDataFrame(Seq((currentDatetime, tweetCount,
