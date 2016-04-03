@@ -129,8 +129,10 @@ object TwitterWishesAnalysis {
 					"\n\n")
 			}
 
+			ssqlc.read.jdbc(DBUrl, "users", prop).registerTempTable("users")
+			ssqlc.read.jdbc(DBUrl, "hashtags", prop).registerTempTable("hashtags")
+
 			// create dataframe containg tweet authors
-			val users_saved = ssqlc.read.jdbc(DBUrl, "users", prop).registerTempTable("users")
 			val authors_current = rdd.map(status =>
 				{
 					(status.getUser().getId(),
@@ -170,6 +172,32 @@ object TwitterWishesAnalysis {
 			// convert new users to DF and write to DB
 			val users_new_df = ssqlc.createDataFrame(users_new).toDF("id", "username", "profile_picture_url")
 			users_new_df.write.mode(SaveMode.Append).jdbc(DBUrl, "users", prop)
+
+			// create dataframe containing hashtags used
+			var hashtags_current_rdd = rdd.flatMap(status =>
+				{
+					var tweet_hashtag_entities = status.getHashtagEntities()
+					for(entity <- tweet_hashtag_entities) yield {
+						Tuple1(entity.getText())
+					}
+				}
+			)
+			var hashtags_current = hashtags_current_rdd.collect()
+				.toSeq
+				.toDF("hashtag")
+
+			// filter only hashtags that are not already saved
+			val hashtags_current_array = hashtags_current.distinct().collect()
+			var hashtags_new: collection.mutable.Seq[Tuple1[(String)]] = collection.mutable.Seq()
+			for(hashtag_current <- hashtags_current_array){
+				if (ssqlc.sql("SELECT * FROM hashtags WHERE hashtag=\"" + hashtag_current(0) + "\"").count() == 0){
+					hashtags_new = hashtags_new :+ Tuple1(hashtag_current(0).asInstanceOf[String])
+				}
+			}
+
+			// convert new hashtags to DF and write to DB
+			val hashtags_new_df = ssqlc.createDataFrame(hashtags_new).toDF("hashtag")
+			hashtags_new_df.write.mode(SaveMode.Append).jdbc(DBUrl, "hashtags", prop)
 
 			// create dataframe containing wishes
 			val wishes_df = rdd.map(status =>

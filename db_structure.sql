@@ -89,8 +89,8 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `tweet_wishes`.`hashtags` ;
 
 CREATE TABLE IF NOT EXISTS `tweet_wishes`.`hashtags` (
-  `hastag` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`hastag`))
+  `hashtag` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`hashtag`))
 ENGINE = InnoDB;
 
 
