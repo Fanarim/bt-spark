@@ -158,18 +158,18 @@ object TwitterWishesAnalysis {
 			var users_current = authors_current.unionAll(mentioned_current)
 
 			// filter only users that are not already saved
-			val users_current_array = users_current.distinct().collect()
-			var authors_new: collection.mutable.Seq[(Long, String, String)] = collection.mutable.Seq()
-			for(author_current <- users_current_array){
-				if (ssqlc.sql("SELECT * FROM users WHERE id = " + author_current(0)).count() == 0){
-					authors_new = authors_new :+ (author_current(0).asInstanceOf[Long],
-						author_current(1).asInstanceOf[String],
-						author_current(2).asInstanceOf[String])
+			val users_current_array = users_current.dropDuplicates(Seq("id")).collect()
+			var users_new: collection.mutable.Seq[(Long, String, String)] = collection.mutable.Seq()
+			for(user_current <- users_current_array){
+				if (ssqlc.sql("SELECT * FROM users WHERE id = " + user_current(0)).count() == 0){
+					users_new = users_new :+ (user_current(0).asInstanceOf[Long],
+						user_current(1).asInstanceOf[String],
+						user_current(2).asInstanceOf[String])
 				}
 			}
 			// convert new users to DF and write to DB
-			val authors_new_df = ssqlc.createDataFrame(authors_new).toDF("id", "username", "profile_picture_url")
-			authors_new_df.write.mode(SaveMode.Append).jdbc(DBUrl, "users", prop)
+			val users_new_df = ssqlc.createDataFrame(users_new).toDF("id", "username", "profile_picture_url")
+			users_new_df.write.mode(SaveMode.Append).jdbc(DBUrl, "users", prop)
 
 			// create dataframe containing wishes
 			val wishes_df = rdd.map(status =>
