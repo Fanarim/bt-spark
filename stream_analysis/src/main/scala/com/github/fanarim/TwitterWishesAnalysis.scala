@@ -10,6 +10,7 @@ import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
 import org.apache.spark.streaming.twitter._
 import org.apache.spark.sql._
+import org.apache.spark.sql.functions.mean
 import twitter4j._
 import scala.io.Source
 import java.util.Calendar
@@ -116,6 +117,7 @@ object TwitterWishesAnalysis {
 			val timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 			timestampFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 			val currentDatetime = timestampFormat.format(Calendar.getInstance().getTime())
+
 
 			// print wishes to STDOUT
 			rdd.foreach{status =>
@@ -242,9 +244,16 @@ object TwitterWishesAnalysis {
 			// save tweet_contains_hashtag data to DB
 			hashtags_current_relations.write.mode(SaveMode.Append).jdbc(DBUrl, "tweet_contains_hashtag", prop)
 
+			val average_sentiment_arr = wishes_df.select(mean("sentiment")).collect()
+			var average_sentiment = average_sentiment_arr(0).get(0).asInstanceOf[Double]
+
+			if(average_sentiment == 0){
+				average_sentiment = 2
+			}
+
 			// write stats to DB
 			val stats = ssqlc.createDataFrame(Seq((currentDatetime, tweetCount,
-				tweetCountEnglish, wishCount, 0)))
+				tweetCountEnglish, wishCount, average_sentiment)))
 				.toDF("datetime",
 					"tweets_total",
 					"tweets_english",

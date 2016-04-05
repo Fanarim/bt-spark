@@ -8,6 +8,7 @@ import java.util.Properties
 import scala.collection.JavaConversions._
 
 object SentimentAnalysis {
+  // return sentiment of the tweet in range 0(negative) to 4(positive)
   def getAverageSentiment(text: String) : Double = {
     val prop = new Properties()
     prop.setProperty("annotators", "tokenize, ssplit, pos, lemma, parse, sentiment")
