@@ -75,15 +75,15 @@ object TwitterWishesAnalysis {
 		//------------------------------------------------------------------------------------
 
 		// enable meta-data cleaning in Spark so that this program can run forever
-		System.setProperty("spark.cleaner.tt1", "5")
-		System.setProperty("spark.cleaner.delay", "5")
-		System.setProperty("spark.executor.memory","4g")
-		System.setProperty("spark.driver.memory","4g")
+		System.setProperty("spark.cleaner.tt1", "50")
+		System.setProperty("spark.cleaner.delay", "50")
+		System.setProperty("spark.executor.memory","8g")
+		System.setProperty("spark.driver.memory","8g")
 
 		//------------------------------------------------------------------------------------
 		// Spark stream setup
 		// new Twitter stream
-		val ssc = new StreamingContext(sc, Seconds(3))
+		val ssc = new StreamingContext(sc, Seconds(5))
 		// None = default Twitter4j authentication method
 		val stream = TwitterUtils.createStream(ssc, None)
 
