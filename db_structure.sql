@@ -115,9 +115,9 @@ DROP TABLE IF EXISTS `tweet_wishes`.`stats_general_3s` ;
 
 CREATE TABLE IF NOT EXISTS `tweet_wishes`.`stats_general_3s` (
   `datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `tweets_total` BIGINT NULL DEFAULT NULL,
-  `tweets_english` BIGINT NULL DEFAULT NULL,
-  `wishes_total` BIGINT NULL DEFAULT NULL,
+  `tweets_total` INT NULL DEFAULT NULL,
+  `tweets_english` INT NULL DEFAULT NULL,
+  `wishes_total` INT NULL DEFAULT NULL,
   `sentiment_average` DOUBLE NULL)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
@@ -130,9 +130,9 @@ DROP TABLE IF EXISTS `tweet_wishes`.`stats_general_10m` ;
 
 CREATE TABLE IF NOT EXISTS `tweet_wishes`.`stats_general_10m` (
   `datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `tweets_total` BIGINT NULL DEFAULT NULL,
-  `tweets_english` BIGINT NULL DEFAULT NULL,
-  `wishes_total` BIGINT NULL DEFAULT NULL,
+  `tweets_total` INT NULL DEFAULT NULL,
+  `tweets_english` INT NULL DEFAULT NULL,
+  `wishes_total` INT NULL DEFAULT NULL,
   `sentiment_average` DOUBLE NULL)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
@@ -145,9 +145,9 @@ DROP TABLE IF EXISTS `tweet_wishes`.`stats_general_1d` ;
 
 CREATE TABLE IF NOT EXISTS `tweet_wishes`.`stats_general_1d` (
   `datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `tweets_total` BIGINT NULL DEFAULT NULL,
-  `tweets_english` BIGINT NULL DEFAULT NULL,
-  `wishes_total` BIGINT NULL DEFAULT NULL,
+  `tweets_total` INT NULL DEFAULT NULL,
+  `tweets_english` INT NULL DEFAULT NULL,
+  `wishes_total` INT NULL DEFAULT NULL,
   `sentiment_average` DOUBLE NULL)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
