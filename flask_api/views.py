@@ -12,7 +12,7 @@ from models import *
 # manual endpoint - all tweets
 @app.route('/wishes/', methods=['GET'])
 def index():
-    wishes = TweetWishes.query.all()
+    wishes = TweetWish.query.all()
     serialized = [item.json_dump() for item in wishes]
     return json.dumps({'wishes': serialized})
 
@@ -20,7 +20,7 @@ def index():
 # manual endpoint - get last 10 tweets
 @app.route('/last_wishes/', methods=['GET'])
 def last_tweets():
-    wishes = TweetWishes.query.order_by('id desc').limit(10)
+    wishes = TweetWish.query.order_by('id desc').limit(10)
     serialized = [item.json_dump() for item in wishes]
     return json.dumps({'wishes': serialized})
 
@@ -67,7 +67,7 @@ def wish_detail():
     else:
         # TODO error, no tweet id given
         pass
-    wish = TweetWishes.query.filter(TweetWishes.id == wish_id)
+    wish = TweetWish.query.filter(TweetWish.id == wish_id)
     try:
         serialized = wish[0].json_dump()
         return json.dumps(serialized)
