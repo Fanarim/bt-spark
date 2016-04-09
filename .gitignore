@@ -8,4 +8,5 @@ db_cred.txt
 twitter_cred.txt
 thesis/*
 !thesis/main.tex
+!thesis/main.pdf
 db_model.mwb.bak
