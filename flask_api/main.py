@@ -29,6 +29,7 @@ from views import *
 
 # automatic endpoint
 manager.create_api(TweetWish, methods=['GET'], results_per_page=-1)
+
 app.after_request(add_cors_headers)
 
 if __name__ == '__main__':

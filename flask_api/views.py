@@ -1,20 +1,60 @@
 import time
 import json
 
-
-from flask import request
+from flask import request, jsonify
+from flask.ext.restless import ProcessingException
 from sqlalchemy.sql import func
 
 from main import app
 from models import *
 
 
-# manual endpoint - all tweets
-@app.route('/wishes/', methods=['GET'])
-def index():
-    wishes = TweetWish.query.all()
-    serialized = [item.json_dump() for item in wishes]
-    return json.dumps({'wishes': serialized})
+# return wishes from last 10 minutes by default or from chosen interval
+@app.route('/wish/', methods=['GET'])
+def wishes():
+    for arg in request.args:
+        if arg not in ["to", "from"]:
+            raise ProcessingException(description='Invalid argument: ' + arg,
+                                      code=400)
+    time_now = time.time()
+    time_from = (time_now - 60 * 10)
+    time_to = time_now
+
+    if 'from' in request.args:
+        try:
+            float(request.args['from'])
+        except:
+            raise ProcessingException(
+                description='Invalid value in "from" parameter',
+                code=400)
+        time_from = request.args['from']
+
+    if 'to' in request.args:
+        try:
+            float(request.args['to'])
+        except:
+            raise ProcessingException(
+                description='Invalid value in "to" parameter',
+                code=400)
+        time_to = request.args['to']
+
+    wishes = TweetWish.query\
+        .filter(func.unix_timestamp(TweetWish.created_at) < time_to)\
+        .filter(func.unix_timestamp(TweetWish.created_at) >= time_from)\
+        .order_by(TweetWish.created_at.desc())
+    return jsonify(wishes=[item.json_dump() for item in wishes])
+
+
+# return wish with specified id
+@app.route('/wish/<tweet_id>', methods=['GET'])
+def wish(tweet_id):
+    if len(request.args) != 0:
+        raise ProcessingException(
+            description='Invalid argument provided',
+            code=400)
+    wish = TweetWish.query\
+        .get_or_404(tweet_id)
+    return jsonify(wish.json_dump())
 
 
 # manual endpoint - get last 10 tweets
@@ -48,15 +88,16 @@ def stats_history():
             .filter(func.unix_timestamp(Stats3s.datetime) >= history_from)
     if history_density == "10m":
         stats = Stats3s.query\
-            .filter(func.unix_timestamp(Stats3s.datetime) < history_to)\
-            .filter(func.unix_timestamp(Stats3s.datetime) >= history_from)
+            .filter(func.unix_timestamp(Stats10m.datetime) < history_to)\
+            .filter(func.unix_timestamp(Stats10m.datetime) >= history_from)
     if history_density == "1d":
         stats = Stats3s.query\
-            .filter(func.unix_timestamp(Stats3s.datetime) < history_to)\
-            .filter(func.unix_timestamp(Stats3s.datetime) >= history_from)
+            .filter(func.unix_timestamp(Stats1d.datetime) < history_to)\
+            .filter(func.unix_timestamp(Stats1d.datetime) >= history_from)
 
     serialized = [item.json_dump() for item in stats]
     return json.dumps({'stats': serialized})
+
 
 # manual endpoint - single tweet with given id
 # TODO return also hashtags, mentioned user, number of retweets recorded, ...

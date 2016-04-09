@@ -12,34 +12,23 @@ Současným trendem ve zpracování dat, zejména dat ve velkých objemech, je p
 
 ##Available API endpoints:
 
-#####http://twitter-wish-api.herokuapp.com/last_wishes
-
-- last 10 wishes
-
-
-#####http://twitter-wish-api.herokuapp.com/wishes
-
-- all wishes
+`http://twitter-wish-api.herokuapp.com/wish/?from=[timestamp]&to=[timestamp]`
+- returns list of wishes published in last 10 minutes, unless *from* and *to* parameters are specified.
 
 
-#####http://twitter-wish-api.herokuapp.com/api/tweet_wishes
-
-- all wishes
-
-
-#####http://twitter-wish-api.herokuapp.com/stats/?from=[timestamp]&to=[timestamp]&density=[density]
-
-- stats - number of tweets, english tweets and wishes in given time interval.
-
-#####http://twitter-wish-api.herokuapp.com/wish?id=[tweet_id]
-
-- stats with info about a single tweet. Return all the data *wishes* and *last_wishes* endpoints do, but will also return additional info (hashtags, mentions, retweets) in the future
+`http://twitter-wish-api.herokuapp.com/wish/<tweet_id>`
+- same as /wish, but returns data for tweet with given id only
 
 
-All parameters are optional. [timestamp] is classic unix timestamp. Only available option for density right now is "3s".
+`http://twitter-wish-api.herokuapp.com/stats/?from=[timestamp]&to=[timestamp]&density=[density]``
+- stats - number of tweets, english tweets, wishes and average sentiment in last 10 minutes or given time interval.
 
 
-For example API usage, see:
+
+
+All parameters are optional. [timestamp] is standard unix timestamp.
+
+(Outdated)For example API usage, see:
 
 http://tweet-wishes.s3-website.eu-central-1.amazonaws.com/
 
