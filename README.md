@@ -15,10 +15,26 @@ Současným trendem ve zpracování dat, zejména dat ve velkých objemech, je p
 `http://twitter-wish-api.herokuapp.com/wish/?from=[timestamp]&to=[timestamp]`
 - returns list of wishes published in last 10 minutes, unless *from* and *to* parameters are specified.
 
-
-`http://twitter-wish-api.herokuapp.com/wish/<tweet_id>`
+`http://twitter-wish-api.herokuapp.com/wish/<wish_id>`
 - same as /wish, but returns data for tweet with given id only
 
+`http://twitter-wish-api.herokuapp.com/wish/<wish_id>/mentions`
+- return users mentioned in wish with given id
+
+`http://twitter-wish-api.herokuapp.com/wish/<wish_id>/hashtags`
+- return hashtags contained in wish with given id
+
+`http://twitter-wish-api.herokuapp.com/user`
+- returns list of all users
+
+`http://twitter-wish-api.herokuapp.com/user/<user_id>`
+- same as /user, but rturn data for user with given id only
+
+`http://twitter-wish-api.herokuapp.com/user/<user_id>/wishes`
+- return given user's wishes
+
+`http://twitter-wish-api.herokuapp.com/user/<user_id>/mentioned_in`
+- return tweets given user was mentioned in
 
 `http://twitter-wish-api.herokuapp.com/stats/?from=[timestamp]&to=[timestamp]&density=[density]``
 - stats - number of tweets, english tweets, wishes and average sentiment in last 10 minutes or given time interval.

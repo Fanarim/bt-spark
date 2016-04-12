@@ -46,15 +46,98 @@ def wishes():
 
 
 # return wish with specified id
-@app.route('/wish/<tweet_id>', methods=['GET'])
-def wish(tweet_id):
+@app.route('/wish/<wish_id>', methods=['GET'])
+def wish(wish_id):
     if len(request.args) != 0:
         raise ProcessingException(
             description='Invalid argument provided',
             code=400)
     wish = TweetWish.query\
-        .get_or_404(tweet_id)
+        .get_or_404(wish_id)
     return jsonify(wish.json_dump())
+
+
+# return users mentioned in wish with given id
+@app.route('/wish/<wish_id>/mentions', methods=['GET'])
+def wish_mentions(wish_id):
+    if len(request.args) != 0:
+        raise ProcessingException(
+            description='Invalid argument provided',
+            code=400)
+
+    mentioned_users = TweetWish.query\
+        .get_or_404(wish_id)\
+        .mentioned_users
+    return jsonify(
+        mentioned_users=[item.json_dump() for item in mentioned_users])
+
+
+# return hashtags contained in wish with given id
+@app.route('/wish/<wish_id>/hashtags', methods=['GET'])
+def wish_hashtags(wish_id):
+    if len(request.args) != 0:
+        raise ProcessingException(
+            description='Invalid argument provided',
+            code=400)
+
+    hashtags = TweetWish.query\
+        .get_or_404(wish_id)\
+        .hashtags
+    return jsonify(hashtags=[item.hashtag for item in hashtags])
+
+
+# return all users
+@app.route('/user/', methods=['GET'])
+def users():
+    if len(request.args) != 0:
+        raise ProcessingException(
+            description='Invalid argument provided',
+            code=400)
+
+    users = User.query\
+        .order_by(User.id.asc())
+    return jsonify(users=[item.json_dump() for item in users])
+
+
+# return user with specified id
+@app.route('/user/<user_id>', methods=['GET'])
+def user(user_id):
+    if len(request.args) != 0:
+        raise ProcessingException(
+            description='Invalid argument provided',
+            code=400)
+
+    user = User.query\
+        .get_or_404(user_id)
+    return jsonify(user.json_dump())
+
+
+# return user's tweets
+@app.route('/user/<user_id>/wishes', methods=['GET'])
+def user_wishes(user_id):
+    if len(request.args) != 0:
+        raise ProcessingException(
+            description='Invalid argument provided',
+            code=400)
+
+    wishes = User.query\
+        .get_or_404(user_id)\
+        .wishes
+    return jsonify(wishes=[item.json_dump() for item in wishes])
+
+
+# return user's mentions
+@app.route('/user/<user_id>/mentioned_in', methods=['GET'])
+def user_mentioned_in(user_id):
+    if len(request.args) != 0:
+        raise ProcessingException(
+            description='Invalid argument provided',
+            code=400)
+
+    wishes = User.query\
+        .get_or_404(user_id)\
+        .mentioned_in
+    return jsonify(wishes=[item.json_dump() for item in wishes])
 
 
 # manual endpoint - get last 10 tweets
