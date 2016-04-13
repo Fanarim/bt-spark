@@ -57,7 +57,7 @@ def wishes():
 
 
 # return wish with specified id
-@app.route('/wish/<wish_id>', methods=['GET'])
+@app.route('/wish/<wish_id>/', methods=['GET'])
 def wish(wish_id):
     if len(request.args) != 0:
         raise ProcessingException(
@@ -69,7 +69,7 @@ def wish(wish_id):
 
 
 # return users mentioned in wish with given id
-@app.route('/wish/<wish_id>/mentions', methods=['GET'])
+@app.route('/wish/<wish_id>/mentions/', methods=['GET'])
 def wish_mentions(wish_id):
     if len(request.args) != 0:
         raise ProcessingException(
@@ -84,7 +84,7 @@ def wish_mentions(wish_id):
 
 
 # return hashtags contained in wish with given id
-@app.route('/wish/<wish_id>/hashtags', methods=['GET'])
+@app.route('/wish/<wish_id>/hashtags/', methods=['GET'])
 def wish_hashtags(wish_id):
     if len(request.args) != 0:
         raise ProcessingException(
@@ -111,7 +111,7 @@ def users():
 
 
 # return user with specified id
-@app.route('/user/<user_id>', methods=['GET'])
+@app.route('/user/<user_id>/', methods=['GET'])
 def user(user_id):
     if len(request.args) != 0:
         raise ProcessingException(
@@ -124,7 +124,7 @@ def user(user_id):
 
 
 # return user's tweets
-@app.route('/user/<user_id>/wishes', methods=['GET'])
+@app.route('/user/<user_id>/wishes/', methods=['GET'])
 def user_wishes(user_id):
     if len(request.args) != 0:
         raise ProcessingException(
@@ -138,7 +138,7 @@ def user_wishes(user_id):
 
 
 # return user's mentions
-@app.route('/user/<user_id>/mentioned_in', methods=['GET'])
+@app.route('/user/<user_id>/mentioned_in/', methods=['GET'])
 def user_mentioned_in(user_id):
     if len(request.args) != 0:
         raise ProcessingException(
@@ -153,7 +153,7 @@ def user_mentioned_in(user_id):
 
 # return hashtags used in given interval and their count.
 # Results are sorted by this count descending
-@app.route('/stats/hashtags', methods=['GET'])
+@app.route('/stats/hashtags/', methods=['GET'])
 def hashtag_stats():
     check_valid_arguments(request.args, ["to", "from"])
     time_from, time_to = validate_and_set_interval(request.args)
@@ -175,24 +175,28 @@ def hashtag_stats():
 
 # return mentions in given interval and their count.
 # Results are sorted by this count descending
-@app.route('/stats/mentions', methods=['GET'])
+@app.route('/stats/mentions/', methods=['GET'])
 def mention_stats():
     check_valid_arguments(request.args, ["to", "from"])
     time_from, time_to = validate_and_set_interval(request.args)
 
-    mentions = TweetWish\
+    mentions = User\
         .query\
+        .join(tweet_mentions_user)\
+        .join(TweetWish)\
         .filter(func.unix_timestamp(TweetWish.created_at) < time_to)\
         .filter(func.unix_timestamp(TweetWish.created_at) >= time_from)\
-        .join(tweet_mentions_user)\
-        .join(User)\
-        .with_entities(User.id)\
         .add_column(func.count(User.id))\
         .group_by(User.id)\
         .order_by(desc(func.count(User.id)))\
         .all()
 
-    return jsonify(hashtags=[{key: value} for key, value in mentions])
+    serialized = []
+    for result in mentions:
+        serialized.append({'user': result[0].json_dump(),
+                           'mention_count': result[1]})
+    print(serialized)
+    return jsonify(mentions=serialized)
 
 
 # manual endpoint - get last 10 tweets
@@ -204,7 +208,7 @@ def last_tweets():
 
 
 # manual endpoint - stats history endpoint
-@app.route('/stats/general', methods=['GET'])
+@app.route('/stats/general/', methods=['GET'])
 def stats_history():
     check_valid_arguments(request.args, ["to", "from", "density"])
     time_from, time_to = validate_and_set_interval(request.args)
@@ -235,7 +239,7 @@ def stats_history():
 
 
 # return wishes containing selcted hashtag
-@app.route('/hashtag/<hashtag>/wishes', methods=['GET'])
+@app.route('/hashtag/<hashtag>/wishes/', methods=['GET'])
 def hahtag_wishes(hashtag):
     check_valid_arguments(request.args, [])
 
