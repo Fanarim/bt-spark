@@ -4,6 +4,7 @@ import json
 from flask import request, jsonify
 from flask.ext.restless import ProcessingException
 from sqlalchemy.sql import func
+from sqlalchemy import desc
 
 from main import app
 from models import *
@@ -138,6 +139,96 @@ def user_mentioned_in(user_id):
         .get_or_404(user_id)\
         .mentioned_in
     return jsonify(wishes=[item.json_dump() for item in wishes])
+
+
+# return hashtags used in given interval and their count.
+# Results are sorted by this count descending
+@app.route('/hashtag_stats', methods=['GET'])
+def hashtag_stats():
+    for arg in request.args:
+        if arg not in ["to", "from"]:
+            raise ProcessingException(description='Invalid argument: ' + arg,
+                                      code=400)
+    time_now = time.time()
+    time_from = (time_now - 60 * 10)
+    time_to = time_now
+
+    if 'from' in request.args:
+        try:
+            float(request.args['from'])
+        except:
+            raise ProcessingException(
+                description='Invalid value in "from" parameter',
+                code=400)
+        time_from = request.args['from']
+
+    if 'to' in request.args:
+        try:
+            float(request.args['to'])
+        except:
+            raise ProcessingException(
+                description='Invalid value in "to" parameter',
+                code=400)
+        time_to = request.args['to']
+
+    hashtags = TweetWish\
+        .query\
+        .filter(func.unix_timestamp(TweetWish.created_at) < time_to)\
+        .filter(func.unix_timestamp(TweetWish.created_at) >= time_from)\
+        .join(tweet_contains_hashtag)\
+        .join(Hashtag)\
+        .with_entities(Hashtag.hashtag)\
+        .add_column(func.count(Hashtag.hashtag))\
+        .group_by(Hashtag.hashtag)\
+        .order_by(desc(func.count(Hashtag.hashtag)))\
+        .all()
+
+    return jsonify(hashtags=[{key: value} for key, value in hashtags])
+
+
+# return mentions in given interval and their count.
+# Results are sorted by this count descending
+@app.route('/mention_stats', methods=['GET'])
+def mention_stats():
+    for arg in request.args:
+        if arg not in ["to", "from"]:
+            raise ProcessingException(description='Invalid argument: ' + arg,
+                                      code=400)
+    time_now = time.time()
+    time_from = (time_now - 60 * 10)
+    time_to = time_now
+
+    if 'from' in request.args:
+        try:
+            float(request.args['from'])
+        except:
+            raise ProcessingException(
+                description='Invalid value in "from" parameter',
+                code=400)
+        time_from = request.args['from']
+
+    if 'to' in request.args:
+        try:
+            float(request.args['to'])
+        except:
+            raise ProcessingException(
+                description='Invalid value in "to" parameter',
+                code=400)
+        time_to = request.args['to']
+
+    mentions = TweetWish\
+        .query\
+        .filter(func.unix_timestamp(TweetWish.created_at) < time_to)\
+        .filter(func.unix_timestamp(TweetWish.created_at) >= time_from)\
+        .join(tweet_mentions_user)\
+        .join(User)\
+        .with_entities(User.id)\
+        .add_column(func.count(User.id))\
+        .group_by(User.id)\
+        .order_by(desc(func.count(User.id)))\
+        .all()
+
+    return jsonify(hashtags=[{key: value} for key, value in mentions])
 
 
 # manual endpoint - get last 10 tweets
