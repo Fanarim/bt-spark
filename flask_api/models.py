@@ -27,6 +27,7 @@ class User(db.Model):
                           back_populates="user")
     mentioned_in = relationship("TweetWish",
                                 secondary=tweet_mentions_user,
+                                lazy='dynamic',
                                 back_populates="mentioned_users")
 
     def json_dump(self):
@@ -48,14 +49,16 @@ class TweetWish(db.Model):
                         back_populates="wishes")
     mentioned_users = relationship("User",
                                    secondary=tweet_mentions_user,
+                                   lazy='dynamic',
                                    back_populates="mentioned_in")
     hashtags = relationship("Hashtag",
                             secondary=tweet_contains_hashtag,
+                            lazy='dynamic',
                             back_populates="contained_in")
 
     def json_dump(self):
         return dict(id=self.id,
-                    author=self.author,
+                    author=self.user.json_dump(),
                     tweet_text=self.tweet_text.replace("&quot;", "\""),
                     created_at=str(self.created_at),
                     is_retweet=self.is_retweet,
@@ -68,6 +71,7 @@ class Hashtag(db.Model):
     hashtag = db.Column(db.String, primary_key=True)
     contained_in = relationship("TweetWish",
                                 secondary=tweet_contains_hashtag,
+                                lazy='dynamic',
                                 back_populates="hashtags")
 
     def json_dump(self):

@@ -241,8 +241,8 @@ def hahtag_wishes(hashtag):
 
     wishes = TweetWish\
         .query\
-        .filter(Hashtag.hashtag == hashtag)\
         .join(tweet_contains_hashtag)\
-        .join(Hashtag)
+        .join(Hashtag)\
+        .filter(Hashtag.hashtag == hashtag)
 
     return jsonify(wishes=[item.json_dump() for item in wishes])
