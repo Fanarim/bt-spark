@@ -232,3 +232,17 @@ def stats_history():
 
     serialized = [item.json_dump() for item in stats]
     return jsonify(stats=serialized)
+
+
+# return wishes containing selcted hashtag
+@app.route('/hashtag/<hashtag>/wishes', methods=['GET'])
+def hahtag_wishes(hashtag):
+    check_valid_arguments(request.args, [])
+
+    wishes = TweetWish\
+        .query\
+        .filter(Hashtag.hashtag == hashtag)\
+        .join(tweet_contains_hashtag)\
+        .join(Hashtag)
+
+    return jsonify(wishes=[item.json_dump() for item in wishes])
