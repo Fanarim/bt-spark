@@ -36,13 +36,13 @@ Současným trendem ve zpracování dat, zejména dat ve velkých objemech, je p
 `http://twitter-wish-api.herokuapp.com/user/<user_id>/mentioned_in`
 - return tweets given user was mentioned in
 
-`http://twitter-wish-api.herokuapp.com/mention_stats/?from=[timestamp]&to=[timestamp]`
+`http://twitter-wish-api.herokuapp.com/stats/mentions/?from=[timestamp]&to=[timestamp]`
 - returns list of mentioned users and their mention count in last 10 minutes, unless *from* and *to* parameters are specified. The list is sorted by mention count.
 
-`http://twitter-wish-api.herokuapp.com/hashtag_stats/?from=[timestamp]&to=[timestamp]`
+`http://twitter-wish-api.herokuapp.com/stats/hashtags/?from=[timestamp]&to=[timestamp]`
 - returns list of hashtags used and their usage count in last 10 minutes, unless *from* and *to* parameters are specified. The list is sorted by usage count.
 
-`http://twitter-wish-api.herokuapp.com/stats/?from=[timestamp]&to=[timestamp]&density=[density]``
+`http://twitter-wish-api.herokuapp.com/stats/general?from=[timestamp]&to=[timestamp]&density=[density]``
 - stats - number of tweets, english tweets, wishes and average sentiment in last 10 minutes or given time interval.
 
 
