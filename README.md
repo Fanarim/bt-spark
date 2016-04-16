@@ -10,6 +10,9 @@ Současným trendem ve zpracování dat, zejména dat ve velkých objemech, je p
 6. Zhodnoťte dosažené výsledky.
 
 
+##Example website using provided API
+[Twitter Wishes](http://tweet-wishes.s3-website.eu-central-1.amazonaws.com/)
+
 ##Available API endpoints:
 
 `http://twitter-wish-api.herokuapp.com/wish/?from=[timestamp]&to=[timestamp]`
