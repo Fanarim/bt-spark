@@ -46,13 +46,18 @@ def validate_and_set_interval(arguments):
 # return wishes from last 10 minutes by default or from chosen interval
 @app.route('/wish/', methods=['GET'])
 def wishes():
-    check_valid_arguments(request.args, ["to", "from"])
+    check_valid_arguments(request.args, ["to", "from", "count"])
     time_from, time_to = validate_and_set_interval(request.args)
 
-    wishes = TweetWish.query\
-        .filter(func.unix_timestamp(TweetWish.created_at) < time_to)\
-        .filter(func.unix_timestamp(TweetWish.created_at) >= time_from)\
-        .order_by(TweetWish.created_at.desc())
+    if 'count' in request.args:
+        wishes = TweetWish.query\
+            .order_by(TweetWish.created_at.desc())\
+            .limit(request.args['count'])
+    else:
+        wishes = TweetWish.query\
+            .filter(func.unix_timestamp(TweetWish.created_at) < time_to)\
+            .filter(func.unix_timestamp(TweetWish.created_at) >= time_from)\
+            .order_by(TweetWish.created_at.desc())
     return jsonify(wishes=[item.json_dump() for item in wishes])
 
 
@@ -155,20 +160,32 @@ def user_mentioned_in(user_id):
 # Results are sorted by this count descending
 @app.route('/stats/hashtags/', methods=['GET'])
 def hashtag_stats():
-    check_valid_arguments(request.args, ["to", "from"])
+    check_valid_arguments(request.args, ["to", "from", "count"])
     time_from, time_to = validate_and_set_interval(request.args)
 
-    hashtags = TweetWish\
-        .query\
-        .filter(func.unix_timestamp(TweetWish.created_at) < time_to)\
-        .filter(func.unix_timestamp(TweetWish.created_at) >= time_from)\
-        .join(tweet_contains_hashtag)\
-        .join(Hashtag)\
-        .with_entities(Hashtag.hashtag)\
-        .add_column(func.count(Hashtag.hashtag))\
-        .group_by(Hashtag.hashtag)\
-        .order_by(desc(func.count(Hashtag.hashtag)))\
-        .all()
+    if 'count' in request.args:
+        hashtags = TweetWish\
+            .query\
+            .join(tweet_contains_hashtag)\
+            .join(Hashtag)\
+            .with_entities(Hashtag.hashtag)\
+            .add_column(func.count(Hashtag.hashtag))\
+            .group_by(Hashtag.hashtag)\
+            .order_by(desc(func.count(Hashtag.hashtag)))\
+            .limit(request.args['count'])\
+            .all()
+    else:
+        hashtags = TweetWish\
+            .query\
+            .filter(func.unix_timestamp(TweetWish.created_at) < time_to)\
+            .filter(func.unix_timestamp(TweetWish.created_at) >= time_from)\
+            .join(tweet_contains_hashtag)\
+            .join(Hashtag)\
+            .with_entities(Hashtag.hashtag)\
+            .add_column(func.count(Hashtag.hashtag))\
+            .group_by(Hashtag.hashtag)\
+            .order_by(desc(func.count(Hashtag.hashtag)))\
+            .all()
 
     return jsonify(hashtags=[{key: value} for key, value in hashtags])
 
@@ -177,34 +194,35 @@ def hashtag_stats():
 # Results are sorted by this count descending
 @app.route('/stats/mentions/', methods=['GET'])
 def mention_stats():
-    check_valid_arguments(request.args, ["to", "from"])
+    check_valid_arguments(request.args, ["to", "from", "count"])
     time_from, time_to = validate_and_set_interval(request.args)
 
-    mentions = User\
-        .query\
-        .join(tweet_mentions_user)\
-        .join(TweetWish)\
-        .filter(func.unix_timestamp(TweetWish.created_at) < time_to)\
-        .filter(func.unix_timestamp(TweetWish.created_at) >= time_from)\
-        .add_column(func.count(User.id))\
-        .group_by(User.id)\
-        .order_by(desc(func.count(User.id)))\
-        .all()
+    if 'count' in request.args:
+        mentions = User\
+            .query\
+            .join(tweet_mentions_user)\
+            .join(TweetWish)\
+            .add_column(func.count(User.id))\
+            .group_by(User.id)\
+            .order_by(desc(func.count(User.id)))\
+            .limit(request.args['count'])\
+            .all()
+    else:
+        mentions = User\
+            .query\
+            .join(tweet_mentions_user)\
+            .join(TweetWish)\
+            .filter(func.unix_timestamp(TweetWish.created_at) < time_to)\
+            .filter(func.unix_timestamp(TweetWish.created_at) >= time_from)\
+            .add_column(func.count(User.id))\
+            .group_by(User.id)\
+            .order_by(desc(func.count(User.id)))\
 
     serialized = []
     for result in mentions:
         serialized.append({'user': result[0].json_dump(),
                            'mention_count': result[1]})
-    print(serialized)
     return jsonify(mentions=serialized)
-
-
-# manual endpoint - get last 10 tweets
-@app.route('/last_wishes/', methods=['GET'])
-def last_tweets():
-    wishes = TweetWish.query.order_by('id desc').limit(10)
-    serialized = [item.json_dump() for item in wishes]
-    return json.dumps({'wishes': serialized})
 
 
 # manual endpoint - stats history endpoint
@@ -227,7 +245,7 @@ def stats_history():
             .filter(func.unix_timestamp(Stats3s.datetime) >= time_from)
     if time_density == "10m":
         stats = Stats10m.query\
-            .filter(func.unix_timestamp(Stats10m.datmetime) < time_to)\
+            .filter(func.unix_timestamp(Stats10m.datetime) < time_to)\
             .filter(func.unix_timestamp(Stats10m.datetime) >= time_from)
     if time_density == "1d":
         stats = Stats1d.query\
