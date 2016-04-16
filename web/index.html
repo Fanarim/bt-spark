@@ -7,33 +7,95 @@
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
 
 
 </head>
 <body>
 
-<div class="container">
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+          <div class="container">
+              <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="index.html">Twitter Wishes</a>
+              </div>
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                  <ul class="nav navbar-nav">
+                      <li>
+                          <a href="#">About</a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </nav>
 
-  <h1>Twitter wishes</h1>
-  <p></p>
-  <h2>Tweets analyzed in last 10 minutes</h2>
+      <div class="container">
+          <div class="row">
+              <div class="col-lg-12">
+                  <h1 class="page-header">Twitter Wish Statistics
+                      <small>and analysis</small>
+                  </h1>
+              </div>
+          </div>
 
-<div id="statsChart"></div>
 
-  <h2>Last wishes</h2>
-  <ul id="last_tweets">
-    <li id="last_tweet_0"></li>
-    <li id="last_tweet_1"></li>
-    <li id="last_tweet_2"></li>
-    <li id="last_tweet_3"></li>
-    <li id="last_tweet_4"></li>
-    <li id="last_tweet_5"></li>
-  </ul>
+          <div class="row">
+              <div class="col-md-12">
+                <h3>Tweets analyzed in last 10 minutes</h3>
+                <div id="statsChart"></div>
+              </div>
+          </div>
 
-</div>
+          <hr>
+
+          <div class="row">
+              <div class="col-md-12 wishes">
+                <h3>Last wishes <small> positive<span class="glyphicon glyphicon-stop" style="color: #87CB82;"></span><span class="glyphicon glyphicon-stop" style="color: #B9D189;"></span><span class="glyphicon glyphicon-stop" style="color: #EBDD82;"></span><span class="glyphicon glyphicon-stop" style="color: #E4C891;"></span><span class="glyphicon glyphicon-stop" style="color: #DC7E7E;"></span>negative</small></h3>
+                  <div><span id="last_tweet_0"></span></div>
+                  <div class="well positive"><span id="last_tweet_1"></span></div>
+                  <div class="well neutral"><span id="last_tweet_2"></span></div>
+                  <div class="well negative"><span id="last_tweet_3"></span></div>
+                  <div class="well negativenegative"><span id="last_tweet_4"></span></div>
+                  <div class="well"><span id="last_tweet_5"></span></div>
+              </div>
+          </div>
+
+          <hr>
+
+          <div class="row">
+              <div class="col-md-7">
+                  <a href="#">
+                      <img class="img-responsive" src="http://placehold.it/700x300" alt="">
+                  </a>
+              </div>
+              <div class="col-md-5">
+                  <h3>Project Two</h3>
+                  <h4>Subheading</h4>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut, odit velit cumque vero doloremque repellendus distinctio maiores rem expedita a nam vitae modi quidem similique ducimus! Velit, esse totam tempore.</p>
+                  <a class="btn btn-primary" href="#">View Project <span class="glyphicon glyphicon-chevron-right"></span></a>
+              </div>
+          </div>
+
+          <hr>
+
+          <footer>
+              <div class="row">
+                  <div class="col-lg-12">
+                      <p>Copyright &copy; Your Website 2014</p>
+                  </div>
+              </div>
+          </footer>
+
+      </div>
 
 <!--Load the AJAX API-->
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.js"></script>
+<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.14/d3.js"></script>
 <script type="text/javascript" src="myscript.js"></script>

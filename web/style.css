@@ -1,0 +1,48 @@
+/*!
+ * Start Bootstrap - 1 Col Portfolio HTML Template (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+body {
+    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+}
+
+footer {
+    margin: 50px 0;
+}
+
+.wishes .well{
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.wishes .neutral {
+  background-color: #EBDD82;
+  border: 1px solid #9F902E;
+  color: #9F902E;
+}
+
+.wishes .positive {
+  background-color: #B9D189;
+  border: 1px solid #2C812F;
+  color: #2C812F;
+}
+
+.wishes .negative {
+  background-color: #E4C891;
+  border: 1px solid #B75E32;
+  color:#B75E32;
+}
+
+.wishes .negativenegative {
+  background-color: #DC7E7E;
+  border: 1px solid #C63030;
+  color: #7A0C0C;
+}
+
+.wishes .positivepositive {
+  background-color: #87CB82;
+  border: 1px solid #2C812F;
+  color: #2C812F;
+}

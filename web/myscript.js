@@ -33,16 +33,29 @@ getStats();
 window.setInterval(function(){
   getLastWishes();
   getStats();
-}, 3000);
+}, 6000);
 
 
 function getLastWishes() {
-  $.getJSON( APIurl + 'last_wishes', function(data)
+  $.getJSON( APIurl + 'wish/?count=6', function(data)
     {
       var tweets = data.wishes;
       for (i = 0; i < 6; i++) {
         document.getElementById('last_tweet_' + i).innerHTML = "<strong>" +
-          tweets[i].author + ": </strong>" + tweets[i].tweet_text;
+          tweets[i].author.username + ": </strong>" + tweets[i].tweet_text;
+        if (tweets[i].sentiment == 2){
+          document.getElementById('last_tweet_' + i).parentNode.className = "well neutral"
+        } else if (tweets[i].sentiment <= 1) {
+          document.getElementById('last_tweet_' + i).parentNode.className = "well negativenegative"
+        } else if (tweets[i].sentiment >= 3) {
+          document.getElementById('last_tweet_' + i).parentNode.className = "well positivepositive"
+        } else if (tweets[i].sentiment > 2) {
+          document.getElementById('last_tweet_' + i).parentNode.className = "well positive"
+        } else if (tweets[i].sentiment < 2) {
+          document.getElementById('last_tweet_' + i).parentNode.className = "well negative"
+        } else {
+          document.getElementById('last_tweet_' + i).parentNode.className = "well neutral"
+        }
       }
     }
   );
@@ -51,7 +64,7 @@ function getLastWishes() {
 
 function getStats() {
   // get data from API
-  $.getJSON(APIurl + 'stats', function(data){
+  $.getJSON(APIurl + 'stats/general', function(data){
     var stats = data.stats;
     totalTweets = ['Total tweets'];
     englishTweets = ['English tweets'];
