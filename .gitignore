@@ -9,4 +9,5 @@ twitter_cred.txt
 thesis/*
 !thesis/main.tex
 !thesis/main.pdf
+!thesis/images
 db_model.mwb.bak
