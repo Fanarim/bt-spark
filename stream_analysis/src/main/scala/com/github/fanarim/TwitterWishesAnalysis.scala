@@ -201,8 +201,8 @@ object TwitterWishesAnalysis {
 			val hashtags_current_array = hashtags_current.distinct().collect()
 			var hashtags_new: collection.mutable.Seq[Tuple1[(String)]] = collection.mutable.Seq()
 			for(hashtag_current <- hashtags_current_array){
-				if (ssqlc.sql("SELECT * FROM hashtags WHERE hashtag=\"" + hashtag_current(0) + "\"").count() == 0){
-					hashtags_new = hashtags_new :+ Tuple1(hashtag_current(0).asInstanceOf[String])
+				if (ssqlc.sql("SELECT * FROM hashtags WHERE hashtag=\"" + hashtag_current(0).asInstanceOf[String].toLowerCase() + "\"").count() == 0){
+					hashtags_new = hashtags_new :+ Tuple1(hashtag_current(0).asInstanceOf[String].toLowerCase())
 				}
 			}
 
