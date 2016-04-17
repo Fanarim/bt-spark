@@ -24,6 +24,9 @@ object TwitterWishesAnalysis {
 		Logger.getLogger("org.apache.spark").setLevel(Level.ERROR)
 		Logger.getLogger("org.apache.spark.storage.BlockManager").setLevel(Level.ERROR)
 
+		// set TLS version to prevent "SSL peer shut down incorrectly" error
+		System.setProperty("https.protocols", "TLSv1.1");
+
 		// setup spark
 		val conf = new SparkConf().setAppName("Twitter Wishes Analysis")
 		val sc = new SparkContext(conf)
