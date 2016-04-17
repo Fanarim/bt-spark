@@ -187,7 +187,8 @@ def hashtag_stats():
             .order_by(desc(func.count(Hashtag.hashtag)))\
             .all()
 
-    return jsonify(hashtags=[{key: value} for key, value in hashtags])
+    return jsonify(
+        popular_hashtags=[{'hashtag': key, 'count': value} for key, value in hashtags])
 
 
 # return mentions in given interval and their count.
@@ -222,7 +223,7 @@ def mention_stats():
     for result in mentions:
         serialized.append({'user': result[0].json_dump(),
                            'mention_count': result[1]})
-    return jsonify(mentions=serialized)
+    return jsonify(popular_users=serialized)
 
 
 # manual endpoint - stats history endpoint
