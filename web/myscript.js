@@ -32,8 +32,10 @@ getStats();
 
 window.setInterval(function(){
   getLastWishes();
+  getPopularHashtags();
+  getPopularMentions();
   getStats();
-}, 6000);
+}, 7500);
 
 
 function getLastWishes() {
@@ -86,4 +88,30 @@ function getStats() {
     ],
     type: 'line'
   });
+}
+
+function getPopularHashtags() {
+  $.getJSON( APIurl + 'stats/hashtags?count=6', function(data)
+    {
+      var hashtags = data.popular_hashtags;
+      for (i = 0; i < 6; i++) {
+        document.getElementById('popular_hashtag_' + i).innerHTML = "<strong>" +
+          hashtags[i].hashtag + "</strong>";
+          document.getElementById('popular_hashtag_count_' + i).innerHTML = hashtags[i].count;
+      }
+    }
+  );
+}
+
+function getPopularMentions() {
+  $.getJSON( APIurl + 'stats/mentions?count=6', function(data)
+    {
+      var mentions = data.popular_users;
+      for (i = 0; i < 6; i++) {
+        document.getElementById('popular_mention_' + i).innerHTML = "<strong>" +
+          mentions[i].user.username + "</strong>";
+          document.getElementById('popular_mention_count_' + i).innerHTML = mentions[i].mention_count;
+      }
+    }
+  );
 }
