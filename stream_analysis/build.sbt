@@ -12,13 +12,13 @@ mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>
 }
 
 libraryDependencies ++= Seq(
-	"org.apache.spark" %% "spark-core" % "1.6.0" % "provided",
-	"org.apache.spark" %% "spark-streaming" % "1.6.0" % "provided",
-	"org.apache.spark" %% "spark-streaming-twitter" % "1.6.0",
-	"org.apache.spark" %% "spark-sql" % "1.6.0" % "provided",
+	"org.apache.spark" %% "spark-core" % "1.6.1" % "provided",
+	"org.apache.spark" %% "spark-streaming" % "1.6.1" % "provided",
+	"org.apache.spark" %% "spark-streaming-twitter" % "1.6.1",
+	"org.apache.spark" %% "spark-sql" % "1.6.1" % "provided",
 	"org.twitter4j" % "twitter4j-core" % "4.0.4",
 	"org.twitter4j" % "twitter4j-stream" % "4.0.4",
-	"mysql" % "mysql-connector-java" % "5.1.+",
+	"mysql" % "mysql-connector-java" % "5.1.38",
   "edu.stanford.nlp" % "stanford-corenlp" % "3.6.0",
   "edu.stanford.nlp" % "stanford-corenlp" % "3.6.0" classifier "models"
 )
