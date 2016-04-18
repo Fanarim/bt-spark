@@ -62,7 +62,7 @@
 %
 
 
-\chapter{Situace v oblasti zpracovávání dat ??}
+\chapter{Situace v oblasti zpracovávání dat}
 	V současné době generujeme obrovská množství dat - podle některých odhadů to například v roce 2012 mohlo být až 2,5 exabajtů za den\cite{bbc-bigdata}. Od té doby se rychlost přibývání dat stále zvyšuje. Například nárůst objemu dat dostupných na internetu je způsoben jeho neustále větším rozšířením a rostoucí dostupností. V  roce 2016 je k němu připojeno již přes 3,3 miliardy obyvatel planety\cite{internet-live-stats}, což je téměř polovina všech. Roste také míra využívání internetu. Oproti dřívějšku na internetu trávíme nejen díky chytrým telefonům stále více času a využíváme například sociální sítě, internetové vyhledávání a další online služby. Během toho jsou nám zobrazována personalizovaná data a cílené reklamní nabídky. Také ve firemní i státní sféře výrazně roste stupeň využívání informačních technologií a v návaznosti na to objem produkovaných dat. S přibývajícími daty nastávají problémy s jejich zpracováním. Jedním z nich je obecně schopnost zpracovat tak veliké objemy dat, druhým je schopnost jejich zpracování v dostatečně krátkém, ideálně reálném čase. Často je přitom potřeba vyřešit oba tyto problémy naráz. Pro popis těchto dat a problémů spojených s jejich zpracováním se používá relativně nový pojem Big Data. 
 
 		 
@@ -184,12 +184,63 @@
 	Sentiment, ...
 
 \section{Požadavky na systém}
-	Funkční a nefunkční (co konkretne merit?, ...)
+	Výsledný systém, jehož vytvoření je cílem této práce, se bude skládat ze tří klíčových částí - systému pro analýzu textu, databáze a webserveru zpřístupňujícího data pomocí RESTového API.
+	
+	 První zmiňovaná část, systém pro analýzu textu, bude využívat framework Apache Spark. Jako zdroj dat bude použita sociální síť Twitter poskytující vzorek přispěvků z ní, tzv. tweetů, pomocí veřejného API. Tomu se podrobněji věnuji v kapitole \ref{twitter-api}. Z těchto příspěvků budou vyfiltrovány ty, které reprezentují přání jejich autorů. Kromě měření běžných statistik bude systém provádět analýzu sentimentu těchto přání. Tato analýza bude probíhat v reálném čase, respektive se zpožděním v řádu maximálně několika desítek sekund.  Výsledky analýzy z této části budou persistovány ve vhodné relační databázi. Na ní bude napojen webový server zpřístupňující data pomocí RESTful API. 
+
+\subsection{Funkční požadavky}
+\subsubsection{Systém pro analýzu textu}
+Samotný systém pro analýzu textu musí splňovat následující požadavky:
+\begin{itemize}
+\item Získání a ukládání veškerých dat, jejichž zpřístupnění pomocí RESTového API je požadováno a jež nejsou získávána jiným způsobem
+\end{itemize}
+\subsubsection{Databáze}
+ Databáze bude poskytovat následující funkcionality:
+\begin{itemize}
+\item Agregace statistických dat dle času - u dat u kterých je to možné bude docházet k jejich seskupovaní po větších intervalech. Tím dojde ke snížení náročnosti dotazů na tato data. 
+\item Promazávání starých a již zagregovaných dat
+\end{itemize}
+\subsubsection{RESTful API}
+RESTful API bude poskytovat následující data:
+
+\begin{itemize}
+\item Jednotlivá přání a základní informace o nich, včetně jejich sentimentu a informací o jejich autorovi
+\item Seznam uživatelů zmíněných v konkrétním přání
+\item Seznam hastagů použitých v konkrétním přání
+\item Informace o uživatelích, kteří jsou autory některého přání nebo byli v některém zmíněni
+\item Seznam přání publikovaných daným uživatelem
+\item Seznam přání v nichž byl daný uživatel zmíněn
+\item Seznam přání obsahujících daný hashtag
+\item Statistiky nejpouívanějších hashtagů
+\item Statistiky nejvíce zmiňovaných uživatelů
+\item Statistiky o počtech již analyzovaných tweetů, anglických tweetů a z nich vyfiltrovaných přání v daném časovém intervalu
+\item Statistika o průměrném sentimentu v daném intervalu
+\end{itemize}
+
+\noindent Pro data pro která je to vhodné bude API umožňovat:
+\begin{itemize}
+\item Omezení počtu vrácených výsledků
+\item Nastavení časového intervalu
+\item Poskytnutí pouze některých hodnot, například pouze statistik počtu anglických tweetů namísto veškerých statistických údajů
+\end{itemize}
+
+\subsection{Nefunkční požadavky}
+\subsubsection{Kvalitativní}
+\begin{itemize}
+\item \textbf{Rychlost} - analýza textu bude probíhat v reálném čase, respektivě se zpožděním v řádu maximálně několika desítek sekund
+\item \textbf{Škálovatelnost} - systém pro analýzu textu bude při nasazení na dostatečně výkoném počítačovém clusteru připraven pro zpracování tisíců příspěvků za sekundu
+\end{itemize}
+\subsubsection{Omezující}
+\begin{itemize}
+\item \textbf{Framework pro analýzu} - k analýze příspěvků z Twitteru bude použit framework Apeche Spark a jeho komponenta Spark Streaming
+\item \textbf{Zpřístupnění dat} - data budou zpřístupněna pomocí RESTful API. To bude odpovídat běžným praktikám používaným právě při návrhu RESTových rozhraní
+\end{itemize}
 
 \section{Dostupné technologie}
 	- dostupne technologie
 
 \section{Twitter streaming API}
+\label{twitter-api}
 	Jak vypada API, tweet, ze API nenabizi vsechny prispevky - gnip.com
 
 \chapter{Návrh}
@@ -214,10 +265,8 @@
 	da se web castecne povazovat jako otestovani api?
 \section{???}
 
-\chapter{Nasazení}
-
 \chapter{Zhodnocení výsledků}
-
+\section{Možná budoucí vylepšení systému}
 
 
 \begin{conclusion}
