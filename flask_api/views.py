@@ -166,6 +166,8 @@ def hashtag_stats():
     if 'count' in request.args:
         hashtags = TweetWish\
             .query\
+            .filter(func.unix_timestamp(TweetWish.created_at) < time_to)\
+            .filter(func.unix_timestamp(TweetWish.created_at) >= time_from)\
             .join(tweet_contains_hashtag)\
             .join(Hashtag)\
             .with_entities(Hashtag.hashtag)\
@@ -203,6 +205,8 @@ def mention_stats():
             .query\
             .join(tweet_mentions_user)\
             .join(TweetWish)\
+            .filter(func.unix_timestamp(TweetWish.created_at) < time_to)\
+            .filter(func.unix_timestamp(TweetWish.created_at) >= time_from)\
             .add_column(func.count(User.id))\
             .group_by(User.id)\
             .order_by(desc(func.count(User.id)))\

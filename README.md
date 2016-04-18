@@ -15,8 +15,8 @@ Současným trendem ve zpracování dat, zejména dat ve velkých objemech, je p
 
 ##Available API endpoints:
 
-`http://twitter-wish-api.herokuapp.com/wish/?from=[timestamp]&to=[timestamp]`
-- returns list of wishes published in last 10 minutes, unless *from* and *to* parameters are specified.
+`http://twitter-wish-api.herokuapp.com/wish/?from=[timestamp]&to=[timestamp]&count=[count]`
+- returns list of wishes published in last 10 minutes, unless *from* and *to* parameters are specified. Number of results can be limited by using *count*.
 
 `http://twitter-wish-api.herokuapp.com/wish/<wish_id>`
 - same as /wish, but returns data for tweet with given id only
@@ -43,11 +43,11 @@ Současným trendem ve zpracování dat, zejména dat ve velkých objemech, je p
 `http://twitter-wish-api.herokuapp.com/hashtag/<hashtag>/wishes`
 - return tweets containing given hashtag
 
-`http://twitter-wish-api.herokuapp.com/stats/mentions/?from=[timestamp]&to=[timestamp]`
-- returns list of mentioned users and their mention count in last 10 minutes, unless *from* and *to* parameters are specified. The list is sorted by mention count.
+`http://twitter-wish-api.herokuapp.com/stats/mentions/?from=[timestamp]&to=[timestamp]&count=[count]`
+- returns list of mentioned users and their mention count in last 10 minutes, unless *from* and *to* parameters are specified. The list is sorted by mention count. Number of results can be limited by using *count*.
 
-`http://twitter-wish-api.herokuapp.com/stats/hashtags/?from=[timestamp]&to=[timestamp]`
-- returns list of hashtags used and their usage count in last 10 minutes, unless *from* and *to* parameters are specified. The list is sorted by usage count.
+`http://twitter-wish-api.herokuapp.com/stats/hashtags/?from=[timestamp]&to=[timestamp]&count=[count]`
+- returns list of hashtags used and their usage count in last 10 minutes, unless *from* and *to* parameters are specified. The list is sorted by usage count. Number of results can be limited by using *count*.
 
 `http://twitter-wish-api.herokuapp.com/stats/general?from=[timestamp]&to=[timestamp]&density=[density]``
 - stats - number of tweets, english tweets, wishes and average sentiment in last 10 minutes or given time interval.
