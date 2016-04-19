@@ -71,7 +71,7 @@ object TwitterWishesAnalysis {
 
 		// setup DB
 		val DBUrl = "jdbc:mysql://" + dbPath + "/" + dbName + "?user=" + dbUser +
-		  "&password=" + dbPass
+		  "&password=" + dbPass + "&charset=utf8mb4"
 		val prop = new java.util.Properties
 		prop.setProperty("driver", "com.mysql.jdbc.Driver")
 

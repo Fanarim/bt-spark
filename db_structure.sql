@@ -9,7 +9,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 -- Schema tweet_wishes
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `tweet_wishes` DEFAULT CHARACTER SET latin1 ;
+CREATE SCHEMA IF NOT EXISTS `tweet_wishes` DEFAULT CHARACTER SET utf8mb4 ;
 USE `tweet_wishes` ;
 
 
@@ -20,10 +20,12 @@ DROP TABLE IF EXISTS `tweet_wishes`.`users` ;
 
 CREATE TABLE IF NOT EXISTS `tweet_wishes`.`users` (
   `id` BIGINT NOT NULL,
-  `username` VARCHAR(255) NOT NULL,
+  `username` VARCHAR(140) NOT NULL,
   `profile_picture_url` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
 
 
 -- -----------------------------------------------------
@@ -48,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `tweet_wishes`.`tweet_wishes` (
     ON UPDATE NO ACTION
 )
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
@@ -71,7 +73,8 @@ CREATE TABLE IF NOT EXISTS `tweet_wishes`.`tweet_mentions_user` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
 )
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
@@ -80,9 +83,10 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `tweet_wishes`.`hashtags` ;
 
 CREATE TABLE IF NOT EXISTS `tweet_wishes`.`hashtags` (
-  `hashtag` VARCHAR(255) NOT NULL,
+  `hashtag` VARCHAR(140) NOT NULL,
   PRIMARY KEY (`hashtag`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
@@ -92,7 +96,7 @@ DROP TABLE IF EXISTS `tweet_wishes`.`tweet_contains_hashtag` ;
 
 CREATE TABLE IF NOT EXISTS `tweet_wishes`.`tweet_contains_hashtag` (
   `tweet_id` BIGINT NOT NULL,
-  `hashtag` VARCHAR(255) NOT NULL,
+  `hashtag` VARCHAR(140) NOT NULL,
   INDEX `fk_hashtag_idx` (`hashtag` ASC),
   CONSTRAINT `fk_tweet_containining_hash`
     FOREIGN KEY (`tweet_id`)
@@ -105,7 +109,9 @@ CREATE TABLE IF NOT EXISTS `tweet_wishes`.`tweet_contains_hashtag` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
 )
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
 
 
 -- -----------------------------------------------------
@@ -120,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `tweet_wishes`.`stats_general_3s` (
   `wishes_total` INT NULL DEFAULT NULL,
   `sentiment_average` DOUBLE NULL)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
@@ -135,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `tweet_wishes`.`stats_general_10m` (
   `wishes_total` INT NULL DEFAULT NULL,
   `sentiment_average` DOUBLE NULL)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
@@ -150,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `tweet_wishes`.`stats_general_1d` (
   `wishes_total` INT NULL DEFAULT NULL,
   `sentiment_average` DOUBLE NULL)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 
@@ -163,9 +169,9 @@ DELIMITER ;;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;;
-/*!50003 SET character_set_client  = utf8 */ ;;
-/*!50003 SET character_set_results = utf8 */ ;;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;;
+/*!50003 SET character_set_client  = utf8mb4 */ ;;
+/*!50003 SET character_set_results = utf8mb4 */ ;;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;;
 /*!50003 SET @saved_time_zone      = @@time_zone */ ;;
@@ -181,9 +187,9 @@ DELIMITER ;;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;;
-/*!50003 SET character_set_client  = utf8 */ ;;
-/*!50003 SET character_set_results = utf8 */ ;;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;;
+/*!50003 SET character_set_client  = utf8mb4 */ ;;
+/*!50003 SET character_set_results = utf8mb4 */ ;;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;;
 /*!50003 SET @saved_time_zone      = @@time_zone */ ;;
@@ -199,9 +205,9 @@ DELIMITER ;;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;;
-/*!50003 SET character_set_client  = utf8 */ ;;
-/*!50003 SET character_set_results = utf8 */ ;;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;;
+/*!50003 SET character_set_client  = utf8mb4 */ ;;
+/*!50003 SET character_set_results = utf8mb4 */ ;;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;;
 /*!50003 SET @saved_time_zone      = @@time_zone */ ;;
@@ -217,9 +223,9 @@ DELIMITER ;;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;;
-/*!50003 SET character_set_client  = utf8 */ ;;
-/*!50003 SET character_set_results = utf8 */ ;;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;;
+/*!50003 SET character_set_client  = utf8mb4 */ ;;
+/*!50003 SET character_set_results = utf8mb4 */ ;;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;;
 /*!50003 SET @saved_time_zone      = @@time_zone */ ;;
