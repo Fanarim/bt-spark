@@ -199,10 +199,16 @@ object TwitterWishesAnalysis {
 
 			// filter only hashtags that are not already saved
 			val hashtags_current_array = hashtags_current.distinct().collect()
+
 			var hashtags_new: collection.mutable.Seq[Tuple1[(String)]] = collection.mutable.Seq()
 			for(hashtag_current <- hashtags_current_array){
-				if (ssqlc.sql("SELECT * FROM hashtags WHERE hashtag=\"" + hashtag_current(0).asInstanceOf[String].toLowerCase() + "\"").count() == 0){
-					hashtags_new = hashtags_new :+ Tuple1(hashtag_current(0).asInstanceOf[String].toLowerCase())
+				if (ssqlc.sql("SELECT * FROM hashtags WHERE hashtag=\""
+						+ hashtag_current(0).asInstanceOf[String].toLowerCase()
+						+ "\"").count() == 0){
+					// check hashtag isn't already included in hashtags_new
+					if ( !hashtags_new.contains(Tuple1(hashtag_current(0).asInstanceOf[String].toLowerCase()))){
+						hashtags_new = hashtags_new :+ Tuple1(hashtag_current(0).asInstanceOf[String].toLowerCase())
+					}
 				}
 			}
 
