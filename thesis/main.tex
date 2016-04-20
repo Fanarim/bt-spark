@@ -124,7 +124,7 @@
 
 \subsection{Komponenty frameworku}
 	Jak znázorňuje obrázek \ref{fig:spark_components}, Apache Spark se skládá z několika hlavních komponent. 
-		\begin{figure}[ht]
+	\begin{figure}[ht]
     	\centering
     	\includegraphics[width=1\textwidth]{images/spark_engine.jpg}
     	\caption{Komponenty frameworku Spark\cite{spark-components}}
@@ -239,9 +239,69 @@ RESTful API bude poskytovat následující data:
 \section{Dostupné technologie}
 	- dostupne technologie
 
-\section{Twitter streaming API}
+\section{Sociální síť Twitter}
 \label{twitter-api}
-	Jak vypada API, tweet, ze API nenabizi vsechny prispevky - gnip.com
+	
+	Twitter je v současnosti jednou z nejpoužívanějších sociálních sítí poskytující svým uživatelům mikroblogovací funkcionality. Umožňuje zveřejňovat 140 znaků dlouhé zprávy (tzv. tweety) a číst zprávy publikované ostatními. Účet na něm má odhadem 1,3 milardy uživatelů, denně se jich pak na Twitter přihlásí asi 100 milionů\cite{twitter-stats}. Tito uživatelé pak každý den zveřejní 500 milionů tweetů, což odpovídá približně 6000 tweetů každou sekundu\cite{twitter-stats-2}. 
+
+\subsection{Vysvětlení pojmů}
+Pro bližší pochopení fungování sociální sítě Twitter a analýzy příspěvků z ní pro účely této práce je potřeba vysvětlit několik základních termínů:
+
+\subsubsection{Tweet}
+
+Tweet je tím nejdůležitejším pojmem na Twitteru. Jak již bylo řečeno, jedná se o zprávu o maximální délce 140 znaků. Důvody pro toto omezení jsou v dnešní době víceméně historické - Twitter byl totiž už od svých počátků zamýšlen pro použití na mobilních telefonech. Protože klasické textové zprávy posílané právě pomocí mobilních telefonů jsou omezeny na 160 znaků, bylo toto omezení při vzniku Twitteru bráno v potaz. Samotný 140 znaků dlouhý tweet by zabral většinu délky SMS zprávy, zbylých 20 znaků bylo vyhrazeno pro jméno autora zprávy\cite{twitter-140}. Nicméně i dnes má toto omezení smysl - nutí uživatele zprávy zkracovat a zmiňovat to nejdůležitější. 
+
+Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všechny. Uživatel však má možnost nastavit si vyšší úroveň soukromí. Přímo na hlavní stránce se uživateli zobrazují příspěvky těch uživatelů, jejichž je tzv. follower. 
+
+\subsection{Follower}
+
+	Followerem nebo-li "sledujícím" jiného uživatele se člověk stane jednoduše kliknutím na tlačítko Follow na profilu vybraného uživatele. To způsobí právě zobrazování zpráv sledovaného uživatele na hlavní stránce Twitteru. Sledovaný uživatel si může zobrazit seznam uživatelů kteří ho sledují. 
+
+
+\subsubsection{Retweet}
+
+	Často používanou funkcionalitou Twitteru je možnost přeposlat zprávy někoho jiného nebo-li vytvořit tzv. retweet. Taková zpráva pak začíná písmeny RT označujícími právě retweet, za nimi pak následuje jméno původního autora zprávy. 
+
+
+\subsubsection{Hashtag}
+
+	Hashtag je řetězec začínající znakem "\#". Hashtagy vkládají samotní uživatelé do jimi publikovaných tweetů. Na základě použitého hashtagu je pak možno vyhledat i ostatní zprávy, které ho obsahují. Příkladem může být hashtag \#rio2016 používaný pro tweety týkající se nadcházejících Olympijských her v Brazilském Rio de Janeiru. Dostupné hashtagy však nejsou nijak omezeny, použit může být libovolný řetězec. 
+
+
+\subsubsection{Mention}
+
+	Stejně jako může tweet obsahovat hashtag, může v něm být zmíněný jiný uživatel Twitteru. Toto zmínění je v originále označováno jako tzv. Mention. Pro zmínění jiného uživatele je použit znak zavináče následovaný uživatelským jménem. 
+
+
+\subsection{Twitter Streaming API}
+	Twitter poskytuje 2 rozhraní pro přistup k jeho datům. Jde o klasické REST API s mnoha různými endpointy\footnote{Endpoint nebo-li koncový bod je ......} a dále o několik streamových endpointů. Tato práce využívá stremové API, konkretně stream poskytující vzorek veřejně publikovaných tweetů\cite{twitter-api}. Počet tweetů které toto API poskytuje není přesně daný, nicméně experimentálně bylo zjištěno, že jde o přibližně 40 až 60 příspěvků za sekundu. To odpovídá asi 1\% publikovaných tweetů. 
+	
+	Získat lze samozřejmě i přístup ke všem veřejně publikovaným příspěvkům. Nejde však již o volně dostupná API a přístup k nim je placený. Tuto službu nabízí portál Gnip.com\cite{gnip}. Pro tuto práci je z pocohpitelných důvodů použito pouze veřejně dostupné API. 
+	
+	Pro různé případy užití se hodí využít jiné rozhraní. Klasický případ vužití RESTového API ukazuje obrázek \ref{fig:twitter_rest} - uživatel navštíví webovou stránkou a chce zobrazit například údaje o konkrétním uživateli. Server tento požadavek přijme a sám odešle požadavek na API poskytované Twitterem. Ten mu odpoví, server data zpracuje a vrátí je původnímu uživateli. 
+
+\begin{figure}[ht]
+   	\centering
+   	\includegraphics[width=1\textwidth]{images/twitter-rest.png}
+   	\caption{Schéma fungování klasického Twitter REST API\cite{twitter-rest-stream}}
+   	\label{fig:twitter_rest}
+\end{figure}
+
+	V některých případech je ale vhodnější využít právě streaming API. Pokud nepotřebujeme okamžitě reagovat na jednotlivé požadavky uživatelů ale naopak chceme data zpracovávat kontinuelně, je streaming API jasnou volbou. Mimo jiné díky němu dosáhneme nižšího zatížení serveru, protože není nutné neustálne navazovat nová spojení. Tento princip je popsán na obrázku \ref{fig:twitter_streaming}. 
+
+\begin{figure}[ht]
+   	\centering
+   	\includegraphics[width=1\textwidth]{images/twitter-streaming.png}
+   	\caption{Schéma fungování Twitter Streaming API\cite{twitter-rest-stream}}
+   	\label{fig:twitter_streaming}
+\end{figure}
+
+
+\subsubsection{Twitter4j}
+	Popisovat konkrétní parametry použitého streaming API nemá v kontextu této práce smysl. Spark streaming má totiž v sobě Twitter Streaming API zaintegrované jako jeden z možných zdrojů dat a veškerou práci s API tak řeší za uživatele. Je pouze třeba nastavit přístupové údaje k API, které je možné získat vytvořením vývojářského Twitter účtu. 
+	
+	Spark navíc využívá java knihovnu Twitter4j\cite{twitter4j}, která usnadňuje práci s Twitter API. Díky tomu jsou jednotlivá RDD tvořena již přímo objekty reprezentující jednotlivé tweety. Pomocí metod těchto objektů je pak možné o každém tweetu snadno získat všechny dostupné informace, včetně například údajů o autorovi tweetu. 
+
 
 \chapter{Návrh}
 \section{Celkový pohled na systém}
@@ -317,8 +377,21 @@ RESTful API bude poskytovat následující data:
 
 \bibitem{spark-mapreduce-difference}What is the difference between Apache Spark and Apache Hadoop (Map-Reduce) ? Quora [online]. [cit. 2016-04-17]. Dostupné z: https://www.quora.com/What-is-the-difference-between-Apache-Spark-and-Apache-Hadoop-Map-Reduce
 
-  
 \bibitem{google-pagerank}Getting started with Apache Spark GraphX – Part 1. PhData [online]. [cit. 2016-04-17]. Dostupné z: https://phdata.io/getting-started-with-apache-spark-graphx-part-1/
+
+\bibitem{twitter-stats}By The Numbers: 170+ Amazing Twitter Statistics. DMR [online]. [cit. 2016-04-19]. Dostupné z: http://expandedramblings.com/index.php/march-2013-by-the-numbers-a-few-amazing-twitter-stats/
+
+\bibitem{twitter-stats-2}Twitter Usage Statistics. Internet Live Stats: Internet Usage \& Social Media Statistics [online]. [cit. 2016-04-19]. Dostupné z: http://www.internetlivestats.com/twitter-statistics/
+
+\bibitem{twitter-140}Twitter Basics: Why 140-Characters, And How to Write More. Social Times: Covering the world of social media [online]. [cit. 2016-04-19]. Dostupné z: http://www.adweek.com/socialtimes/twitter-basics-why-140-characters-and-how-to-write-more/442608
+
+\bibitem{twitter-api}GET statuses/sample. Twitter Developers [online]. [cit. 2016-04-20]. Dostupné z: https://dev.twitter.com/streaming/reference/get/statuses/sample
+
+\bibitem{twitter-rest-stream}The Streaming APIs Overview. Twitter Developers [online]. [cit. 2016-04-20]. Dostupné z: https://dev.twitter.com/streaming/overview
+
+\bibitem{twitter4j}Twitter4J - A Java library for the Twitter API [online]. [cit. 2016-04-20]. Dostupné z: http://twitter4j.org/en/index.html
+
+\bibitem{gnip}Gnip: Unleash the Power of Social Media [online]. [cit. 2016-04-20]. Dostupné z: https://gnip.com/
 
   
 \end{thebibliography}
