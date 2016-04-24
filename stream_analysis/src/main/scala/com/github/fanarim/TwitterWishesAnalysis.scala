@@ -86,7 +86,7 @@ object TwitterWishesAnalysis {
 		//------------------------------------------------------------------------------------
 		// Spark stream setup
 		// new Twitter stream
-		val ssc = new StreamingContext(sc, Seconds(15))
+		val ssc = new StreamingContext(sc, Seconds(40))
 		// None = default Twitter4j authentication method
 		val stream = TwitterUtils.createStream(ssc, None)
 
