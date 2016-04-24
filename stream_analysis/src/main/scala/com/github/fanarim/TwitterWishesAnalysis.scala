@@ -245,7 +245,7 @@ object TwitterWishesAnalysis {
 					"sentiment")
 
 			// write wishes to DB
-			wishes_df.write.mode(SaveMode.Append).jdbc(DBUrl, "tweet_wishes", prop)
+			wishes_df.distinct.write.mode(SaveMode.Append).jdbc(DBUrl, "tweet_wishes", prop)
 
 			// save tweet_mentions_user data to DB
 			mentioned_current_relations.write.mode(SaveMode.Append).jdbc(DBUrl, "tweet_mentions_user", prop)
