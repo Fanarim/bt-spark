@@ -136,7 +136,11 @@ object TwitterWishesAnalysis {
 			}
 
 			ssqlc.read.jdbc(DBUrl, "users", prop).registerTempTable("users")
+			ssqlc.cacheTable("users")
 			ssqlc.read.jdbc(DBUrl, "hashtags", prop).registerTempTable("hashtags")
+			ssqlc.cacheTable("hashtags")
+			ssqlc.read.jdbc(DBUrl, "tweet_wishes", prop).registerTempTable("tweet_wishes")
+			ssqlc.cacheTable("tweet_wishes")
 
 			// create dataframe containg tweet authors
 			val authors_current = rdd.map(status =>
