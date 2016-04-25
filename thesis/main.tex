@@ -11,11 +11,16 @@
 
 \usepackage[utf8]{inputenc} % LaTeX source encoded as UTF-8
 
+\usepackage{listings} % source codes
+
 \usepackage{graphicx} %graphics files inclusion
 % \usepackage{amsmath} %advanced maths
 % \usepackage{amssymb} %additional math symbols
 
 \usepackage{dirtree} %directory tree visualisation
+
+\usepackage[table,xcdraw]{xcolor}
+
 
 
 
@@ -184,11 +189,12 @@
 	Sentiment, ...
 
 \section{Požadavky na systém}
-	Výsledný systém, jehož vytvoření je cílem této práce, se bude skládat ze tří klíčových částí - systému pro analýzu textu, databáze a webserveru zpřístupňujícího data pomocí RESTového API.
+	Výsledný systém, jehož vytvoření je cílem této práce, se bude skládat ze tří klíčových částí - systému pro analýzu textu, databáze a webserveru zpřístupňujícího data pomocí RESTového API. Pojmu REST API se podrobněji věnuji v sekci \ref{rest}. 
 	
 	 První zmiňovaná část, systém pro analýzu textu, bude využívat framework Apache Spark. Jako zdroj dat bude použita sociální síť Twitter poskytující vzorek přispěvků z ní, tzv. tweetů, pomocí veřejného API. Tomu se podrobněji věnuji v kapitole \ref{twitter-api}. Z těchto příspěvků budou vyfiltrovány ty, které reprezentují přání jejich autorů. Kromě měření běžných statistik bude systém provádět analýzu sentimentu těchto přání. Tato analýza bude probíhat v reálném čase, respektive se zpožděním v řádu maximálně několika desítek sekund.  Výsledky analýzy z této části budou persistovány ve vhodné relační databázi. Na ní bude napojen webový server zpřístupňující data pomocí RESTful API. 
 
 \subsection{Funkční požadavky}
+\label{pozadavky}
 \subsubsection{Systém pro analýzu textu}
 Samotný systém pro analýzu textu musí splňovat následující požadavky:
 \begin{itemize}
@@ -274,7 +280,7 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 
 
 \subsection{Twitter Streaming API}
-	Twitter poskytuje 2 rozhraní pro přistup k jeho datům. Jde o klasické REST API s mnoha různými endpointy\footnote{Endpoint nebo-li koncový bod je ......} a dále o několik streamových endpointů. Tato práce využívá stremové API, konkretně stream poskytující vzorek veřejně publikovaných tweetů\cite{twitter-api}. Počet tweetů které toto API poskytuje není přesně daný, nicméně experimentálně bylo zjištěno, že jde o přibližně 40 až 60 příspěvků za sekundu. To odpovídá asi 1\% publikovaných tweetů. 
+	Twitter poskytuje 2 rozhraní pro přistup k jeho datům. Jde o klasické REST API s mnoha různými endpointy\footnote{Endpoint nebo-li koncový bod je ......} a dále o několik streamových endpointů. Tato práce využívá stremové API, konkretně stream poskytující vzorek veřejně publikovaných tweetů\cite{twitter-api}. Počet tweetů které toto API poskytuje není přesně daný, nicméně experimentálně bylo zjištěno, že jde o přibližně 60 až 80 příspěvků za sekundu. To odpovídá asi 1\% publikovaných tweetů. 
 	
 	Získat lze samozřejmě i přístup ke všem veřejně publikovaným příspěvkům. Nejde však již o volně dostupná API a přístup k nim je placený. Tuto službu nabízí portál Gnip.com\cite{gnip}. Pro tuto práci je z pocohpitelných důvodů použito pouze veřejně dostupné API. 
 	
@@ -311,7 +317,343 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 \section{Struktura databáze}
 	schema, ...
 \section{Návrh API}
-	definice endpointů atd.
+\label{rest}
+\subsection{REST architektura}
+	Jedním z požadavků pro API poskytující výsledky analýzy dat je využití REST neboli Representational State Transfer architektury. Tato architektura rozhraní byla představena v roce 2000 Royem Fieldingem, spoluautorem protokolu HTTP. Proto není překvapením že REST pro přenos dat využívá právě tento protokol. Jedná se o bezestavovou architekturu, která poskytuje jednoduchý a především jednotný přístup k zdrojům. Za zdroj pak považujeme samotná data či stavy aplikace. 
+	
+	Každý zdroj má svoji vlastní URI\footnote{URI}, REST definuje čtyři základní metody pro přístup k nim. Tyto základní metody protoklu HTTP jsou označovány jako CRUD - umožňují totiž vytvoření dat (Create), jejich získání (Retrieve), aktualizování (Update) a smazání (Delete):
+\begin{itemize}
+
+\item\textbf{GET}
+
+Get je tou nejzákladnější metodou, která slouží k získání zdroje. Při používání webového prohlížeče se s ním setkáváme neustále - jedná se totiž o metodu sloužící jako klasický požadavek na webovou stránku. Případné parametry jsou přidány přimo do URI. Pro získání informají o uživateli Jan můžeme použít následující požadavek: 
+\begin{lstlisting}[frame=single]
+GET /api/user/jan
+Host: www.my-web.com
+\end{lstlisting}
+
+\item\textbf{POST}
+
+Post je metoda sloužící pro vytváření dat nových, která se používá například u klasických webových formulářů. Parametry s údaji pro nová data nejsou součástí URI ale přímo HTTP dotazu. 
+
+\item\textbf{DELETE}
+
+Metoda Delete slouží ke smazání konkrétního zdroje definovaného pomocí URI. HTTP požadavek pro smazání uživatele Jan by se nelišil od výše uvedeného příkladu požadavku GET, pouze by bylo nutné použít metodu DELETE. 
+
+\item\textbf{PUT}
+
+Put je metodou sloužící k aktualizaci zdroje. Jde jistým způsobem o kombinaci GET a POST - používá přímo URI již existujícího zdroje jako GET, ale v těle HTTP požadavku odesílá nová data sloužící k aktualizaci tohoto zdroje. 
+
+\end{itemize}
+
+	
+\subsection{JSON}	
+	Jedním z nejčastěji používaných formátů pro přenos dat v kombinaci s RESTovým API je JSON, neboli JavaScript Object Notation. Použit bude i v rámci této práce. Skládá se z dvojic klíčů a hodnot a jeho hlavními výhodami jsou jednoduchá struktura, přehlednost a čitelnost. 
+	
+	Většina programovacích jazyků navíc obsahuje knhovny a funkce, které umožňují jednoduché zpracování tohoto formátu. Například v jazyce Python formát JSON v podstatě odpovídá klasickému slovníku. Následující ukázka zobrazuje zápis objektu obsahujícího pole se dvěma uživateli:
+\begin{lstlisting}
+{
+	"uzivatele": [{
+		"name": "Jan Novak",
+		"age": 24,
+		"adresa": {
+			"mesto": "Praha 7",
+			"ulice": "Dlouha",
+			"cislo_popisne": "451"
+		}
+	}, {
+		"name": "Karel Spacek",
+		"age": 46,
+		"adresa": {
+			"mesto": "Praha 4",
+			"ulice": "Siroka",
+			"cislo_popisne": "841"
+		}
+	}]
+}
+\end{lstlisting}
+	
+\subsection{API enpointy}
+	Kromě použití architektury REST je také nutné splnit všechny funkční požadavky definované v sekci \ref{pozadavky}. Jelikož API data pouze zpřístupňuje ale nikterak je neupravuje, veškeré API endpointy budou využívat pouze výše popsanou metodu GET. Konkrétní endpointy budou poskytovat tato rozhraní:
+	
+
+\begin{table}[h]
+\begin{tabular}{llllr}
+\rowcolor[HTML]{EFEFEF}
+\large \textbf{/wish/}        &         &                 &        & \multicolumn{1}{l}{}                \\
+\rowcolor[HTML]{EFEFEF}
+\textbf{GET}          &         &                 &        & Seznam přání                        \\
+\multicolumn{5}{l}{\parbox[t]{12.8cm}{Bez použití následujích parametrů vrátí všechna přání za posledních 10 minut. Při použití \textit{count} jsou ignorovány parametry  \textit{from} a \textit{to}.}  } \\
+\textbf{from}         &         & timestamp       &        & od včetně                           \\
+\textbf{to}           &         & timestamp       &        & do vyjímaje                         \\
+\textbf{count}        &         & integer         &        & omezení počtu vrácených přání      \\
+ & & & & \\
+ Příklad odpovědi:
+\end{tabular}
+\end{table}
+
+\begin{lstlisting}
+ {
+  "wishes": [
+    {
+      "author": {
+        "id": 2745306105,
+        "profile_picture_url": "http://pbs.twimg.com/..",
+        "username": "moley Jem"
+      },
+      "created_at": "2016-04-25 20:13:11",
+      "id": 724692755319021569,
+      "is_retweet": false,
+      "retweet_tweet_id": 724692755319021569,
+      "sentiment": 1.0,
+      "tweet_text": "I just wish...that's all"
+    },
+    ...
+    ]
+ }
+\end{lstlisting} 
+
+
+\begin{table}[h]
+\begin{tabular}{llllr}
+\rowcolor[HTML]{EFEFEF}
+\large \textbf{/wish/\{wish\_id\}}        &         &                 &        & \multicolumn{1}{l}{}                \\
+\rowcolor[HTML]{EFEFEF}
+\textbf{GET}          &         &                 &        & Konkrétní přání                        \\
+\multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací stejné údaje jako \textit{/wish/}, ale pouze pro konkrétní přání s daným \textit{wish\_id}.}  } \\  
+ & & & & \\
+ Příklad odpovědi:
+\end{tabular}
+\end{table}
+ 
+\begin{lstlisting}
+{
+  "author": {
+    "id": 19748673,
+    "profile_picture_url": "http://pbs.twimg.com/pro...",
+    "username": "DJ Romeo Reyes"
+  },
+  "created_at": "2016-04-25 20:12:44",
+  "id": 724692642039111680,
+  "is_retweet": false,
+  "retweet_tweet_id": 724692642039111680,
+  "sentiment": 2.0,
+  "tweet_text": "I hope the Blazers take the series to..."
+ }
+\end{lstlisting} 
+
+\begin{table}[h]
+\begin{tabular}{llllr}
+\rowcolor[HTML]{EFEFEF}
+\large \textbf{/wish/\{wish\_id\}/mentions}        &         &                 &        & \multicolumn{1}{l}{}                \\
+\rowcolor[HTML]{EFEFEF}
+\textbf{GET}          &         &                 &        & Uživatelé zmíněný v přání                        \\
+\multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam uživatelů zmíněných v přání s daným \textit{wish\_id}.}  } \\    
+ & & & & \\
+ Příklad odpovědi:
+\end{tabular}
+\end{table}
+
+\begin{lstlisting}
+ {
+  "mentioned_users": [
+    {
+      "id": 389507955,
+      "profile_picture_url": "",
+      "username": "EJ Gomez"
+    },
+    ...
+  ]
+ }
+\end{lstlisting} 
+
+\begin{table}[h]
+\begin{tabular}{llllr}
+\rowcolor[HTML]{EFEFEF}
+\large \textbf{/wish/\{wish\_id\}/hashtags}        &         &                 &        & \multicolumn{1}{l}{}                \\
+\rowcolor[HTML]{EFEFEF}
+\textbf{GET}          &         &                 &        & Hashtagy použité v přání                        \\
+\multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam hashtagů použitch v přání s daným \textit{wish\_id}.}  } \\   
+ & & & & \\
+ Příklad odpovědi: 
+\end{tabular}
+\end{table}
+
+\begin{lstlisting}
+TODO
+\end{lstlisting} 
+
+\begin{table}[h]
+\begin{tabular}{llllr}
+\rowcolor[HTML]{EFEFEF}
+\large \textbf{/user/}        &         &                 &        & \multicolumn{1}{l}{}                \\
+\rowcolor[HTML]{EFEFEF}
+\textbf{GET}          &         &                 &        & Seznam uživatelů                        \\
+\multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam všech uživatelů, tedy autorů přání nebo uživatelů zmíněných v některém z nich. }  } \\   
+ & & & & \\
+ Příklad odpovědi:
+\end{tabular}
+\end{table}
+
+\begin{lstlisting}
+ {
+  "users": [
+    {
+      "id": 12,
+      "profile_picture_url": "",
+      "username": "Jack"
+    },
+    ...
+    ]
+ }
+\end{lstlisting} 
+
+\begin{table}[h]
+\begin{tabular}{llllr}
+\rowcolor[HTML]{EFEFEF}
+\large \textbf{/user/\{user\_id\}}        &         &                 &        & \multicolumn{1}{l}{}                \\
+\rowcolor[HTML]{EFEFEF}
+\textbf{GET}          &         &                 &        & Konkrétní uživatel                        \\
+\multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací údaje o konkrétním uživateli s daným \textit{user\_id}. }  } \\  
+ & & & & \\
+ Příklad odpovědi:
+\end{tabular}
+\end{table}
+
+\begin{lstlisting}
+ {
+  "id": 12,
+  "profile_picture_url": "",
+  "username": "Jack"
+ }
+\end{lstlisting} 
+
+\begin{table}[h]
+\begin{tabular}{llllr}
+\rowcolor[HTML]{EFEFEF}
+\large \textbf{/user/\{user\_id\}/wishes}        &         &                 &        & \multicolumn{1}{l}{}                \\
+\rowcolor[HTML]{EFEFEF}
+\textbf{GET}          &         &                 &        & Přání daného uživatele                        \\
+\multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam přání uživatele s daným \textit{user\_id}. }  } \\  
+ & & & & \\
+ Příklad odpovědi: viz \textit{/wish/\{wish\_id\}}
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\begin{tabular}{llllr}
+\rowcolor[HTML]{EFEFEF}
+\large \textbf{/user/\{user\_id\}/mentioned\_in}        &         &                 &        & \multicolumn{1}{l}{}                \\
+\rowcolor[HTML]{EFEFEF}
+\textbf{GET}          &         &                 &        & Zmínění daného uživatele                        \\
+\multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam přání, ve kterých byl uživatel s daným \textit{user\_id} zmíněn. }  } \\  
+ & & & & \\
+ Příklad odpovědi: viz \textit{/wish/\{wish\_id\}}
+\end{tabular}
+\end{table}
+
+
+\begin{table}[h]
+\begin{tabular}{llllr}
+\rowcolor[HTML]{EFEFEF}
+\large \textbf{/hashtag/\{hashtag\}/wishes}        &         &                 &        & \multicolumn{1}{l}{}                \\
+\rowcolor[HTML]{EFEFEF}
+\textbf{GET}          &         &                 &        & Přání obsahující daný hashtag                       \\
+\multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam přání, ve kterých byl použit daný \textit{hashtag}. }  } \\  
+ & & & & \\
+ Příklad odpovědi: viz \textit{/wish/}
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\begin{tabular}{llllr}
+\rowcolor[HTML]{EFEFEF}
+\large \textbf{/stats/mentions}        &         &                 &        & \multicolumn{1}{l}{}                \\
+\rowcolor[HTML]{EFEFEF}
+\textbf{GET}          &         &                 &        & Seznam zmiňovaných uživatelů                        \\
+\multicolumn{5}{l}{\parbox[t]{12.8cm}{Bez použití následujích parametrů vrátí seznam všech zmíněných uživatelů v posledních 10 minutách společně s počtem jejich zmínění. \\ Výsledky jsou řazeny sestupně dle počtu zmínění v daném intervalu. }  } \\
+\textbf{from}         &         & timestamp       &        & od včetně                           \\
+\textbf{to}           &         & timestamp       &        & do vyjímaje                         \\
+\textbf{count}        &         & integer         &        & omezení počtu vrácených uživatelů     \\ 
+ & & & & \\
+ Příklad odpovědi:
+\end{tabular}
+\end{table}
+
+\begin{lstlisting}[float=H]
+{
+  "popular_users": [
+    {
+      "mention_count": 5,
+      "user": {
+        "id": 42562446,
+        "profile_picture_url": "",
+        "username": "Stephen Curry"
+      }
+    },
+    ...
+    ]
+ }
+\end{lstlisting} 
+
+\begin{table}[h]
+\begin{tabular}{llllr}
+\rowcolor[HTML]{EFEFEF}
+\large \textbf{/stats/hashtags}        &         &                 &        & \multicolumn{1}{l}{}                \\
+\rowcolor[HTML]{EFEFEF}
+\textbf{GET}          &         &                 &        & Seznam používaných hashtagů                        \\
+\multicolumn{5}{l}{\parbox[t]{12.8cm}{Bez použití následujích parametrů vrátí seznam všech hashtagů použitých v posledních 10 minutách společně s počtem jejich použití. \\ Výsledky jsou řazeny sestupně dle počtu použití v daném intervalu. }  } \\
+\textbf{from}         &         & timestamp       &        & od včetně                           \\
+\textbf{to}           &         & timestamp       &        & do vyjímaje                         \\
+\textbf{count}        &         & integer         &        & omezení počtu vrácených hashtagů     \\
+ & & & & \\
+ Příklad odpovědi: 
+\end{tabular}
+\end{table}
+
+\begin{lstlisting}[float=H]
+ {
+  "popular_hashtags": [
+    {
+      "count": 3,
+      "hashtag": "dubnation"
+    },
+    ...
+    ]
+ }
+\end{lstlisting} 
+
+
+\begin{table}[h]
+\begin{tabular}{llllr}
+\rowcolor[HTML]{EFEFEF}
+\large \textbf{/stats/general}        &         &                 &        & \multicolumn{1}{l}{}                \\
+\rowcolor[HTML]{EFEFEF}
+\textbf{GET}          &         &                 &        & Seznam používaných hashtagů                        \\
+\multicolumn{5}{l}{\parbox[t]{12.8cm}{Bez použití následujích parametrů vrátí obecné statistiky za posledních 10 minut.  }  } \\
+\textbf{from}         &         & timestamp       &        & od včetně                           \\
+\textbf{to}           &         & timestamp       &        & do vyjímaje                         \\
+\textbf{density}        &         & "3s"/"10m"/"1d"         &        & hustota statistických dat   \\
+ & & & & \\
+ Příklad odpovědi:   \\
+\end{tabular}
+\end{table}
+
+\begin{lstlisting}[float=H]
+ {
+  "stats": [
+    {
+      "datetime": "2016-04-25 20:43:29",
+      "sentiment_average": 2.1570285426245794,
+      "tweets_english": 644,
+      "tweets_total": 1591,
+      "wishes_total": 9
+    },
+    ...
+    ]
+ }
+\end{lstlisting}
+
 
 \chapter{Implementace}
 \section{Použité technologie}
@@ -326,7 +668,8 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 \section{???}
 
 \chapter{Zhodnocení výsledků}
-\section{Možná budoucí vylepšení systému}
+\section{Využití systému}
+\section{Možná budoucí vylepšení}
 
 
 \begin{conclusion}
