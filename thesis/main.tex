@@ -656,11 +656,60 @@ TODO
 
 
 \chapter{Implementace}
-\section{Použité technologie}
-\subsection{Analýza proudu dat}
-\subsection{Databáze}
-\subsection{API webserver}
-\subsection{Webová aplikace}
+\section{Analýza proudu dat}
+\section{Databáze}
+\subsection{Výběr technologií}
+	Při výběru konkrétní databáze bylo nejdříve nutné rozhodnout, zda použít klasickou relační databázi nebo sáhnout po NoSQL databázi. NoSQL databáze, někdy také označované jako Not Only SQL, zpravidla nejsou relační a nemají pevně dané schéma. Na druhou stranu tyto databáze nabízejí větší možnosti škálování, často jsou distribuované a umožňují pojmout výrazně větší objemy dat než databáze klasické\cite{nosql-dbs}. 
+	
+	Data jsou v nich obvykle uložena ve formátu podobném JSONu, přičemž narozdíl od relačních databázích často provádíme jejich denormalizaci. To umožňuje rychlejší načtení informací z databáze, aktualizace dat je ale naopak časově náročnější. NoSQL databáze se často využívají právě v projektech pracujících s Big Daty. Jednou z nejrozšířenějších NoSQL databází je Cassandra. 
+	
+	Z několika důvodů jsem však pro tuto práci zvolil klasickou relační databázi. Po vyfiltrování jednotlivých přání a jejich analýze nebudu pracovat s tak velkými objemy dat, které by relační databáze nebyla schopna pojmout. Tato data navíc mezi sebou mají jasné vztahy, které je možné zanést do schématu databáze a usnadnit si tak práci s nimi. Relační databáze jsou také využívány výrazně delší dobu a jsou vývojově vyspělejší. 
+	
+	Z volně dostupných databázových řešení jsou nejrozšířenější především MySQL a PostgreSQL. Protože tato práce neklade na databázi žádné specifické požadavky, výběr konkrétní databáze je možné založit pouze na obecných parametrech. Protože PostgreSQL nabízí některé funkcionality které MySQL nebsahuje a protože je obecně považována za databázi na lepší úrovni\cite{aaaaaaaa}, bylo PostgreSQL první volbou i pro tuto práci. Po několika neúspěšných pokusech propojit právě PostgreSQL s frameworkem Apache Spark však bylo nutné použít MySQL. 
+	
+\subsection{Nasazení databáze}
+	Amazon
+	
+\subsection{Agregace dat v čase}
+	Jedním z funkčních požadavků této práce je agregace statistických dat dle času. Té je možné dosáhnout například pomocí CRONu nebo přímo na úrovni databáze pomocí Event Scheduleru. 
+	
+	CRON je unixový systémový démon zajišťující provádění uživatelem definovaných příkazů v daném čase. Stačilo by tedy napsat jednoduchý script, který by se připojil k databázi a provedl sloučení dat. Tento skript by pak byl pomocí CRONu pravidelně spouštěn. Protože byl pro nasazení databáze zvolen Amazon RDS, nemáme přístup k celému systému na kterém databáze běží, ale pouze k samotné databázi. CRON proto není vhodným řešením. 
+	
+	Event Scheduler poskytovaný přímo jako součást MySQL je naopak ideálním řešením. Jeho využití je oproti CRONu omezenější, nicméně pro námi požadovanou agregaci dat je jeho funkcionalita postačující. Půjde navíc o čistší řešení, protože bude operace modifikující databázi řešena přímo na její úrovni. 
+	
+	Příkaz pro vytvoření eventu agregujího data z tabulky \textit{stats\_general\_3s} do tabulky \textit{stats\_general\_10m }pak vypadá takto:
+	
+\begin{lstlisting}
+CREATE EVENT `stats_general_3s_to_10m` 
+ON SCHEDULE EVERY 10 MINUTE STARTS '2016-01-01 00:01:00' 
+ON COMPLETION NOT PRESERVE ENABLE COMMENT 
+	'Aggregate general stats 3s -> 10m' 
+DO BEGIN 
+	INSERT INTO stats_general_10m (tweets_total, 
+		tweets_english, wishes_total, 
+		sentiment_average) 
+	SELECT SUM(tweets_total), SUM(tweets_english), 
+		SUM(wishes_total), AVG(sentiment_average) 
+	FROM stats_general_3s 
+	WHERE datetime > timestamp(utc_timestamp() 
+		- interval 10 minute); 
+END;
+\end{lstlisting}
+
+Tento příkaz však provádí pouze slučování dat. Pro mazání dat starých bylo potřeba vytvořit další event. Ten zajišťuje mazání dat starších než 30 minut v tabulce stats\_general\_3s:
+
+\begin{lstlisting}
+CREATE EVENT `stats_general_3s_clean` 
+ON SCHEDULE EVERY 10 MINUTE STARTS '2016-01-01 00:00:00' 
+ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Clean old data 
+FROM stats_general_3s' DO 
+	DELETE FROM stats_general_3s
+	WHERE datetime < timestamp(utc_timestamp() 
+		- interval 1 hour) */ ;;
+\end{lstlisting}
+
+\section{API webserver}
+\section{Webová aplikace}
 
 \chapter{Testování}
 \section{Test API endpointů}
@@ -735,6 +784,8 @@ TODO
 \bibitem{twitter4j}Twitter4J - A Java library for the Twitter API [online]. [cit. 2016-04-20]. Dostupné z: http://twitter4j.org/en/index.html
 
 \bibitem{gnip}Gnip: Unleash the Power of Social Media [online]. [cit. 2016-04-20]. Dostupné z: https://gnip.com/
+
+\bibitem{nosql-dbs}NOSQL Databases [online]. [cit. 2016-04-26]. Dostupné z: http://nosql-database.org/
 
   
 \end{thebibliography}
