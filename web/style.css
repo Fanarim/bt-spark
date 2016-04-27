@@ -12,37 +12,89 @@ footer {
     margin: 50px 0;
 }
 
-.wishes .well{
+
+.well{
     padding: 10px;
     margin-bottom: 10px;
 }
 
-.wishes .neutral {
+.neutral {
   background-color: #EBDD82;
   border: 1px solid #9F902E;
   color: #9F902E;
 }
 
-.wishes .positive {
+.neutral a{
+  color: #9F902E;
+}
+
+.positive {
   background-color: #B9D189;
   border: 1px solid #2C812F;
   color: #2C812F;
 }
 
-.wishes .negative {
+.positive a{
+  color: #2C812F;
+}
+
+.negative {
   background-color: #E4C891;
   border: 1px solid #B75E32;
   color:#B75E32;
 }
 
-.wishes .negativenegative {
+.negative a{
+  color:#B75E32;
+}
+
+.negativenegative {
   background-color: #DC7E7E;
   border: 1px solid #C63030;
   color: #7A0C0C;
 }
 
-.wishes .positivepositive {
+.negativenegative a{
+  color: #7A0C0C;
+}
+
+.positivepositive {
   background-color: #87CB82;
   border: 1px solid #2C812F;
   color: #2C812F;
+}
+
+.positivepositive a{
+  color: #2C812F;
+}
+
+.tweet_text {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#tweet_contains_hashtags {
+  font-size: 24px;
+}
+
+#tweet_contains_mentions {
+  font-size: 24px;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
 }
