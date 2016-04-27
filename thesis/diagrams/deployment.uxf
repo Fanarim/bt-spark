@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+  <zoom_level>7</zoom_level>
+  <element>
+    <type>com.umlet.element.custom.Component</type>
+    <coordinates>
+      <x>518</x>
+      <y>210</y>
+      <w>161</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes> 
+&lt;&lt;jar&gt;&gt;
+Systém pro 
+analýzu textu</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Component</type>
+    <coordinates>
+      <x>518</x>
+      <y>448</y>
+      <w>161</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes> 
+&lt;&lt;schema&gt;&gt;
+tweet_wishes
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>539</x>
+      <y>266</y>
+      <w>108</w>
+      <h>195</h>
+    </coordinates>
+    <panel_attributes>lt=-(()-
+JDBC               .  </panel_attributes>
+    <additional_attributes>56;182;56;21</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Component</type>
+    <coordinates>
+      <x>518</x>
+      <y>672</y>
+      <w>161</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes> 
+ 
+Webserver
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>511</x>
+      <y>504</y>
+      <w>156</w>
+      <h>181</h>
+    </coordinates>
+    <panel_attributes>lt=-(()-  
+
+PyMySQL                         .
+</panel_attributes>
+    <additional_attributes>84;168;84;21</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Systemborder</type>
+    <coordinates>
+      <x>441</x>
+      <y>98</y>
+      <w>350</w>
+      <h>700</h>
+    </coordinates>
+    <panel_attributes>topcenter:Implementovaný systém
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>658</x>
+      <y>679</y>
+      <w>188</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=-()&gt;
+        
+        
+                      REST API</panel_attributes>
+    <additional_attributes>21;35;175;35</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>203</x>
+      <y>210</y>
+      <w>328</w>
+      <h>87</h>
+    </coordinates>
+    <panel_attributes>lt=-(
+
+              
+                                          
+Twitter
+Streaming API</panel_attributes>
+    <additional_attributes>315;35;21;35</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Node</type>
+    <coordinates>
+      <x>497</x>
+      <y>175</y>
+      <w>217</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>center:&lt;&lt;execution environment&gt;&gt;
+center:Java 1.8</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Node</type>
+    <coordinates>
+      <x>469</x>
+      <y>140</y>
+      <w>287</w>
+      <h>161</h>
+    </coordinates>
+    <panel_attributes>center:Počítačový cluster</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Node</type>
+    <coordinates>
+      <x>497</x>
+      <y>413</y>
+      <w>224</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>center:&lt;&lt;execution environment&gt;&gt;
+center:MySQL</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Node</type>
+    <coordinates>
+      <x>483</x>
+      <y>385</y>
+      <w>259</w>
+      <h>154</h>
+    </coordinates>
+    <panel_attributes>center:Amazon RDS</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Node</type>
+    <coordinates>
+      <x>497</x>
+      <y>637</y>
+      <w>217</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>center:&lt;&lt;execution environment&gt;&gt;
+center:Python 3.4</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Node</type>
+    <coordinates>
+      <x>469</x>
+      <y>616</y>
+      <w>287</w>
+      <h>147</h>
+    </coordinates>
+    <panel_attributes>center:Heroku</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

@@ -10,4 +10,5 @@ thesis/*
 !thesis/main.tex
 !thesis/main.pdf
 !thesis/images
+!thesis/diagrams
 db_model.mwb.bak
