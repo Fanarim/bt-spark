@@ -81,7 +81,7 @@
 \subsection{Strukturovaná a nestrukturovaná data}	
 	Data obecně často rozdělujeme do dvou kategorií - na data strukturovaná a nestrukturovaná. Strukturovaná data jsou obvykle uložena v klasické relační databázi, nebo obecně utříděna po řádcích a s přesně definovanými sloupci. Ostatní data, která nemají takto pevně danou strukturu, jsou data nestrukturovaná. Ještě donedávna docházelo ke zpracování téměř váhradně dat strukturovaných. Ta nestrukturovaná však často nabízejí obrovský potenciál k jejich využití. Klasickým příkladem nestrukturovaných dat je lidská řeč v psané formě - ta rozhodně obsahuje spoustu informací, ale ve formě kterou je počítačově složité analyzovat. Může se jednat například o články, konverzace nebo příspěvky na sociálních sítích.  Právě příspěvkům na sociální síti Twitter se věnuje i tato práce. 
 	
-	Analýzou lidské řeči se zabývá obor zvaný Natural Language Processing, obecně vytěžováním znalostí z dat pak tzv. Data Mining. Často skloňovaným pojmem je také Machine Learning, v češtině strojové učení. Pro všechny tyto obory jsou technologie pro Big Data obrovským přínosem - díky nim je možné získat opravdu cenné informace snáze a rychleji než bylo možné dříve. Například analýzou dat pohybu uživatele po webové stránce a jeho chováním můžeme odhalit nedostatky tohoto webu a jejich odstraněním zvýšit míru konverze. Hovoříme-li v kontextu sociální sítě Twitter, možnosti jsou ještě zajímavější. Na základě příspěvků a vyplněných informací jednotlivých uživatelů můžeme například odhadovat jejich volební preference nebo nabízet velice přesně cílenou reklamu. Konkrétnějším příkladem může být zajímavý projekt ze Stanfordské univerzity usilující o odhad vývoje cen akcií na základě analýzy sentimentu příspěvků z Twitteru\cite{stock-stanford}. Touto technikou se budu zabývat v následující kapitole této práce.  
+	Analýzou lidské řeči se zabývá obor zvaný Natural Language Processing či Text Mining, obecně vytěžováním znalostí z dat pak tzv. Data Mining. Často skloňovaným pojmem je také Machine Learning, v češtině strojové učení. Pro všechny tyto obory jsou technologie pro Big Data obrovským přínosem - díky nim je možné získat opravdu cenné informace snáze a rychleji než bylo možné dříve. Například analýzou dat pohybu uživatele po webové stránce a jeho chováním můžeme odhalit nedostatky tohoto webu a jejich odstraněním zvýšit míru konverze. Hovoříme-li v kontextu sociální sítě Twitter, možnosti jsou ještě zajímavější. Na základě příspěvků a vyplněných informací jednotlivých uživatelů můžeme například odhadovat jejich volební preference nebo nabízet velice přesně cílenou reklamu. Konkrétnějším příkladem může být zajímavý projekt ze Stanfordské univerzity usilující o odhad vývoje cen akcií na základě analýzy sentimentu příspěvků z Twitteru\cite{stock-stanford}. Obecně metodám Text Miningu a především právě analýze sentimentu se věnuji v kapitole \ref{text-mining}.  
 
 	Technologie pro Big Data je samozřejmě možné použít i na data strukturovaná, největší využití však nabízejí při zpracování těch nestrukturovaných. Protože nestruktorovaná data přibývají výrazně rychleji\cite{structured-unstructured}, a protože je jejich zpracování obvykle výpočetně náročnější, jsou právě technologie pro Big Data vhodnou volbou. 
  
@@ -101,7 +101,7 @@
 	Především v posledních letech se objevují konkrétní komplexnější nástroje pro práci s velkými daty. Tyto nástroje obvykle obsahují i další technologie, mimo jiné umožňující například správu a konzistenci počítačového clusteru. Tyto frameworky principielně data zpracovávají dvěma různými způsoby - jde o tzv. batchové zpracování nebo o zpracování streamové. 
 	
 \subsection{Batchové zpracování Big dat}
-	Batchové nebo-li dávkové zpracování je vhodné především pro takové úkoly, jejichž výsledky není nutné znát ihned. Data jsou nejprve po určitou dobu shromažďována a až poté je jednorázově spuštěna úloha pro jejich zpracování. Toto zpracování obvykle zabere relativně dlouhý čas. Zmiňovaný MapReduce se využívá právě pro batchové zpracování dat. 
+	Batchové neboli dávkové zpracování je vhodné především pro takové úkoly, jejichž výsledky není nutné znát ihned. Data jsou nejprve po určitou dobu shromažďována a až poté je jednorázově spuštěna úloha pro jejich zpracování. Toto zpracování obvykle zabere relativně dlouhý čas. Zmiňovaný MapReduce se využívá právě pro batchové zpracování dat. 
 
 	Jedním z prvních klíčových frameworků který umožnil další vývoj v oblasti Big dat je jednoznačně open-source framework Hadoop\cite{hadoop-home}. Protože využívá MapReduce model podporuje právě batchové zpracování dat. Jeho první plná verze vyšla na konci roku 2011, ale byl využíván již přibližně od roku 2006 například ve společnosti Yahoo\cite{hadoop-history}. Je určen pro použití na počítačových clusterech složených z řádově desítek až stovek běžně dostupných serverů. Hadoop se skládá ze tří hlavních komponent - Hadoop Distributed File System, Hadoop MapReduce a Hadoop YARN. HDFS neboli Hadoop Distributed File System je distribuovaný filesystem zajišťující rozprostření dat po jednotlivých počítačích v clusteru. Klade důraz na toleranci výpadků částí clusteru. Pro zabránění ztráty dat v případě takového výpadku dochází mimo jiné k jejich replikaci na více strojů. Hadoop MapReduce je konkrétní implementace MapReduce modelu zmiňovaného dříve. Hadoop YARN pak slouží především k řízení zdrojů v clusteru, tedy například rozdělování práce jednotlivým serverům v clusteru. Nevýhodou Hadoopu je fakt, že nepodporuje proudové zpracování dat, ale pouze zpracování batchové. 
 	
@@ -137,9 +137,9 @@
 	\end{figure}
 	
 \subsubsection{Spark core}
-	Tou hlavní komponentou je Spark Core, který zajišťuje všechny základní funkcionality Sparku, jako jsou například plánování úloh a základní vstupní a výstupní operace. Ostatní komponenty nad ním staví. Základním pojmem je zde tzv. Resilient Distributed Dataset, nebo-li RDD. RDD je zjednodušeně řeřeno téměř libovolná kolekce dat, nad kterou je možné provádět paralelní výpočty. Je navíc zajištěna jejich konzistence - při výpadku některého ze strojů mohou být ztracená data obnova pomocí informací na těch ostatních. 
+	Tou hlavní komponentou je Spark Core, který zajišťuje všechny základní funkcionality Sparku, jako jsou například plánování úloh a základní vstupní a výstupní operace. Ostatní komponenty nad ním staví. Základním pojmem je zde tzv. Resilient Distributed Dataset, neboli RDD. RDD je zjednodušeně řeřeno téměř libovolná kolekce dat, nad kterou je možné provádět paralelní výpočty. Je navíc zajištěna jejich konzistence - při výpadku některého ze strojů mohou být ztracená data obnova pomocí informací na těch ostatních. 
 	
-	Kdykoli je na konkrétním RDD vykonána některá z operací umožňujících paralelní zpracování, tzv. transformace (například map, filter nebo reduce), driver nebo-li počítač řídící ostatní počítače naplánuje její zpracování na všech počítačích v clusteru. Ty poté vytvoří nová RDD s výsledky. Operace na RDD jsou ale "lazy", což znemaná, že se neprovádějí dokud na RDD neaplikujeme nějakou akci. Akce je opakem transformace a jejím výsledkem není vytvoření nového RDD. Příkladem akce je vypsání obsahu RDD na standartní výstup. 
+	Kdykoli je na konkrétním RDD vykonána některá z operací umožňujících paralelní zpracování, tzv. transformace (například map, filter nebo reduce), driver neboli počítač řídící ostatní počítače naplánuje její zpracování na všech počítačích v clusteru. Ty poté vytvoří nová RDD s výsledky. Operace na RDD jsou ale "lazy", což znemaná, že se neprovádějí dokud na RDD neaplikujeme nějakou akci. Akce je opakem transformace a jejím výsledkem není vytvoření nového RDD. Příkladem akce je vypsání obsahu RDD na standartní výstup. 
 
 \subsubsection{Spark SQL}
 	Další důležitou komponentou je Spark SQL, dříve nazývaný jako Apache Shark. Ten umožňuje práci s především strukturovanými daty. Zavádí také novou strukturu zvanou Data Frame (DF). Stejně jako RDD, je i Data Frame distribuovaný po clusteru. Jeho struktura je ale narozdíl od RDD pevně daná - konceptuelně odpovídá klasické tabulce v relační databázi. Vnitřně v něm dochází k optimalizacím urychlujícím operaci s ním. 
@@ -166,7 +166,7 @@
     	\label{fig:spark_streaming_arch}
 	\end{figure}
 	
-	I Spark Streaming zavádí novou strukturu. Nazývá se Discretized Stream nebo-li DStream. Jde o nekonečnou posloupnost nových dat reprezentovaných jednotlivými RDD. Při psaní konkrétních programů pak stačí nastavit délku intervalu, ve kterém se má opakovaně spouštět daná úloha. DStream pak v každém intervalu dané délky vrátí právě jedno RDD, které je již možné klasicky zpracovat. 
+	I Spark Streaming zavádí novou strukturu. Nazývá se Discretized Stream neboli DStream. Jde o nekonečnou posloupnost nových dat reprezentovaných jednotlivými RDD. Při psaní konkrétních programů pak stačí nastavit délku intervalu, ve kterém se má opakovaně spouštět daná úloha. DStream pak v každém intervalu dané délky vrátí právě jedno RDD, které je již možné klasicky zpracovat. 
 	
 
 \subsubsection{MLlib}
@@ -185,8 +185,39 @@
 
 
 \chapter{Analýza}
+V této kapitole... 
+
 \section{Metody pro analýzu textu}
-	Sentiment, ...
+\label{text-mining}
+	Získáváním informací z běžného textu se zabývá obor zvaný Text Mining. Jde o obor na pomezí strojového učení a klasického data miningu a umožňuje získávání strukturovaných dat z běžného textu, tedy dat nestrukturovaných. K tomu jsou obvykle použity techniky právě ze zmiňovaných disciplín. Několik základních metod pro dolování dat z textu popisuji v následujících sekcích. 
+	
+	Protože příspěvky ze sociální sítě Twitter, jejichž analýze se tato práce věnuje, jsou relativně krátké a obsahově specifické, v rámci této práce bude použita pouze metoda zvaná Analýza sentimentu. Té se věnuji nejprve obecně v sekci \ref{sentiment-analysis}. Její použití v kontextu této práce pak podrobněji popisuji v kapitole \ref{analysis-implementation}. 
+	
+\subsection{Text Categorization}
+	Text Categorization, někdy také Text Classification je metodou umožňující rozdělení analyzovaných dokumentů do předem daných skupin, jako například sport, politika a věda. Kategorizace je založena na četnosti jednotlivých slov v analyzovaném textu - pokud například text často obsahuje slova spadající do kategorie sport, bude i celý text do této kategorie zařazen. Rozdělení slov do jednotlivých kategorií je dosaženo buďto manuálně nebo právě pomocí technik strojového učení. Jeden dokument může být obvykle zařezen do více kategorií. 
+
+\subsection{Text Clustering}
+	Text Clustering neboli shlukování textů je metoda umožňující seskupování podobných textů. Místo do předem daných kategorií jsou tyto dokumenty přiřazovány na základě jejich podobnosti do dynamicky vytvářených skupin. I zde je rozdělení dosaženo pomocí četnosti jednotlivých použítých slov. Každý dokument je obvykle přiřazen do jediné kategorie. 
+
+\subsection{Document Summarization}
+	Vytvářením krátkých shrnujících textů se zabývá metoda zvaná Document Summarization. Jednodušší varianta této metody funguje na principu výběru klíčových vět dokumentu a jejich správného seřazení. Ta složitější pak spočívá v opravdu podrobném rozboru dokumentu, především pak v jeho syntaktické analýze. Ná základě té pak dochází k vytvoření kompletně nového textu shrnujícího text původní. Praktické provedení takové analýzy a následné vytvoření shrnutí je nicméně velice složité a nejsme tak prozatím obvykle schopni dosáhnout tak dobrých výsledků jako pomocí prvně zmíněné varianty\cite{aaaa}. 
+
+
+\subsection{Sentiment Analysis}
+\label{sentiment-analysis}
+	Sentiment analysis, v češtině analýza sentimentu, je metodou pro určování celkové nálady či pozitivity daného textu. Výsledkem této analýzy tedy nejsou žádné faktické informace, ale hodnota určující subjektivní názor autora textu na dané téma. 
+	
+	Jednodušší verze algoritmů pro analýzu sentimentu fungují na podobném principu jako předchozí metody. Text je rozdělen na jednotlivá slova, z nichž každému je přiděleno negativní, neutrální nebo pozitivní hodnocení. Tato hodnocení jsou posléze zprůměrována. Tímto způsobem však dochází ke ztrátě podstatných informací - dochází k zanedbání pořadí slov a především nejsou zohledňovány například negace, které mohou změnit celý význam věty. Příkladem může být následující věta:
+
+\textit{This movie was actually neither that funny, nor super witty.}	
+
+\subsubsection{Stanford NLP knihovna}
+
+	V rámci této práce bude použita knihovna Stanford NLP\cite{sssss}, která mimo jiné obsahuje právě funkce pro analýzu sentimentu. Ty jsou již výrazně propracovanější a výše zmiňovanou větu ohodnotí jako negativní. Použitý model je nejdříve potřeba vytrénovat na vzorových datech. Bez manuálního přetrénování je algoritmus již vytrénován na datasetu složeného z necelých 10 tisíc vět z oblasti filmových hodnocení. V rámci této práce nebude tento model přetrénováván přímo pro kontext sociální sítě Twitter, bylo by totiž potřeba manuálně ohodnotit řádově tisíce vět. Podrobnější popis využití této knihovny bude popsán v kapitole \ref{analysis-implementation}. 
+
+
+
+
 
 \section{Požadavky na systém}
 	Výsledný systém, jehož vytvoření je cílem této práce, se bude skládat ze tří klíčových částí - systému pro analýzu textu, databáze a webserveru zpřístupňujícího data pomocí RESTového API. Pojmu REST API se podrobněji věnuji v sekci \ref{rest}. 
@@ -261,12 +292,12 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 
 \subsection{Follower}
 
-	Followerem nebo-li "sledujícím" jiného uživatele se člověk stane jednoduše kliknutím na tlačítko Follow na profilu vybraného uživatele. To způsobí právě zobrazování zpráv sledovaného uživatele na hlavní stránce Twitteru. Sledovaný uživatel si může zobrazit seznam uživatelů kteří ho sledují. 
+	Followerem neboli "sledujícím" jiného uživatele se člověk stane jednoduše kliknutím na tlačítko Follow na profilu vybraného uživatele. To způsobí právě zobrazování zpráv sledovaného uživatele na hlavní stránce Twitteru. Sledovaný uživatel si může zobrazit seznam uživatelů kteří ho sledují. 
 
 
 \subsubsection{Retweet}
 
-	Často používanou funkcionalitou Twitteru je možnost přeposlat zprávy někoho jiného nebo-li vytvořit tzv. retweet. Taková zpráva pak začíná písmeny RT označujícími právě retweet, za nimi pak následuje jméno původního autora zprávy. 
+	Často používanou funkcionalitou Twitteru je možnost přeposlat zprávy někoho jiného neboli vytvořit tzv. retweet. Taková zpráva pak začíná písmeny RT označujícími právě retweet, za nimi pak následuje jméno původního autora zprávy. 
 
 
 \subsubsection{Hashtag}
@@ -280,7 +311,7 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 
 
 \subsection{Twitter Streaming API}
-	Twitter poskytuje 2 rozhraní pro přistup k jeho datům. Jde o klasické REST API s mnoha různými endpointy\footnote{Endpoint nebo-li koncový bod je ......} a dále o několik streamových endpointů. Tato práce využívá stremové API, konkretně stream poskytující vzorek veřejně publikovaných tweetů\cite{twitter-api}. Počet tweetů které toto API poskytuje není přesně daný, nicméně experimentálně bylo zjištěno, že jde o přibližně 60 až 80 příspěvků za sekundu. To odpovídá asi 1\% publikovaných tweetů. 
+	Twitter poskytuje 2 rozhraní pro přistup k jeho datům. Jde o klasické REST API s mnoha různými endpointy\footnote{Endpoint neboli koncový bod je ......} a dále o několik streamových endpointů. Tato práce využívá stremové API, konkretně stream poskytující vzorek veřejně publikovaných tweetů\cite{twitter-api}. Počet tweetů které toto API poskytuje není přesně daný, nicméně experimentálně bylo zjištěno, že jde o přibližně 60 až 80 příspěvků za sekundu. To odpovídá asi 1\% publikovaných tweetů. 
 	
 	Získat lze samozřejmě i přístup ke všem veřejně publikovaným příspěvkům. Nejde však již o volně dostupná API a přístup k nim je placený. Tuto službu nabízí portál Gnip.com\cite{gnip}. Pro tuto práci je z pocohpitelných důvodů použito pouze veřejně dostupné API. 
 	
@@ -664,6 +695,7 @@ TODO
 \end{figure}
 
 \section{Analýza proudu dat}
+\label{analysis-implementation}
 \section{Databáze}
 \subsection{Výběr technologií}
 	Při výběru konkrétní databáze bylo nejdříve nutné rozhodnout, zda použít klasickou relační databázi nebo sáhnout po NoSQL databázi. NoSQL databáze, někdy také označované jako Not Only SQL, zpravidla nejsou relační a nemají pevně dané schéma. Na druhou stranu tyto databáze nabízejí větší možnosti škálování, často jsou distribuované a umožňují pojmout výrazně větší objemy dat než databáze klasické\cite{nosql-dbs}. 
