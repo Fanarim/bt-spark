@@ -213,10 +213,7 @@ V této kapitole...
 
 \subsubsection{Stanford NLP knihovna}
 
-	V rámci této práce bude použita knihovna Stanford NLP\cite{sssss}, která mimo jiné obsahuje právě funkce pro analýzu sentimentu. Ty jsou již výrazně propracovanější a výše zmiňovanou větu ohodnotí jako negativní. Použitý model je nejdříve potřeba vytrénovat na vzorových datech. Bez manuálního přetrénování je algoritmus již vytrénován na datasetu složeného z necelých 10 tisíc vět z oblasti filmových hodnocení. V rámci této práce nebude tento model přetrénováván přímo pro kontext sociální sítě Twitter, bylo by totiž potřeba manuálně ohodnotit řádově tisíce vět. Podrobnější popis využití této knihovny bude popsán v kapitole \ref{analysis-implementation}. 
-
-
-
+	V rámci této práce bude použita knihovna Stanford NLP\cite{sssss}, která mimo jiné obsahuje právě funkce pro analýzu sentimentu. Ty jsou již výrazně propracovanější a výše zmiňovanou větu ohodnotí jako negativní. Použitý model je nejdříve potřeba vytrénovat na vzorových datech. Bez manuálního přetrénování je algoritmus již vytrénován na datasetu složeného z necelých 10 tisíc vět z oblasti filmových hodnocení. Tato trénovací data je možné najít na stránce Stanford Dataset Treebank\cite{ssdassa}. V rámci této práce nebude použitý model přetrénováván přímo pro kontext sociální sítě Twitter, bylo by totiž potřeba manuálně ohodnotit řádově tisíce vět. Podrobnější popis využití této knihovny bude popsán v kapitole \ref{analysis-implementation}. 
 
 
 \section{Požadavky na systém}
@@ -687,7 +684,7 @@ TODO
 
 
 \chapter{Implementace}
-\begin{figure}
+\begin{figure}[h]
    	\centering
    	\includegraphics[width=1\textwidth]{images/deployment.jpg}
    	\caption{Diagram nasazení implementovaného systému}
@@ -707,14 +704,28 @@ TODO
 	Z volně dostupných databázových řešení jsou nejrozšířenější především MySQL a PostgreSQL. Protože tato práce neklade na databázi žádné specifické požadavky, výběr konkrétní databáze je možné založit pouze na obecných parametrech. Protože PostgreSQL nabízí některé funkcionality které MySQL nebsahuje a protože je obecně považována za databázi na lepší úrovni\cite{aaaaaaaa}, bylo PostgreSQL první volbou i pro tuto práci. Po několika neúspěšných pokusech propojit právě PostgreSQL s frameworkem Apache Spark však bylo nutné použít MySQL. 
 	
 \subsection{Nasazení databáze}
-	Amazon
+	Po výběru konkrétních databázových technologií byl potřeba zvolit vhodný způsob nasazení. Z důvodů popsaných v následující sekci nebyl k nasazení použit vlastní linuxový server, nicméně jedna z v poslední době stále rozšířenějších cloudových služeb. 
+	
+\subsubsection{Amazon RDS}
+	Konkrétně byla pro nasazení databáze využita služba Amazon AWS\cite{gghjjkk}. Amazon Web Services je kolekce cloudových služeb zahrnujících například cloudové úložiště, virtuální servery nebo právě databázové servery - tzv. Amazon RDS, neboli Relational Database Service. Veškeré služby je možno provozovat v celkem 12 regionech pokrývajících většinu světa. Česká Republika například spadá pod datacentrum umístěné ve Frankfurtu. 
+	
+	Hlavní výhodou Amazon AWS a podobných služeb je výrazné usnadnění instalace i administrace a jednoduchá škálovatelnost, obvykle je také zaručena určitá dostupnost služeb. Jak ukazuje obrázek \ref{fig:aws_monitoring}, v případě Amazonu je výhodou také relativně podrobný monitoring. Nevýhodou oproti vlastnímu serveru může být především vyšší cena, v některých případech také restrikce při nastavování služeb. 
+	
+	Ani v případě RDS není možné provést všechna nastavení, která by byla dostupná při použití vlastní instalace MySQL. Automaticky vytvořený uživatel totiž nemá neomezená práva a nemůže například měnit hodnoty globálních proměnných. Většinu jich lze nicméně nastavit pomocí tzv. profilů v administraci RDS. Příkladem takových nastavení je povolení MySQL Events, kterým se věnuji v následující sekci. 
+
+\begin{figure}[h]
+   	\centering
+   	\includegraphics[width=1\textwidth]{images/aws-monitoring.png}
+   	\caption{Monitoring databáze v Amazon RDS}
+   	\label{fig:aws_monitoring}
+\end{figure}
 	
 \subsection{Agregace dat v čase}
 	Jedním z funkčních požadavků této práce je agregace statistických dat dle času. Té je možné dosáhnout například pomocí CRONu nebo přímo na úrovni databáze pomocí Event Scheduleru. 
 	
 	CRON je unixový systémový démon zajišťující provádění uživatelem definovaných příkazů v daném čase. Stačilo by tedy napsat jednoduchý script, který by se připojil k databázi a provedl sloučení dat. Tento skript by pak byl pomocí CRONu pravidelně spouštěn. Protože byl pro nasazení databáze zvolen Amazon RDS, nemáme přístup k celému systému na kterém databáze běží, ale pouze k samotné databázi. CRON proto není vhodným řešením. 
 	
-	Event Scheduler poskytovaný přímo jako součást MySQL je naopak ideálním řešením. Jeho využití je oproti CRONu omezenější, nicméně pro námi požadovanou agregaci dat je jeho funkcionalita postačující. Půjde navíc o čistší řešení, protože bude operace modifikující databázi řešena přímo na její úrovni. 
+	Event Scheduler poskytovaný přímo jako součást MySQL je naopak řešením ideálním. Jeho využití je oproti CRONu omezenější, nicméně pro námi požadovanou agregaci dat je jeho funkcionalita postačující. Půjde navíc o čistší řešení, protože bude operace modifikující databázi řešena přímo na její úrovni. 
 	
 	Příkaz pro vytvoření eventu agregujího data z tabulky \textit{stats\_general\_3s} do tabulky \textit{stats\_general\_10m }pak vypadá takto:
 	
@@ -749,13 +760,17 @@ FROM stats_general_3s' DO
 
 \section{API webserver}
 \section{Webová aplikace}
+	Jako součást této práce byla pro prezentaci výsledků analýzy vytvořena i webová apliace využívající API popsané v předchozí kapitole. Protože web není součástí zadání této práce, budu se mu věnovat pouze z hlediska testování API v kapitole \ref{testovani} a v závěřečném zhodnocení v kapitole \ref{zhodnoceni}. 
+
 
 \chapter{Testování}
+\label{testovani}
 \section{Test API endpointů}
 	da se web castecne povazovat jako otestovani api?
 \section{???}
 
 \chapter{Zhodnocení výsledků}
+\label{zhodnoceni}
 \section{Využití systému}
 \section{Možná budoucí vylepšení}
 
