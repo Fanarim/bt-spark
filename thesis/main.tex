@@ -342,6 +342,7 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 	jednotlive casti, propojeni, diagram 
 \section{Analýza tweetů}
 	jak bude vypadat program ve sparku
+
 \section{Struktura databáze}
 	schema, ...
 \section{Návrh API}
@@ -693,6 +694,15 @@ TODO
 
 \section{Analýza proudu dat}
 \label{analysis-implementation}
+
+	
+\begin{figure}[h]
+   	\centering
+   	\includegraphics[width=1\textwidth]{images/activity-diagram.png}
+   	\caption{Diagram aktivit systému pro analýzu tweetů}
+   	\label{fig:activity_diagram}
+\end{figure}
+
 \section{Databáze}
 \subsection{Výběr technologií}
 	Při výběru konkrétní databáze bylo nejdříve nutné rozhodnout, zda použít klasickou relační databázi nebo sáhnout po NoSQL databázi. NoSQL databáze, někdy také označované jako Not Only SQL, zpravidla nejsou relační a nemají pevně dané schéma. Na druhou stranu tyto databáze nabízejí větší možnosti škálování, často jsou distribuované a umožňují pojmout výrazně větší objemy dat než databáze klasické\cite{nosql-dbs}. 
@@ -759,6 +769,23 @@ FROM stats_general_3s' DO
 \end{lstlisting}
 
 \section{API webserver}
+\subsection{Výběr technologií}
+	Frameworky umožňující implementaci RESTového API existují pro víceméně všechny rozšířené programovací jazyky, některé z nich se však pro tyto účely hodí víc než jiné. Velice oblíbeným je například jazyk Python, který jsem především z důvodů jako jsou skvělá přehlednost kódu a rozsáhlá komunita zvolil i já. Z konkrétních frameworků jsem se poté rozhodoval především mezi minimalistickým Flaskem a komplexnějším Djangem. 
+	
+	Oba tyto frameworky mají kvalitní dokumentaci a stojí za nima rozsáhlá komunita. Django je ale určený především pro tvorbu komplexních webových aplikací, kdežto Flask je označován za tzv. micro-framework. Poskytuje tedy jen základní funkcionality, které je možné rozšířit instalací dalších pluginů. Protože cílem je vytvoření pouze RESTového API, je Flask ideálním nástrojem bez pro tento projekt zbytečných funkcí. 
+	
+\noindent Při implementaci bylo použito několik pluginů pro Flask:
+	
+\begin{itemize}
+\item \textbf{flask-sqlalchemy} - SQLAlchemy je asi nejrozšířenějším ORM\footnote{XXXX} pro Python. Tento plugin integruje jeho funkcionality do frameworku Flask. Umožňuje tedy namapování jednotlivých tabulek databáze na třídy, se kterými je v programu možno jednoduše pracovat místo manuálního vytváření SQL dotazů. 
+\item \textbf{flask-restless} - Tento plugin dále využívá SQLAlchemy a umožňuje především automatické vytváření API endpointů na základě definovaných databázových modelů. 
+\item \textbf{flask-testing} - Flask-testing je plugin použitý pro testování API endpointů. Tomu se podrobněji věnuji v sekci \ref{api-testing}.
+\end{itemize}
+
+\subsection{Nasazení}
+\subsubsection{Heroku}
+
+
 \section{Webová aplikace}
 	Jako součást této práce byla pro prezentaci výsledků analýzy vytvořena i webová apliace využívající API popsané v předchozí kapitole. Protože web není součástí zadání této práce, budu se mu věnovat pouze z hlediska testování API v kapitole \ref{testovani} a v závěřečném zhodnocení v kapitole \ref{zhodnoceni}. 
 
@@ -766,7 +793,7 @@ FROM stats_general_3s' DO
 \chapter{Testování}
 \label{testovani}
 \section{Test API endpointů}
-	da se web castecne povazovat jako otestovani api?
+\label{api-testing}
 \section{???}
 
 \chapter{Zhodnocení výsledků}
