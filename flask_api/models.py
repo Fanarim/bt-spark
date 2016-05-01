@@ -36,7 +36,7 @@ class User(db.Model):
                                 back_populates="mentioned_users")
 
     def json_dump(self):
-        return dict(id=self.id,
+        return dict(id=str(self.id),
                     username=self.username,
                     profile_picture_url=self.profile_picture_url)
 
@@ -78,12 +78,12 @@ class TweetWish(db.Model):
                             back_populates="contained_in")
 
     def json_dump(self):
-        return dict(id=self.id,
+        return dict(id=str(self.id),
                     author=self.user.json_dump(),
                     tweet_text=self.tweet_text.replace("&quot;", "\""),
                     created_at=str(self.created_at),
                     is_retweet=self.is_retweet,
-                    retweet_tweet_id=self.retweet_tweet_id,
+                    retweet_tweet_id=str(self.retweet_tweet_id),
                     sentiment=self.sentiment)
 
 
