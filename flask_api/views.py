@@ -16,6 +16,14 @@ def check_valid_arguments(arguments, allowed_arguments):
             raise ProcessingException(description='Invalid argument: ' + arg,
                                       code=400)
 
+def validate_count(count):
+    try:
+        int(count)
+    except:
+        raise ProcessingException(
+            description='Invalid value in "count" parameter',
+            code=400)
+
 
 def validate_and_set_interval(arguments):
     time_now = time.time()
@@ -50,6 +58,7 @@ def wishes():
     time_from, time_to = validate_and_set_interval(request.args)
 
     if 'count' in request.args:
+        validate_count(request.args['count'])
         wishes = TweetWish.query\
             .order_by(TweetWish.created_at.desc())\
             .limit(request.args['count'])
@@ -164,6 +173,7 @@ def hashtag_stats():
     time_from, time_to = validate_and_set_interval(request.args)
 
     if 'count' in request.args:
+        validate_count(request.args['count'])
         hashtags = TweetWish\
             .query\
             .filter(func.unix_timestamp(TweetWish.created_at) < time_to)\
@@ -201,6 +211,7 @@ def mention_stats():
     time_from, time_to = validate_and_set_interval(request.args)
 
     if 'count' in request.args:
+        validate_count(request.args['count'])
         mentions = User\
             .query\
             .join(tweet_mentions_user)\
