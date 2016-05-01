@@ -181,7 +181,7 @@ def hashtag_stats():
             .join(tweet_contains_hashtag)\
             .join(Hashtag)\
             .with_entities(Hashtag.hashtag)\
-            .add_column(func.count(Hashtag.hashtag))\
+            .add_columns(func.count(Hashtag.hashtag))\
             .group_by(Hashtag.hashtag)\
             .order_by(desc(func.count(Hashtag.hashtag)))\
             .limit(request.args['count'])\
@@ -194,7 +194,7 @@ def hashtag_stats():
             .join(tweet_contains_hashtag)\
             .join(Hashtag)\
             .with_entities(Hashtag.hashtag)\
-            .add_column(func.count(Hashtag.hashtag))\
+            .add_columns(func.count(Hashtag.hashtag))\
             .group_by(Hashtag.hashtag)\
             .order_by(desc(func.count(Hashtag.hashtag)))\
             .all()
@@ -218,7 +218,7 @@ def mention_stats():
             .join(TweetWish)\
             .filter(func.unix_timestamp(TweetWish.created_at) < time_to)\
             .filter(func.unix_timestamp(TweetWish.created_at) >= time_from)\
-            .add_column(func.count(User.id))\
+            .add_columns(func.count(User.id))\
             .group_by(User.id)\
             .order_by(desc(func.count(User.id)))\
             .limit(request.args['count'])\
@@ -230,7 +230,7 @@ def mention_stats():
             .join(TweetWish)\
             .filter(func.unix_timestamp(TweetWish.created_at) < time_to)\
             .filter(func.unix_timestamp(TweetWish.created_at) >= time_from)\
-            .add_column(func.count(User.id))\
+            .add_columns(func.count(User.id))\
             .group_by(User.id)\
             .order_by(desc(func.count(User.id)))\
 

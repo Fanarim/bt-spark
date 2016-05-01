@@ -9,7 +9,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
-app.debug = True
+app.debug = False
 
 # import db models and initialize db
 from models import *
