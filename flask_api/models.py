@@ -14,15 +14,20 @@ tweet_mentions_user = db.Table(
 tweet_contains_hashtag = db.Table(
     'tweet_contains_hashtag', db.Model.metadata,
     db.Column('tweet_id', db.BigInteger, db.ForeignKey('tweet_wishes.id')),
-    db.Column('hashtag', db.String, db.ForeignKey('hashtags.hashtag'))
+    db.Column('hashtag', db.String(140), db.ForeignKey('hashtags.hashtag'))
 )
 
 
 class User(db.Model):
+    def __init__(self, id, username, profile_picture_url):
+        self.id = id
+        self.username = username
+        self.profile_picture_url = profile_picture_url
+
     __tablename__ = 'users'
     id = db.Column(db.BigInteger, primary_key=True)
-    username = db.Column(db.String)
-    profile_picture_url = db.Column(db.String)
+    username = db.Column(db.String(140))
+    profile_picture_url = db.Column(db.Text)
     wishes = relationship("TweetWish",
                           back_populates="user")
     mentioned_in = relationship("TweetWish",
@@ -37,10 +42,26 @@ class User(db.Model):
 
 
 class TweetWish(db.Model):
+    def __init__(self,
+                 id,
+                 author,
+                 tweet_text,
+                 created_at,
+                 is_retweet,
+                 retweet_tweet_id,
+                 sentiment):
+        self.id = id
+        self.author = author
+        self.tweet_text = tweet_text
+        self.created_at = created_at
+        self.is_retweet = is_retweet
+        self.retweet_tweet_id = retweet_tweet_id
+        self.sentiment = sentiment
+
     __tablename__ = 'tweet_wishes'
     id = db.Column(db.BigInteger, primary_key=True)
     author = db.Column(db.BigInteger, db.ForeignKey('users.id'))
-    tweet_text = db.Column(db.String)
+    tweet_text = db.Column(db.Text)
     created_at = db.Column(db.DateTime)
     is_retweet = db.Column(db.Boolean)
     retweet_tweet_id = db.Column(db.BigInteger)
@@ -67,8 +88,11 @@ class TweetWish(db.Model):
 
 
 class Hashtag(db.Model):
+    def __init__(self, hashtag):
+        self.hashtag = hashtag
+
     __tablename__ = 'hashtags'
-    hashtag = db.Column(db.String, primary_key=True)
+    hashtag = db.Column(db.String(140), primary_key=True)
     contained_in = relationship("TweetWish",
                                 secondary=tweet_contains_hashtag,
                                 lazy='dynamic',
@@ -79,6 +103,18 @@ class Hashtag(db.Model):
 
 
 class Stats3s(db.Model):
+    def __init__(self,
+                 datetime,
+                 tweets_total,
+                 tweets_english,
+                 wishes_total,
+                 sentiment_average):
+        self.datetime = datetime
+        self.tweets_total = tweets_total
+        self.tweets_english = tweets_english
+        self.wishes_total = wishes_total
+        self.sentiment_average = sentiment_average
+
     __tablename__ = 'stats_general_3s'
     datetime = db.Column(db.DateTime, primary_key=True)
     tweets_total = db.Column(db.Integer)
@@ -95,6 +131,18 @@ class Stats3s(db.Model):
 
 
 class Stats10m(db.Model):
+    def __init__(self,
+                 datetime,
+                 tweets_total,
+                 tweets_english,
+                 wishes_total,
+                 sentiment_average):
+        self.datetime = datetime
+        self.tweets_total = tweets_total
+        self.tweets_english = tweets_english
+        self.wishes_total = wishes_total
+        self.sentiment_average = sentiment_average
+
     __tablename__ = 'stats_general_10m'
     datetime = db.Column(db.DateTime, primary_key=True)
     tweets_total = db.Column(db.Integer)
@@ -111,6 +159,18 @@ class Stats10m(db.Model):
 
 
 class Stats1d(db.Model):
+    def __init__(self,
+                 datetime,
+                 tweets_total,
+                 tweets_english,
+                 wishes_total,
+                 sentiment_average):
+        self.datetime = datetime
+        self.tweets_total = tweets_total
+        self.tweets_english = tweets_english
+        self.wishes_total = wishes_total
+        self.sentiment_average = sentiment_average
+
     __tablename__ = 'stats_general_1d'
     datetime = db.Column(db.DateTime, primary_key=True)
     tweets_total = db.Column(db.Integer)

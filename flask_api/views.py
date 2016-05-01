@@ -6,7 +6,7 @@ from flask.ext.restless import ProcessingException
 from sqlalchemy.sql import func
 from sqlalchemy import desc
 
-from main import app
+from wish_api import app
 from models import *
 
 
@@ -99,7 +99,7 @@ def wish_hashtags(wish_id):
     hashtags = TweetWish.query\
         .get_or_404(wish_id)\
         .hashtags
-    return jsonify(hashtags=[item.hashtag for item in hashtags])
+    return jsonify(hashtags=[{'hashtag': item.hashtag} for item in hashtags])
 
 
 # return all users
