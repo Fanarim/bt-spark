@@ -217,7 +217,7 @@ V této kapitole...
 
 
 \section{Požadavky na systém}
-	Výsledný systém, jehož vytvoření je cílem této práce, se bude skládat ze tří klíčových částí - systému pro analýzu textu, databáze a webserveru zpřístupňujícího data pomocí RESTového API. Pojmu REST API se podrobněji věnuji v sekci \ref{rest}. 
+	Jak podrobněji popisuji v kapitole \ref{navrh}, výsledný systém jehož vytvoření je cílem této práce se bude skládat ze tří klíčových částí - systému pro analýzu textu, databáze a webserveru zpřístupňujícího data pomocí RESTového API. Pojmu REST API se podrobněji věnuji v sekci \ref{rest}. 
 	
 	 První zmiňovaná část, systém pro analýzu textu, bude využívat framework Apache Spark. Jako zdroj dat bude použita sociální síť Twitter poskytující vzorek přispěvků z ní, tzv. tweetů, pomocí veřejného API. Tomu se podrobněji věnuji v kapitole \ref{twitter-api}. Z těchto příspěvků budou vyfiltrovány ty, které reprezentují přání jejich autorů. Kromě měření běžných statistik bude systém provádět analýzu sentimentu těchto přání. Tato analýza bude probíhat v reálném čase, respektive se zpožděním v řádu maximálně několika desítek sekund.  Výsledky analýzy z této části budou persistovány ve vhodné relační databázi. Na ní bude napojen webový server zpřístupňující data pomocí RESTful API. 
 
@@ -338,17 +338,34 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 
 
 \chapter{Návrh}
+\label{navrh}
+V této kapitole...
 \section{Celkový pohled na systém}
-	jednotlive casti, propojeni, diagram 
+Jak již bylo nastíněno v definici požadavků pro systém implementovaný jako součást této práce, bude se tento systém skládat z několika hlavních částí: 
+\begin{itemize}
+\item \textbf{Systém pro analýzu tweetů} využívající framework Spark bude sloužit k analýze příspěvků ze sociální sítě Twitter. Po vyfiltrování tweetů reprezentujích přání jejich autorů provede analýzu sentimentu těchto tweetů. Výsledky analýzy společně s obecnými údaji o zpracovávaných textech budou uloženy do databáze. 
+\item \textbf{Databáze} bude uchovávat veškeré potřebné údaje o analyzovaných příspěvcích. Krom toho bude v databázi docházet k agregaci dat pro dosažení snížené zátaže. 
+\item \textbf{Webserver poskytující REST API} bude zpřístupňovat veškeré údaje, jejichž dostupnost je vyžadována ve funkčních požadavcích. 
+\item \textbf{Webová aplikace} sice není součástí zadání této práce, bude nicméně z důvodů prezentace výsledků a testování API také implementována. 
+\end{itemize}
+
+\noindent Jednotlivé části podrobněji popisuji v následujících sekcích. 
+
 \section{Analýza tweetů}
 	jak bude vypadat program ve sparku
 
 \section{Struktura databáze}
-	schema, ...
+\begin{figure}[ht]
+   	\centering
+   	\includegraphics[width=1\textwidth]{../db_model.png}
+   	\caption{Návrh schámatu databáze}
+   	\label{fig:db-structure}
+\end{figure}
+
 \section{Návrh API}
 \label{rest}
 \subsection{REST architektura}
-	Jedním z požadavků pro API poskytující výsledky analýzy dat je využití REST neboli Representational State Transfer architektury. Tato architektura rozhraní byla představena v roce 2000 Royem Fieldingem, spoluautorem protokolu HTTP. Proto není překvapením že REST pro přenos dat využívá právě tento protokol. Jedná se o bezestavovou architekturu, která poskytuje jednoduchý a především jednotný přístup k zdrojům. Za zdroj pak považujeme samotná data či stavy aplikace. 
+	Jedním z požadavků pro API poskytující výsledky analýzy dat je využití REST neboli Representational State Transfer architektury. Tato architektura rozhraní byla představena v roce 2000 Royem Fieldingem, spoluautorem protokolu HTTP\cite{jjjlkll}. Proto není překvapením že REST pro přenos dat využívá právě tento protokol. Jedná se o bezestavovou architekturu, která poskytuje jednoduchý a především jednotný přístup ke zdrojům. Za zdroj pak považujeme samotná data či stavy aplikace. 
 	
 	Každý zdroj má svoji vlastní URI\footnote{URI}, REST definuje čtyři základní metody pro přístup k nim. Tyto základní metody protoklu HTTP jsou označovány jako CRUD - umožňují totiž vytvoření dat (Create), jejich získání (Retrieve), aktualizování (Update) a smazání (Delete):
 \begin{itemize}
@@ -874,6 +891,10 @@ FROM stats_general_3s' DO
 
 
 \appendix
+
+\chapter{Definice API endpointů}
+\label{appendix-api}
+aaabbb
 
 \chapter{Seznam použitých zkratek}
 % \printglossaries
