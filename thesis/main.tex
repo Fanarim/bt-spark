@@ -422,21 +422,21 @@ Put je metodou sloužící k aktualizaci zdroje. Jde jistým způsobem o kombina
 	Většina programovacích jazyků navíc obsahuje knhovny a funkce, které umožňují jednoduché zpracování tohoto formátu. Například v jazyce Python formát JSON v podstatě odpovídá klasickému slovníku. Následující ukázka zobrazuje zápis objektu obsahujícího pole se dvěma uživateli:
 \begin{lstlisting}[language=json,firstnumber=1]
 {
-	"uzivatele": [{
+	"users": [{
 		"name": "Jan Novak",
 		"age": 24,
-		"adresa": {
-			"mesto": "Praha 7",
-			"ulice": "Dlouha",
-			"cislo_popisne": "451"
+		"address": {
+			"city": "Praha 7",
+			"street": "Dlouha",
+			"street_number": "451"
 		}
 	}, {
 		"name": "Karel Spacek",
 		"age": 46,
-		"adresa": {
-			"mesto": "Praha 4",
-			"ulice": "Siroka",
-			"cislo_popisne": "841"
+		"address": {
+			"city": "Praha 4",
+			"street": "Siroka",
+			"street_number": "841"
 		}
 	}]
 }
@@ -621,7 +621,11 @@ Put je metodou sloužící k aktualizaci zdroje. Jde jistým způsobem o kombina
 	Po výběru konkrétních databázových technologií byl potřeba zvolit vhodný způsob nasazení. Z důvodů popsaných v následující sekci nebyl k nasazení použit vlastní linuxový server, nicméně jedna z v poslední době stále rozšířenějších cloudových služeb. 
 	
 \subsubsection{Amazon RDS}
-	Konkrétně byla pro nasazení databáze využita služba Amazon AWS\cite{gghjjkk}. Amazon Web Services je kolekce cloudových služeb zahrnujících například cloudové úložiště, virtuální servery nebo právě databázové servery - tzv. Amazon RDS, neboli Relational Database Service. Veškeré služby je možno provozovat v celkem 12 regionech pokrývajících většinu světa. Česká Republika například spadá pod datacentrum umístěné ve Frankfurtu. 
+	Konkrétně byla pro nasazení databáze využita služba Amazon AWS\cite{gghjjkk}. Amazon Web Services je kolekce cloudových služeb zahrnujících například cloudové úložiště, virtuální servery nebo právě databázové servery - tzv. Amazon RDS, neboli Relational Database Service. 
+	
+	Nabízené virtuální servery jsou příkladem tzv. IaaS - tedy Infrastructure as a Service. Uživatel se v případě IaaS nemusí starat o infrastrukturu, jsou mu ale poskytnuty přístupové údaje v tomto případě k linuxovému serveru a o veškeré další nastavení a provoz se stará sám. Amazon RDS je pak příkladem tzv. Paas, neboli Platform as a Service. V případě PaaS obecně odpadá i nutnost instalace softwaru a dalších administrátorských úkonů. Uživatel se stará pouze o vývoj a provoz jím provozovaného software. U Amazon RDS tak není třeba (a zároveň není možné) manuálně instalovat databázi nebo třeba nastavovat připojení systému k síti. Na druhou stranu to může přinášet i značná omezení. 
+	
+	Veškeré služby poskytované v rámci Amazon AWS je možno provozovat v celkem 12 regionech pokrývajících většinu světa. Česká Republika například spadá pod datacentrum umístěné ve Frankfurtu. 
 	
 	Hlavní výhodou Amazon AWS a podobných služeb je výrazné usnadnění instalace i administrace a jednoduchá škálovatelnost, obvykle je také zaručena určitá dostupnost služeb. Jak ukazuje obrázek \ref{fig:aws_monitoring}, v případě Amazonu je výhodou také relativně podrobný monitoring. Nevýhodou oproti vlastnímu serveru může být především vyšší cena, v některých případech také restrikce při nastavování služeb. 
 	
@@ -644,7 +648,7 @@ Put je metodou sloužící k aktualizaci zdroje. Jde jistým způsobem o kombina
 	
 	Příkaz pro vytvoření eventu agregujího data z tabulky \textit{stats\_general\_3s} do tabulky \textit{stats\_general\_10m }pak vypadá takto:
 	
-\begin{lstlisting}
+\begin{lstlisting}[language=json,firstnumber=1]
 CREATE EVENT `stats_general_3s_to_10m` 
 ON SCHEDULE EVERY 10 MINUTE STARTS '2016-01-01 00:01:00' 
 ON COMPLETION NOT PRESERVE ENABLE COMMENT 
@@ -663,7 +667,7 @@ END;
 
 Tento příkaz však provádí pouze slučování dat. Pro mazání dat starých bylo potřeba vytvořit další event. Ten zajišťuje mazání dat starších než 30 minut v tabulce stats\_general\_3s:
 
-\begin{lstlisting}
+\begin{lstlisting}[language=json,firstnumber=1]
 CREATE EVENT `stats_general_3s_clean` 
 ON SCHEDULE EVERY 10 MINUTE STARTS '2016-01-01 00:00:00' 
 ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Clean old data 
@@ -687,7 +691,62 @@ FROM stats_general_3s' DO
 \item \textbf{flask-testing} - Flask-testing je plugin použitý pro testování API endpointů. Tomu se podrobněji věnuji v sekci \ref{api-testing}.
 \end{itemize}
 
+\subsection{Ukázky implementace}
+Jednotlivé tabulky databáze jsou tedy pomocí ORM SQLAlchemy namapovány na třídy reprezentující objekty jako \textit{user} nebo \textit{tweetWish}. Příklad takového namapování tabulky user ukazuje zdrojový kód \ref{fig:user-orm}. Metodu \textit{json\_dump} bylo nutné naimplementovat pro všechny třídy. Ne všechny atributy jsou totiž serializovatelné a není je tak možné automaticky převádět na JSON. 
+
+\begin{figure}
+\begin{lstlisting}[language=json,firstnumber=1][ht]
+class User(db.Model):
+	def __init__(self, id, username, profile_picture_url):
+		self.id = id
+		self.username = username
+		self.profile_picture_url = profile_picture_url
+
+	__tablename__ = 'users'
+	id = db.Column(db.BigInteger, primary_key=True)
+	username = db.Column(db.String(140))
+	profile_picture_url = db.Column(db.Text)
+	wishes = relationship("TweetWish",
+							back_populates="user")
+	mentioned_in = relationship("TweetWish",
+    							 secondary=tweet_mentions_user,
+								 lazy='dynamic',
+								 back_populates="mentioned_users")
+
+	def json_dump(self):
+		return dict(id=str(self.id),
+					username=self.username,
+					profile_picture_url=self.profile_picture_url)
+\end{lstlisting}
+\caption{Ukázka použití ORM SQLAlchemy}
+\label{fig:user-orm}
+\end{figure} 
+
+Po namapování všech potřebných tabulek již můžeme v rámci programu pracovat s definovanými třídami. To platí i při vytváření konkrétních endpointů jak ukazuje zdrojový kód \ref{fig:user-view}. Po definování konkrétní cesty, v tomto případě \textit{/user/<user\_id>/}, již dochází jen ke kontrole počtu zadaných argumentů. Poté je jednoduše vrácen JSON obsahující údaje uživatele s daným ID nebo v případě neexistujícího uživatele HTTP status 404. 
+
+Obdobným způsobem jsou implementovány i další endpointy. Zajímavá je také nutnost přidání tzv. CORS hlaviček ke všem odpovědím. CORS neboli Cross Origin Resource Sharing je mechanismus umožňující webům získávání zdrojů z jiných domén. To je ale standardně z bezpečnostních důvodů zakázáno. 
+
+\begin{figure}
+\begin{lstlisting}[language=json,firstnumber=1][ht]
+# return user with specified id
+@app.route('/user/<user_id>/', methods=['GET'])
+def user(user_id):
+	if len(request.args) != 0:
+		raise ProcessingException(
+				description='Invalid argument provided',
+				code=400)
+
+	user = User.query\
+		.get_or_404(user_id)
+	return jsonify(user.json_dump())
+\end{lstlisting}
+\caption{Ukázka implementace konkrétního API endpointu}
+\label{fig:user-view}
+\end{figure} 
+
 \subsection{Nasazení}
+Stejně jako v případě databáze, i pro webserver byly využity cloudové služby. Zvolit bylo potřeba mezi již probíraným Amazon AWS nebo službou zvanou Heroku. Pro webserver by v případě Amazon AWS bylo nutno použít službu EC2, tedy virtuální server. EC2 je příkladem již popisované IaaS. Heroku však nabízí PaaS umožňující i spouštění aplikací psaných v Pythonu. Protože v jeho případě odpadá nutnost administrace linuxového serveru a první nasazení aplikace je na něm otázkou několika minut, je pro námi požadovaný jednoduchý webserver skvělou volbou. 
+
 \subsubsection{Heroku}
 
 
