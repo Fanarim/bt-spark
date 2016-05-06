@@ -589,6 +589,8 @@ Put je metodou sloužící k aktualizaci zdroje. Jde jistým způsobem o kombina
 
 
 \chapter{Implementace}
+Odkaz na github?
+
 \begin{figure}[ht]
    	\centering
    	\includegraphics[width=1\textwidth]{images/deployment.jpg}
@@ -621,13 +623,12 @@ Put je metodou sloužící k aktualizaci zdroje. Jde jistým způsobem o kombina
 	Po výběru konkrétních databázových technologií byl potřeba zvolit vhodný způsob nasazení. Z důvodů popsaných v následující sekci nebyl k nasazení použit vlastní linuxový server, nicméně jedna z v poslední době stále rozšířenějších cloudových služeb. 
 	
 \subsubsection{Amazon RDS}
+\label{amazon-aws}
 	Konkrétně byla pro nasazení databáze využita služba Amazon AWS\cite{gghjjkk}. Amazon Web Services je kolekce cloudových služeb zahrnujících například cloudové úložiště, virtuální servery nebo právě databázové servery - tzv. Amazon RDS, neboli Relational Database Service. 
 	
-	Nabízené virtuální servery jsou příkladem tzv. IaaS - tedy Infrastructure as a Service. Uživatel se v případě IaaS nemusí starat o infrastrukturu, jsou mu ale poskytnuty přístupové údaje v tomto případě k linuxovému serveru a o veškeré další nastavení a provoz se stará sám. Amazon RDS je pak příkladem tzv. Paas, neboli Platform as a Service. V případě PaaS obecně odpadá i nutnost instalace softwaru a dalších administrátorských úkonů. Uživatel se stará pouze o vývoj a provoz jím provozovaného software. U Amazon RDS tak není třeba (a zároveň není možné) manuálně instalovat databázi nebo třeba nastavovat připojení systému k síti. Na druhou stranu to může přinášet i značná omezení. 
+	Nabízené virtuální servery jsou příkladem modelu IaaS - tedy Infrastructure as a Service. Uživatel se v případě IaaS nemusí starat o infrastrukturu, jsou mu ale poskytnuty přístupové údaje v tomto případě k linuxovému serveru a o veškeré další nastavení a provoz se stará sám. Amazon RDS je pak příkladem modelu Paas, neboli Platform as a Service. V případě PaaS obecně odpadá i nutnost instalace softwaru a dalších administrátorských úkonů. Uživatel se stará pouze o konkrétné software provozovaný na dané platformě. U Amazon RDS tak není třeba manuálně instalovat databázi nebo třeba nastavovat připojení systému k síti. Na druhou stranu to ani není možné a obecně model PaaS může přinášet i značná omezení. 
 	
-	Veškeré služby poskytované v rámci Amazon AWS je možno provozovat v celkem 12 regionech pokrývajících většinu světa. Česká Republika například spadá pod datacentrum umístěné ve Frankfurtu. 
-	
-	Hlavní výhodou Amazon AWS a podobných služeb je výrazné usnadnění instalace i administrace a jednoduchá škálovatelnost, obvykle je také zaručena určitá dostupnost služeb. Jak ukazuje obrázek \ref{fig:aws_monitoring}, v případě Amazonu je výhodou také relativně podrobný monitoring. Nevýhodou oproti vlastnímu serveru může být především vyšší cena, v některých případech také restrikce při nastavování služeb. 
+	Veškeré služby poskytované v rámci Amazon AWS je možno provozovat v celkem 12 regionech pokrývajících většinu světa. Česká Republika například spadá pod datacentrum umístěné ve Frankfurtu. Hlavní výhodou Amazon AWS a podobných služeb je výrazné usnadnění instalace i administrace a především jednoduchá škálovatelnost, obvykle je také zaručena určitá dostupnost služeb. Jak ukazuje obrázek \ref{fig:aws_monitoring}, v případě Amazonu je výhodou také relativně podrobný monitoring. Nevýhodou oproti vlastnímu serveru může být především vyšší cena, v některých případech také zmiňované restrikce při nastavování služeb. 
 	
 	Ani v případě RDS není možné provést všechna nastavení, která by byla dostupná při použití vlastní instalace MySQL. Automaticky vytvořený uživatel totiž nemá neomezená práva a nemůže například měnit hodnoty globálních proměnných. Většinu jich lze nicméně nastavit pomocí tzv. profilů v administraci RDS. Příkladem takových nastavení je povolení MySQL Events, kterým se věnuji v následující sekci. 
 
@@ -745,9 +746,28 @@ def user(user_id):
 \end{figure} 
 
 \subsection{Nasazení}
-Stejně jako v případě databáze, i pro webserver byly využity cloudové služby. Zvolit bylo potřeba mezi již probíraným Amazon AWS nebo službou zvanou Heroku. Pro webserver by v případě Amazon AWS bylo nutno použít službu EC2, tedy virtuální server. EC2 je příkladem již popisované IaaS. Heroku však nabízí PaaS umožňující i spouštění aplikací psaných v Pythonu. Protože v jeho případě odpadá nutnost administrace linuxového serveru a první nasazení aplikace je na něm otázkou několika minut, je pro námi požadovaný jednoduchý webserver skvělou volbou. 
+Stejně jako v případě databáze, i pro webserver byly využity cloudové služby. Volba probíhala především mezi již probíraným Amazon AWS nebo službou zvanou Heroku. Pro webserver by v případě Amazon AWS bylo nutno použít službu EC2, tedy virtuální server. EC2 je příkladem v kapitole \ref{amazon-aws} již popisovaného modelu IaaS. Heroku je však příkladem platformy (PaaS) umožňující mimojiné i jednoduché spouštění aplikací psaných v Pythonu. Protože v případě Heroku odpadá nutnost administrace linuxového serveru a první nasazení aplikace je na něm otázkou několika minut, je pro námi požadovaný jednoduchý webserver skvělou volbou. 
 
 \subsubsection{Heroku}
+Po vytvoření účtu na Heroku je potřeba stáhnout si tzv. Heroku Toolbelt. Jedná se o CLI\footnote{CLI} nástroj sloužící právě ke správě a monitorování aplikací běžících v Heroku cloudu. Při vytváření nové aplikace si uživatel stejně jako v případě Amazon AWS nejdříve zvolí variantu služby na základě jeho hardwarových a jiných požadavků. 
+
+Konkrétní způsob nasazení aplikace se pak mírně liší pro každý z podporovaných jazyků, kterých je momentálně 8. V případě pythonu je nejdříve nutné vytvořit několik souborů:
+
+\begin{itemize}
+\item \textbf{requirements.txt} - seznam požadovaných knihoven pro Python vygenerovaný pomocí nástroje pip\footnote{pip}, konkrétně příkazem \textit{pip freeze}.
+\item \textbf{Procfile} - soubor určující jak a který soubor spustit po nahrání aplikace na Heroku
+\item \textbf{runtime.txt} - určení verze pythonu použité pro spuštění aplikace
+\end{itemize}
+
+Nahrání aplikace na Heroku může probíhat několika způsoby, tím základním je ale pooužití GITu. Samotným vytvoření aplikace pomocí Heroku Toolbeltu dojde k přidání remote repozitáře. Do něj poté stačí nahrát změny v repozitáři a Heroku již v případě nenalezení problémů zařídí spuštění aplikace. 
+
+Protože k verzování této práce byl použit jeden společný repozitář namísto oddělených repozitářů pro každou komponentu, nastal samozřejmě problém s nahráním pouze adresáře obsahujícího soubory pro webserver. I toho je ale pomocí GITu možné dosáhnout, použit byl příkaz \textit{git subtree}:
+
+
+\begin{lstlisting}[language=json,firstnumber=1][ht]
+git push heroku_remote `git subtree split --prefix flask_api master`:master --force
+\end{lstlisting}
+
 
 
 \section{Webová aplikace}
