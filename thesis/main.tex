@@ -145,6 +145,7 @@
 	\end{figure}
 	
 \subsubsection{Spark core}
+\label{spark-core}
 	Tou hlavní komponentou je Spark Core, který zajišťuje všechny základní funkcionality Sparku, jako jsou například plánování úloh a základní vstupní a výstupní operace. Ostatní komponenty nad ním staví. Základním pojmem je zde tzv. Resilient Distributed Dataset, neboli RDD. RDD je zjednodušeně řeřeno téměř libovolná kolekce dat, nad kterou je možné provádět paralelní výpočty. Je navíc zajištěna jejich konzistence - při výpadku některého ze strojů mohou být ztracená data obnova pomocí informací na těch ostatních. 
 	
 	Kdykoli je na konkrétním RDD vykonána některá z operací umožňujících paralelní zpracování, tzv. transformace (například map, filter nebo reduce), driver neboli počítač řídící ostatní počítače naplánuje její zpracování na všech počítačích v clusteru. Ty poté vytvoří nová RDD s výsledky. Operace na RDD jsou ale "lazy", což znemaná, že se neprovádějí dokud na RDD neaplikujeme nějakou akci. Akce je opakem transformace a jejím výsledkem není vytvoření nového RDD. Příkladem akce je vypsání obsahu RDD na standartní výstup. 
@@ -217,11 +218,11 @@ V této kapitole...
 	
 	Jednodušší verze algoritmů pro analýzu sentimentu fungují na podobném principu jako předchozí metody. Text je rozdělen na jednotlivá slova, z nichž každému je přiděleno negativní, neutrální nebo pozitivní hodnocení. Tato hodnocení jsou posléze zprůměrována. Tímto způsobem však dochází ke ztrátě podstatných informací - dochází k zanedbání pořadí slov a především nejsou zohledňovány například negace, které mohou změnit celý význam věty. Příkladem může být následující věta:
 
+\vspace{\baselineskip}
 \textit{This movie was actually neither that funny, nor super witty.}	
+\vspace{\baselineskip}
 
-\subsubsection{Stanford NLP knihovna}
-
-	V rámci této práce bude použita knihovna Stanford NLP\cite{sssss}, která mimo jiné obsahuje právě funkce pro analýzu sentimentu. Ty jsou již výrazně propracovanější a výše zmiňovanou větu ohodnotí jako negativní. Použitý model je nejdříve potřeba vytrénovat na vzorových datech. Bez manuálního přetrénování je algoritmus již vytrénován na datasetu složeného z necelých 10 tisíc vět z oblasti filmových hodnocení. Tato trénovací data je možné najít na stránce Stanford Dataset Treebank\cite{ssdassa}. V rámci této práce nebude použitý model přetrénováván přímo pro kontext sociální sítě Twitter, bylo by totiž potřeba manuálně ohodnotit řádově tisíce vět. Podrobnější popis využití této knihovny naleznete v kapitole \ref{analysis-implementation}. 
+	V rámci této práce bude použita knihovna Stanford NLP\cite{sssss}, která mimo jiné obsahuje právě funkce pro analýzu sentimentu. Ty jsou již výrazně propracovanější a výše zmiňovanou větu ohodnotí jako negativní. Podrobněji se použité knihovně věnuji v sekci \ref{stanford-nlp}.
 
 
 \section{Požadavky na systém}
@@ -589,9 +590,11 @@ Put je metodou sloužící k aktualizaci zdroje. Jde jistým způsobem o kombina
 
 
 \chapter{Implementace}
-Odkaz na github?
+V následujících sekcích jsou podrobněji popsány způsoby implementace jednotlivých částí systému. Způsob jeho nasazení je znázorněn na obrázku \ref{fig:deployment_diagram}. Z důvodů zmíněných v sekci \ref{analysis-implementation} byl však místo počítačového clusteru použit virtualizovaný systém na lokálním počítači. 
 
-\begin{figure}[ht]
+Při vývoji systému i psaní tohoto textu byl používán verzovací systém GIT. Repozitář této práce je možné nalézt na serveru GitHub\cite{ghrtyrtt}. 
+
+\begin{figure}[h!]
    	\centering
    	\includegraphics[width=1\textwidth]{images/deployment.jpg}
    	\caption{Diagram nasazení implementovaného systému}
@@ -600,9 +603,33 @@ Odkaz na github?
 
 \section{Analýza proudu dat}
 \label{analysis-implementation}
+\subsection{Výběr technologií}
+Framework Spark, který byl použit při implementaci analýzy proudu dat, nabízí API pro několik jazyků - Scala, Java, Python a R. API pro poslední dva zmiňované jazyky však neposkytují veškeré funkcionality Sparku, příkladem může být použití Twitter Streaming API jako zdroje dat. V úvahu pro použití v rámci této práce tedy připadaly jazyky Java a Scala. 
 
+Jak již bylo zmíněno v kapitole \ref{spark-core}, výpočty lze distribuovat pro operace typu transformace, tedy například map, filter a reduce. Protože Scala je funkcionální jazyk obsahující podobné funkce již v základu, je v kontextu distribuovaných výpočtů ideální. I proto je samotný Spark naimplementovaný ve Scale\cite{kkkkjjjhh}. Další výhodou je možnost použití existujících knihoven pro Javu. Především z těchto důvodů byla Scala použita i pro tuto práci. 
+
+\subsubsection{Stanford NLP knihovna}
+\label{stanford-nlp}
+	Pro analýzu sentimentu byla namísto vlastní jednoduché implementace analýzy sentimentu použita Java knihovna Stanford NLP\cite{fghjkkl}. Jedná se o knihovnu obecně poskytující funckionality pro zpracování a analýzu lidské řeči. Zahrnuje právě analyzátor pro určení sentimentu. 
 	
-\begin{figure}[ht]
+	Použitý model je nejdříve potřeba vytrénovat na vzorových datech. Bez manuálního přetrénování je algoritmus již vytrénován na datasetu složeného z necelých 10 tisíc vět z oblasti filmových hodnocení. Tato trénovací data je možné najít na stránce Stanford Dataset Treebank\cite{ssdassa}. V rámci této práce nebude použitý model přetrénováván přímo pro kontext sociální sítě Twitter, bylo by totiž potřeba manuálně ohodnotit řádově tisíce vět. 
+	
+	Výsledkem analýzy sentimentu pomocí Stanford NLP je hodnota v intervalu 0 až 4, kde 0 reprezentuje negativní a 4 pozitivní větu. Jednotlivé tweety tedy bylo nutné rozdělit na věty a každou z nich analyzovat zvlášť. Celkový sentiment tweetu byl pak určen na základě hodnocení jednotlivých vět a jejich délce. 
+
+\subsection{Nasazení}
+Aby implementovaný systém zvládal analyzovat všechny publikované tweety, bylo by nutné jeho nasazení na počítačovém clusteru. K tomu je systém připravený a krom instalace potřebného software na jednotlivé stroje by nasazení nemělo vyžadovat další úpravy zdrojových kódů. Jak jsem ale popsal v sekci \ref{twitter-api}, ve volně dostupném API Twitter poskytuje pouze asi 1\% publikovaných zpráv. Protože navíc počítačový cluster nemám k dispozici a jeho pronájem by byl velice nákladný, je program spouštěn na lokálním počítači ve virtualizovaném prostředí. 
+
+K dispozici má Spark 8GB RAM a 3 výpočetní jádra. Je ho možné spustit v tzv. lokálním režimu, ve kterém je na každém jádře spuštěn jeden výpočetní uzel. I kvůli omezeným zdrojům bylo v průběhu implementace nutné zvětšit délku intervalu, ve kterém Spark data zpracovává. Většina tohoto času je však overhead a s nárůstem objemu zpracovávaných dat není celková doba jejich analýzy výrazně navýšena. 
+
+\subsection{Popis implementace}
+
+Celkový pohled na implementovaný systém zobrazuje diagram aktivit na obrázku \ref{fig:activity_diagram}. Po úspěšné inicializaci Sparku a přihlášení k Twitter Streaming API začnou probíhat dvě nezávislé větve programu. Samotné střádání dat z Twitteru vždy po dobu 40 vteřin řeší samotný Spark. Po uběhnutí daného intervalu jsou data poskytnuta jako RDD ke zpracování a ihned začíná další střádání dat. 
+
+Druhá větev má za úkol zpracování dat poskytnutých větví první. Ke zpracování další batche dochází kdykoli bylo dokončeno zpracování té předchozí a zároveň jsou k dispozici nová data. Program se tak může dostávat do zpoždění pokud data zpracovávat nestíhá v daném intervalu. Při zpracování dat z každého intervalu jsou nejprve vyfiltrovány anglické příspěvky reprezentující přání jejich autorů. Poté je vypočítán sentiment těchto přání a data o nich jsou uložena do databáze. 
+
+TODO ukazky implementace, kontexty, foreachRDD, ...
+	
+\begin{figure}[h]
    	\centering
    	\includegraphics[width=1\textwidth]{images/activity-diagram.png}
    	\caption{Diagram aktivit systému pro analýzu tweetů}
@@ -632,7 +659,7 @@ Odkaz na github?
 	
 	Ani v případě RDS není možné provést všechna nastavení, která by byla dostupná při použití vlastní instalace MySQL. Automaticky vytvořený uživatel totiž nemá neomezená práva a nemůže například měnit hodnoty globálních proměnných. Většinu jich lze nicméně nastavit pomocí tzv. profilů v administraci RDS. Příkladem takových nastavení je povolení MySQL Events, kterým se věnuji v následující sekci. 
 
-\begin{figure}[ht]
+\begin{figure}[h]
    	\centering
    	\includegraphics[width=1\textwidth]{images/aws-monitoring.png}
    	\caption{Monitoring databáze v Amazon RDS}
@@ -764,7 +791,7 @@ Nahrání aplikace na Heroku může probíhat několika způsoby, tím základn�
 Protože k verzování této práce byl použit jeden společný repozitář namísto oddělených repozitářů pro každou komponentu, nastal samozřejmě problém s nahráním pouze adresáře obsahujícího soubory pro webserver. I toho je ale pomocí GITu možné dosáhnout, použit byl příkaz \textit{git subtree}:
 
 
-\begin{lstlisting}[language=json,firstnumber=1][ht]
+\begin{lstlisting}[language=json][ht]
 git push heroku_remote `git subtree split --prefix flask_api master`:master --force
 \end{lstlisting}
 
