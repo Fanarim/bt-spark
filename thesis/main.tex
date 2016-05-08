@@ -51,7 +51,7 @@
 \authorWithDegrees{David Viktora} %jméno autora včetně současných akademických titulů
 \supervisor{Ing. Adam Šenk}
 \acknowledgements{Poděkování ....}
-\abstractCS{V~několika větách shrňte obsah a přínos této práce v~češtině. Po přečtení abstraktu by se čtenář měl mít čtenář dost informací pro rozhodnutí, zda chce Vaši práci číst.}
+\abstractCS{Cílem této práce bylo vytvoření systému pro analýzu proudu dat v reálném čase v kontextu velkých objemů dat. Zpracovávanými daty jsou příspěvky ze sociální sítě Twitter. K samotné analýze byl použit framework Apache Spark, výsledky z něj jsou ukládány do klasické relační databáze a zpřístupněné pomocí REST API. Vytvořený systém umožňuje monitorovat přání uživatelů Twitteru. Díky analýze sentimentu těchto příspěvků by po drobných úpravách mohl být vyvynutý systém použit například pro předvolební průzkumy či analýzu oblíbenosti produktů dané společnosti. }
 \abstractEN{Sem doplňte ekvivalent abstraktu Vaší práce v~angličtině.}
 \placeForDeclarationOfAuthenticity{V~Praze}
 \declarationOfAuthenticityOption{4} %volba Prohlášení (číslo 1-6)
@@ -791,21 +791,51 @@ Nahrání aplikace na Heroku může probíhat několika způsoby, tím základn�
 Protože k verzování této práce byl použit jeden společný repozitář namísto oddělených repozitářů pro každou komponentu, nastal samozřejmě problém s nahráním pouze adresáře obsahujícího soubory pro webserver. I toho je ale pomocí GITu možné dosáhnout, použit byl příkaz \textit{git subtree}:
 
 
-\begin{lstlisting}[language=json][ht]
+\begin{lstlisting}[language=json,firstnumber=1][ht]
 git push heroku_remote `git subtree split --prefix flask_api master`:master --force
 \end{lstlisting}
 
 
 
 \section{Webová aplikace}
-	Jako součást této práce byla pro prezentaci výsledků analýzy vytvořena i webová apliace využívající API popsané v předchozí kapitole. Protože web není součástí zadání této práce, budu se mu věnovat pouze z hlediska testování API v kapitole \ref{testovani} a v závěřečném zhodnocení v kapitole \ref{zhodnoceni}. 
+	Jako součást této práce byla pro prezentaci výsledků analýzy vytvořena i webová apliace využívající API popsané v předchozí kapitole. Protože web není součástí zadání této práce, budu se mu podrobněji věnovat pouze z hlediska testování API v kapitole \ref{testovani} a v závěřečném zhodnocení v kapitole \ref{zhodnoceni}. 
+	
+	Webová aplikace je napsána pomocí jazyků HTML, CSS a JavaScript, použity byly i komponenty frameworku Bootstrap. K nasazení byl použit Amazon AWS, konkrétně služby Amazon S3 pro hostování dat a Amazon Route 53 pro nastavení vlastního doménového jména. 
 
 
 \chapter{Testování}
 \label{testovani}
+Testovování je důležitou součástí vývoje každého software a jinak tomu není ani v případě systému implementovaného v rámci této práce. Kromě manuálního testování prováděného během vývoje systému byly implementovány i automatické testy poskytovaného API. Pro prezentaci výsledků analýzy a zároveň pro otestování celého systému byl vytvořen také web zobrazující informace o analyzovaných přáních. 
+
+
 \section{Test API endpointů}
 \label{api-testing}
-\section{???}
+Při testování implementovaného API bylo použito rozšíření pro framework Flask zvané Flask-testing. To využívá knihovnu unittest, která je součástí standardní Python knihovny, a přidává několik funkcionalit zjednodušujících použití v rámci Flasku. 
+
+Po vytvoření třídy dědící od třídy TestCase je nejrpve nutné vytvořit několik metod:
+
+\begin{itemize}
+\item \textbf{create\_app} - jde o metodu volanou ještě před spuštěním prvního testu. Lze v ním například změnit konfigurační soubor a použít díky tomu testovací instanci databáze místo té produkční. 
+\item \textbf{setUp} - tato metoda je spuštěna před každým jednotlivým testem. Jejím hlavním úkolem je naplnění databáze daty, která budou následně využita při testování. 
+\item \textbf{tearDown} - metoda tearDown je naopak spouštěna na konci každého testu. V ní je obvykle databáze naopak přemazána. 
+\end{itemize}
+
+Poté již stačí vytvořit jednotlivé testy. Za ty se automaticky považují všechny metody, jejichž název začíná slovem test. Ukázku testu zaměřeného na endpoint /user/<user\_id> zobrazuje zdrojový kód \ref{user-test}. U všech endpointů je testován především návratový kód, v některých případech i konkrétní odpověď webserveru. 
+\begin{figure}
+\begin{lstlisting}[language=json,firstnumber=1][ht]
+def test_user_detail(self):
+	response = self.client.get('/user/123/', query_string={})
+	assert response.status_code == 200
+	user = {'username': 'Jack', 'id': '123', 'profile_picture_url': 'http://profile.picture.url'}
+	self.assertEqual(response.json, user)
+\end{lstlisting}
+\caption{Test API endpointu /user/<user\_id>}
+\label{user-test}
+\end{figure} 
+
+\section{Web prezentující výsledky analýzy}
+Vytvořenou webovou stránku je možné nalézt na adrese http://tweetwishes.com, pro jeho plnou funkcionalitu však musí být spuštěn i samotný systém pro analýzu tweetů. Na webu jsou totiž v reálném čase zobrazována nová přání, statistiky a další údaje. Obrázky webu jsou k dispozici v příloze \ref{appendix-web}. 
+
 
 \chapter{Zhodnocení výsledků}
 \label{zhodnoceni}
@@ -1164,6 +1194,9 @@ TODO
     ]
  }
 \end{lstlisting}
+
+\chapter{Ukázky webové aplikace}
+\label{appendix-web}
 
 \chapter{Seznam použitých zkratek}
 % \printglossaries
