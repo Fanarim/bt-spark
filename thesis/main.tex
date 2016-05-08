@@ -51,7 +51,7 @@
 \authorWithDegrees{David Viktora} %jméno autora včetně současných akademických titulů
 \supervisor{Ing. Adam Šenk}
 \acknowledgements{Poděkování ....}
-\abstractCS{Cílem této práce bylo vytvoření systému pro analýzu proudu dat v reálném čase v kontextu velkých objemů dat. Zpracovávanými daty jsou příspěvky ze sociální sítě Twitter. K samotné analýze byl použit framework Apache Spark, výsledky z něj jsou ukládány do klasické relační databáze a zpřístupněné pomocí REST API. Vytvořený systém umožňuje monitorovat přání uživatelů Twitteru. Díky analýze sentimentu těchto příspěvků by po drobných úpravách mohl být vyvynutý systém použit například pro předvolební průzkumy či analýzu oblíbenosti produktů dané společnosti. }
+\abstractCS{Cílem této práce bylo vytvoření systému pro analýzu proudu dat v reálném čase v kontextu velkých objemů dat. Zpracovávanými daty jsou příspěvky ze sociální sítě Twitter. K samotné analýze byl použit framework Apache Spark, výsledky z něj jsou ukládány do klasické relační databáze a zpřístupněné pomocí REST API. Vytvořený systém umožňuje monitorovat přání uživatelů Twitteru. Díky analýze sentimentu těchto příspěvků by po drobných úpravách mohl být vyvynutý systém použit například pro předvolební průzkumy či analýzu oblíbenosti produktů vybrané společnosti. }
 \abstractEN{Sem doplňte ekvivalent abstraktu Vaší práce v~angličtině.}
 \placeForDeclarationOfAuthenticity{V~Praze}
 \declarationOfAuthenticityOption{4} %volba Prohlášení (číslo 1-6)
@@ -279,9 +279,6 @@ RESTful API bude poskytovat následující data:
 \item \textbf{Zpřístupnění dat} - data budou zpřístupněna pomocí RESTful API. To bude odpovídat běžným praktikám používaným právě při návrhu RESTových rozhraní
 \end{itemize}
 
-\section{Dostupné technologie}
-	- dostupne technologie
-
 \section{Sociální síť Twitter}
 \label{twitter-api}
 	
@@ -317,6 +314,7 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 
 
 \subsection{Twitter Streaming API}
+\label{twitter-api}
 	Twitter poskytuje 2 rozhraní pro přistup k jeho datům. Jde o klasické REST API s mnoha různými endpointy\footnote{Endpoint neboli koncový bod je ......} a dále o několik streamových endpointů. Tato práce využívá stremové API, konkretně stream poskytující vzorek veřejně publikovaných tweetů\cite{twitter-api}. Počet tweetů které toto API poskytuje není přesně daný, nicméně experimentálně bylo zjištěno, že jde o přibližně 60 až 80 příspěvků za sekundu. To odpovídá asi 1\% publikovaných tweetů. 
 	
 	Získat lze samozřejmě i přístup ke všem veřejně publikovaným příspěvkům. Nejde však již o volně dostupná API a přístup k nim je placený. Tuto službu nabízí portál Gnip.com\cite{gnip}. Pro tuto práci je z pocohpitelných důvodů použito pouze veřejně dostupné API. 
@@ -798,7 +796,7 @@ git push heroku_remote `git subtree split --prefix flask_api master`:master --fo
 
 
 \section{Webová aplikace}
-	Jako součást této práce byla pro prezentaci výsledků analýzy vytvořena i webová apliace využívající API popsané v předchozí kapitole. Protože web není součástí zadání této práce, budu se mu podrobněji věnovat pouze z hlediska testování API v kapitole \ref{testovani} a v závěřečném zhodnocení v kapitole \ref{zhodnoceni}. 
+	Jako součást této práce byla pro prezentaci výsledků analýzy vytvořena i webová apliace využívající API popsané v předchozí kapitole. Protože web není součástí zadání této práce, budu se mu podrobněji věnovat pouze z hlediska testování API v kapitole \ref{testovani}. Ukázky této aplikace jsou pak k nalezení v příloze \ref{appendix-web}.  
 	
 	Webová aplikace je napsána pomocí jazyků HTML, CSS a JavaScript, použity byly i komponenty frameworku Bootstrap. K nasazení byl použit Amazon AWS, konkrétně služby Amazon S3 pro hostování dat a Amazon Route 53 pro nastavení vlastního doménového jména. 
 
@@ -839,9 +837,30 @@ Vytvořenou webovou stránku je možné nalézt na adrese http://tweetwishes.com
 
 \chapter{Zhodnocení výsledků}
 \label{zhodnoceni}
-\section{Využití systému}
-\section{Možná budoucí vylepšení}
+Implementovaný systém dle požadavků provádí analýzu příspěvků publikovaných na Twitteru. Přestože původní plán rychlosti zpracování těchto příspěvků počítal s kratší doubou analýzy, její výsledky jsou dostupné na webu již během několika desítek sekund po publikování tweetů. Toto zpoždění je způsobeno slabým výpočetním výkonem a overheadem potřebným pro inicializaci Sparku a distribuci operací a dat. 
 
+Prováděná analýza vedla k zajímavým výsledkům. Jak ukazuje graf na obrázku \ref{fig:sentiment-graph}, výrazně převažují negativní přání nad těmi pozitivními. Monitorováním nejpoužívanějších hashtagů bylo například možné sledovat vývoj amerických prezidentských voleb, velice aktivní byly také uživatelé z Filipín. I ti vyjadřovali svá přání týkající se voleb nového filipínského prezidenta. Kromě politických témat se v přáních často objevovala sportovní témata či příspěvky týkající se hudebních a filmových hvězd. 
+\begin{figure}[h]
+   	\centering
+   	\includegraphics[width=1\textwidth]{images/cvut-logo-bw.pdf}
+   	\caption{Zde bude graf vývoje sentimentu}
+   	\label{fig:sentiment-graph}
+\end{figure}
+
+\section{Využití systému}
+V současném stavu je implementovaný systém určen především pro pobavení a prezentaci použitých technologií. Nabízí se však několik možných využítí, kterých by bylo možné dosáhnout jen drobnými úpravami tohoto systému. 
+
+Díky prováděné analýze sentimentu by mohlo jít obecně o úlohy zabývající se tzv. opinion miningem - díky analýze sentimentu příspěvků obsahujících dané výrazy či hashtagy by bylo možné například provádět předvolební průzkumy, hodnotit úspěšnost reklamní kampaně či určovat oblíbenost zvolených produktů a značek. 
+
+
+\section{Možná budoucí vylepšení}
+Jedním z hlavních vylepšení systému by bylo bezesporu jeho nasazení na počítačový cluster. K tomu je celý systém připravený a díky dostupnému výkonu by stálo za zvážení zažádat o přístup k veškerým příspěvkům z Twitteru pomocí služby Gnip popsané v sekci \ref{twitter-api}. 
+
+Nabízí se i několik funkčních vylepšení celého systému. Jedním z nich jeho jeho zobecnění, díky kterému by jeho využití nebylo omezeno na analýzů přání uživatelů, ale bylo by ho možné využívat například i pro výše zmíněné účely. Filtrované výrazy by byly zadány například do konfiguračního souboru. Až na přejmenování tabulek a proměnných by jiné výraznější zásahy do systému nebyly nutné. 
+
+Systém by také jistě bylo možné optimalizovat a snížit tak rychlost analýzy tweetů. Jednou z možností by bylo využití noSQL databáze a kompletní změna způsobu ukládání dat. Práce s relační SQL databází pomocí SparkSQL je totiž v některých směrech omezující a některé operace mohou dobu zpracování nežádoucím způsobem zvyšovat. 
+
+Zajímavé by bylo také rozšíření systému o další metody z oblasti text miningu a zpracování řeči, jejichž použití by v kontextu sociální sítě Twitter dávalo smysl. 
 
 \begin{conclusion}
 	Zaver
