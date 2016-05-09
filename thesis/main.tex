@@ -55,7 +55,7 @@
 \abstractEN{Sem doplňte ekvivalent abstraktu Vaší práce v~angličtině.}
 \placeForDeclarationOfAuthenticity{V~Praze}
 \declarationOfAuthenticityOption{4} %volba Prohlášení (číslo 1-6)
-\keywordsCS{Nahraďte seznamem klíčových slov v češtině oddělených čárkou.}
+\keywordsCS{Apache Spark, proudové zpracování dat, Twitter, sentimentální analýza, REST API}
 \keywordsEN{Nahraďte seznamem klíčových slov v angličtině oddělených čárkou.}
 
 
@@ -194,7 +194,7 @@
 
 
 \chapter{Analýza}
-V této kapitole... 
+V této kapitole se nejdříve v sekci \ref{text-mining} věnuji dostupným metodám pro analýzu textu, především pak metodě zvané sentimentální analýza. V sekci \ref{pozadavky} jsou podrobně rozebrány požadavky na implementovaný systém, poslední sekce \ref{twitter} se pak zabývá sociální sítí Twitter a jí poskytovaným rozhraním, které bude v rámci této práce využito. 
 
 \section{Metody pro analýzu textu}
 \label{text-mining}
@@ -226,12 +226,12 @@ V této kapitole...
 
 
 \section{Požadavky na systém}
+\label{pozadavky}
 	Jak podrobněji popisuji v kapitole \ref{navrh}, výsledný systém jehož vytvoření je cílem této práce se bude skládat ze tří klíčových částí - systému pro analýzu textu, databáze a webserveru zpřístupňujícího data pomocí RESTového API. Pojmu REST API se podrobněji věnuji v sekci \ref{rest}. 
 	
 	 První zmiňovaná část, systém pro analýzu textu, bude využívat framework Apache Spark. Jako zdroj dat bude použita sociální síť Twitter poskytující vzorek přispěvků z ní, tzv. tweetů, pomocí veřejného API. Tomu se podrobněji věnuji v kapitole \ref{twitter-api}. Z těchto příspěvků budou vyfiltrovány ty, které reprezentují přání jejich autorů. Kromě měření běžných statistik bude systém provádět analýzu sentimentu těchto přání. Tato analýza bude probíhat v reálném čase, respektive se zpožděním v řádu maximálně několika desítek sekund.  Výsledky analýzy z této části budou persistovány ve vhodné relační databázi. Na ní bude napojen webový server zpřístupňující data pomocí RESTful API. 
 
 \subsection{Funkční požadavky}
-\label{pozadavky}
 \subsubsection{Systém pro analýzu textu}
 Samotný systém pro analýzu textu musí splňovat následující požadavky:
 \begin{itemize}
@@ -280,7 +280,7 @@ RESTful API bude poskytovat následující data:
 \end{itemize}
 
 \section{Sociální síť Twitter}
-\label{twitter-api}
+\label{twitter}
 	
 	Twitter je v současnosti jednou z nejpoužívanějších sociálních sítí poskytující svým uživatelům mikroblogovací funkcionality. Umožňuje zveřejňovat 140 znaků dlouhé zprávy (tzv. tweety) a číst zprávy publikované ostatními. Účet na něm má odhadem 1,3 milardy uživatelů, denně se jich pak na Twitter přihlásí asi 100 milionů\cite{twitter-stats}. Tito uživatelé pak každý den zveřejní 500 milionů tweetů, což odpovídá približně 6000 tweetů každou sekundu\cite{twitter-stats-2}. 
 
@@ -346,9 +346,7 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 
 \chapter{Návrh}
 \label{navrh}
-V této kapitole...
-\section{Celkový pohled na systém}
-Jak již bylo nastíněno v definici požadavků pro systém implementovaný jako součást této práce, bude se tento systém skládat z několika hlavních částí: 
+V této kapitole se věnuji návrhu jednotlivých komponent implementovaného systému. Jak již bylo nastíněno v definici požadavků, bude se tento systém skládat z několika hlavních částí: 
 \begin{itemize}
 \item \textbf{Systém pro analýzu tweetů} využívající framework Spark bude sloužit k analýze příspěvků ze sociální sítě Twitter. Po vyfiltrování tweetů reprezentujích přání jejich autorů provede analýzu sentimentu těchto tweetů. Výsledky analýzy společně s obecnými údaji o zpracovávaných textech budou uloženy do databáze. 
 \item \textbf{Databáze} bude uchovávat veškeré potřebné údaje o analyzovaných příspěvcích. Krom toho bude v databázi docházet k agregaci dat pro dosažení snížené zátaže. 
