@@ -621,9 +621,59 @@ K dispozici má Spark 8GB RAM a 3 výpočetní jádra. Je ho možné spustit v t
 
 Celkový pohled na implementovaný systém zobrazuje diagram aktivit na obrázku \ref{fig:activity_diagram}. Po úspěšné inicializaci Sparku a přihlášení k Twitter Streaming API začnou probíhat dvě nezávislé větve programu. Samotné střádání dat z Twitteru vždy po dobu 40 vteřin řeší samotný Spark. Po uběhnutí daného intervalu jsou data poskytnuta jako RDD ke zpracování a ihned začíná další střádání dat. 
 
-Druhá větev má za úkol zpracování dat poskytnutých větví první. Ke zpracování další batche dochází kdykoli bylo dokončeno zpracování té předchozí a zároveň jsou k dispozici nová data. Program se tak může dostávat do zpoždění pokud data zpracovávat nestíhá v daném intervalu. Při zpracování dat z každého intervalu jsou nejprve vyfiltrovány anglické příspěvky reprezentující přání jejich autorů. Poté je vypočítán sentiment těchto přání a data o nich jsou uložena do databáze. 
+Druhá větev má za úkol zpracování dat poskytnutých větví první. Ke zpracování další batche dochází kdykoli je dokončeno zpracování té předchozí a zároveň jsou k dispozici nová data. Program se tak může dostávat do zpoždění pokud data zpracovávat nestíhá v daném intervalu. Při zpracování dat z každého intervalu jsou nejprve vyfiltrovány anglické příspěvky reprezentující přání jejich autorů. Poté je vypočítán sentiment těchto přání a data o nich jsou uložena do databáze. 
 
-TODO ukazky implementace, kontexty, foreachRDD, ...
+Několik zajímavých částí této implementace zobrazují následující zdrojové kódy. Před začátkem zpracování dat je krom připojení k Twitteru také potřeba provést základní nastavení Sparku. Nutné je především vytvořit kontexty, jak ukazuje zdrojový kód \ref{fig:spark-context}. Tyto kontexty budou později použity při operacích prováděných při zpracování dat. Vytvořen je také samotný stream. 
+
+\begin{figure}
+\begin{lstlisting}[language=json,firstnumber=1][h]
+val conf = new SparkConf().setAppName("Twitter Wishes Analysis")
+
+val sc = new SparkContext(conf)
+val ssqlc = new SQLContext(sc)
+val ssc = new StreamingContext(sc, Seconds(40))
+
+val stream = TwitterUtils.createStream(ssc, None)
+\end{lstlisting}
+\caption{Vytvoření kontextů a streamu}
+\label{fig:spark-context}
+\end{figure} 
+
+Z vytvořeného streamu je potřeba vyfiltrovat pouze anglické příspěvky. K tomu je použita metoda \textit{getLang()} dostupná v knihovně Twitter4j. Zdrojový kód \ref{fig:spark-filter} ukazuje také vyfiltrování pouze příspěvků reprezentujících přání jejich autorů. 
+
+\begin{figure}
+\begin{lstlisting}[language=json,firstnumber=1][h]
+// filter English tweets
+var tweetWishesStream = stream.filter( status => ( status.getLang() == "en"))
+
+// filter wishes
+tweetWishesStream = tweetWishesStream
+	.filter( status => (
+		status.getText().contains("wish") ||
+		status.getText().contains("hope") ||
+		status.getText().contains("pray") ))
+\end{lstlisting}
+\caption{Vyfiltrování anglických přání}
+\label{fig:spark-filter}
+\end{figure} 
+
+V další části již nastává samotná analýza vyfiltrovaných přání. Zdrojový kód \ref{fig:spark-stats-db} zobrazuje vytvoření DataFramu obsahujícího obecné statistiky v daném časovém intervalu a jejich uložení do databáze. 
+
+\begin{figure}
+\begin{lstlisting}[language=json,firstnumber=1][h]
+// write stats to DB
+val stats = ssqlc.createDataFrame(Seq((currentDatetime, tweetCount,
+	tweetCountEnglish, wishCount, average_sentiment)))
+	.toDF("datetime",
+		"tweets_total",
+		"tweets_english",
+		"wishes_total",
+		"sentiment_average")
+stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_general_3s", prop)
+\end{lstlisting}
+\caption{Ukládání statistik do databáze}
+\label{fig:spark-stats-db}
+\end{figure} 
 	
 \begin{figure}[h]
    	\centering
@@ -671,7 +721,8 @@ TODO ukazky implementace, kontexty, foreachRDD, ...
 	Event Scheduler poskytovaný přímo jako součást MySQL je naopak řešením ideálním. Jeho využití je oproti CRONu omezenější, nicméně pro námi požadovanou agregaci dat je jeho funkcionalita postačující. Půjde navíc o čistší řešení, protože bude operace modifikující databázi řešena přímo na její úrovni. 
 	
 	Příkaz pro vytvoření eventu agregujího data z tabulky \textit{stats\_general\_3s} do tabulky \textit{stats\_general\_10m }pak vypadá takto:
-	
+
+\begin{figure}
 \begin{lstlisting}[language=json,firstnumber=1]
 CREATE EVENT `stats_general_3s_to_10m` 
 ON SCHEDULE EVERY 10 MINUTE STARTS '2016-01-01 00:01:00' 
@@ -688,9 +739,13 @@ DO BEGIN
 		- interval 10 minute); 
 END;
 \end{lstlisting}
+\caption{MySQL Event provádějící agregaci dat}
+\label{fig:mysql-event-agr}
+\end{figure} 
 
 Tento příkaz však provádí pouze slučování dat. Pro mazání dat starých bylo potřeba vytvořit další event. Ten zajišťuje mazání dat starších než 30 minut v tabulce stats\_general\_3s:
 
+\begin{figure}
 \begin{lstlisting}[language=json,firstnumber=1]
 CREATE EVENT `stats_general_3s_clean` 
 ON SCHEDULE EVERY 10 MINUTE STARTS '2016-01-01 00:00:00' 
@@ -700,6 +755,9 @@ FROM stats_general_3s' DO
 	WHERE datetime < timestamp(utc_timestamp() 
 		- interval 1 hour) */ ;;
 \end{lstlisting}
+\caption{MySQL provádějící smazání starých dat}
+\label{fig:mysql-event-del}
+\end{figure} 
 
 \section{API webserver}
 \subsection{Výběr technologií}
@@ -719,7 +777,7 @@ FROM stats_general_3s' DO
 Jednotlivé tabulky databáze jsou tedy pomocí ORM SQLAlchemy namapovány na třídy reprezentující objekty jako \textit{user} nebo \textit{tweetWish}. Příklad takového namapování tabulky user ukazuje zdrojový kód \ref{fig:user-orm}. Metodu \textit{json\_dump} bylo nutné naimplementovat pro všechny třídy. Ne všechny atributy jsou totiž serializovatelné a není je tak možné automaticky převádět na JSON. 
 
 \begin{figure}
-\begin{lstlisting}[language=json,firstnumber=1][ht]
+\begin{lstlisting}[language=json,firstnumber=1][h]
 class User(db.Model):
 	def __init__(self, id, username, profile_picture_url):
 		self.id = id
@@ -751,7 +809,7 @@ Po namapování všech potřebných tabulek již můžeme v rámci programu prac
 Obdobným způsobem jsou implementovány i další endpointy. Zajímavá je také nutnost přidání tzv. CORS hlaviček ke všem odpovědím. CORS neboli Cross Origin Resource Sharing je mechanismus umožňující webům získávání zdrojů z jiných domén. To je ale standardně z bezpečnostních důvodů zakázáno. 
 
 \begin{figure}
-\begin{lstlisting}[language=json,firstnumber=1][ht]
+\begin{lstlisting}[language=json,firstnumber=1][h]
 # return user with specified id
 @app.route('/user/<user_id>/', methods=['GET'])
 def user(user_id):
