@@ -11,7 +11,19 @@
 
 \usepackage[utf8]{inputenc} % LaTeX source encoded as UTF-8
 
+\usepackage{color}
+\definecolor{light-gray}{gray}{0.95}
+
 \usepackage{listings} % source codes
+\renewcommand{\lstlistingname}{Zdrojový kód}
+\renewcommand{\lstlistlistingname}{Seznam ukázek kódu}
+
+\lstset{
+  captionpos=b,                           % sets the caption-position to top
+  abovecaptionskip=12pt,
+  backgroundcolor = \color{light-gray},
+  basicstyle=\ttfamily,breaklines=true
+ }
 
 \usepackage{graphicx} %graphics files inclusion
 % \usepackage{amsmath} %advanced maths
@@ -24,8 +36,7 @@
 \lstdefinelanguage{json}{
 	showstringspaces=false,
 	numbers=left,
-	breaklines=true,
-	frame=lines,
+	breaklines=true
 	tabsize=2,
 }
 
@@ -51,11 +62,11 @@
 \authorWithDegrees{David Viktora} %jméno autora včetně současných akademických titulů
 \supervisor{Ing. Adam Šenk}
 \acknowledgements{Poděkování ....}
-\abstractCS{Cílem této práce bylo vytvoření systému pro analýzu proudu dat v reálném čase v kontextu velkých objemů dat. Zpracovávanými daty jsou příspěvky ze sociální sítě Twitter. K samotné analýze byl použit framework Apache Spark, výsledky z něj jsou ukládány do klasické relační databáze a zpřístupněné pomocí REST API. Vytvořený systém umožňuje monitorovat přání uživatelů Twitteru. Díky analýze sentimentu těchto příspěvků by po drobných úpravách mohl být vyvynutý systém použit například pro předvolební průzkumy či analýzu oblíbenosti produktů vybrané společnosti. }
+\abstractCS{Cílem této práce bylo vytvoření systému pro analýzu proudu dat v reálném čase v kontextu velkých objemů dat. Zpracovávanými daty jsou příspěvky ze sociální sítě Twitter. K samotné analýze byl použit framework Apache Spark, výsledky z něj jsou ukládány do klasické relační databáze a zpřístupněné pomocí REST API. Vytvořený systém umožňuje monitorovat přání uživatelů Twitteru. Díky analýze sentimentu těchto příspěvků by po drobných úpravách mohl být vyvinutý systém použit například při provádění předvolebních průzkumů či analýze oblíbenosti produktů vybrané společnosti. }
 \abstractEN{Sem doplňte ekvivalent abstraktu Vaší práce v~angličtině.}
 \placeForDeclarationOfAuthenticity{V~Praze}
 \declarationOfAuthenticityOption{4} %volba Prohlášení (číslo 1-6)
-\keywordsCS{Apache Spark, proudové zpracování dat, Twitter, sentimentální analýza, REST API}
+\keywordsCS{Apache Spark, proudové zpracování dat, Big Data, Twitter, sentimentální analýza, REST API}
 \keywordsEN{Nahraďte seznamem klíčových slov v angličtině oddělených čárkou.}
 
 
@@ -64,8 +75,16 @@
 % \newacronym{CVUT}{{\v C}VUT}{{\v C}esk{\' e} vysok{\' e} u{\v c}en{\' i} technick{\' e} v Praze}
 % \newacronym{FIT}{FIT}{Fakulta informa{\v c}n{\' i}ch technologi{\' i}}
 
+\lstlistoflistings
+
 \begin{introduction}
-	Kratce o jednotlivých bodech zadání a struktuře prace, motivace
+	V současné době generujeme obrovská množství dat - podle některých odhadů to například v roce 2012 mohlo být až 2,5 exabajtů za den\cite{bbc-bigdata}, od té doby se rychlost jejich přibývání stále zvyšuje. Spolu s nárůstem objemu dat je potřeba vyvinout nové metody umožňující jejich zpracování v přijatelném čase. 
+	
+	Cílem této práce je pomocí frameworku Apache Spark vyvinout systém pro analýzů příspěvků ze sociální sítě Twitter. Tato analýza probíhá v reálném čase a umožňuje monitorovat příspěvky reprezentující přání jejich autorů. U těchto přání je prováděna mimo jiné analýza sentimentu jejímž výsledkem je hodnocení pozitivity daného příspěvku. Výsledky této analýzy jsou ukládány do relační databáze a zpřístupněny pomocí REST API. Pro prezentaci výsledků byla vytvořena také webová stránka. 
+	
+	Text této práce je členěn šesti kapitol. V první kapitole se věnuji současné situaci v oblati zpracování dat. Zaměřuji se na vysvětlení některých pojmů a zabývám se také dostupnými technologiemi umožňujícími zpracování velkých objemů dat. Druhá kapitola pak obsahuje informace o nejrozšířenějších metodách analýzy textu a o sociální síti Twitter. Jsou v ní také definovány požadavky pro vyvinutý systém. 
+	
+	V třetí kapitole nejprvne obecně analyzuji jednotlivé komponenty systému, abych posléze podrobněji popsal jejich implementaci a k tomu použité konkrétní technologie v kapitole \ref{implementace}. Pátá kapitola se věnuje testování implementovaného systému a v poslední kapitole jsou shrnuty dosažené výsledky a přínosy této práce. 
 	
 \end{introduction}
 
@@ -76,7 +95,7 @@
 
 
 \chapter{Situace v oblasti zpracovávání dat}
-	V současné době generujeme obrovská množství dat - podle některých odhadů to například v roce 2012 mohlo být až 2,5 exabajtů za den\cite{bbc-bigdata}. Od té doby se rychlost přibývání dat stále zvyšuje. Například nárůst objemu dat dostupných na internetu je způsoben jeho neustále větším rozšířením a rostoucí dostupností. V  roce 2016 je k němu připojeno již přes 3,3 miliardy obyvatel planety\cite{internet-live-stats}, což je téměř polovina všech. Roste také míra využívání internetu. Oproti dřívějšku na internetu trávíme nejen díky chytrým telefonům stále více času a využíváme například sociální sítě, internetové vyhledávání a další online služby. Během toho jsou nám zobrazována personalizovaná data a cílené reklamní nabídky. Také ve firemní i státní sféře výrazně roste stupeň využívání informačních technologií a v návaznosti na to objem produkovaných dat. S přibývajícími daty nastávají problémy s jejich zpracováním. Jedním z nich je obecně schopnost zpracovat tak veliké objemy dat, druhým je schopnost jejich zpracování v dostatečně krátkém, ideálně reálném čase. Často je přitom potřeba vyřešit oba tyto problémy naráz. Pro popis těchto dat a problémů spojených s jejich zpracováním se používá relativně nový pojem Big Data. 
+	Například nárůst objemu dat dostupných na internetu je způsoben jeho neustále větším rozšířením a rostoucí dostupností. V  roce 2016 je k němu připojeno již přes 3,3 miliardy obyvatel planety\cite{internet-live-stats}, což je téměř polovina celkové populace. Roste také míra využívání internetu. Oproti dřívějšku na internetu trávíme nejen díky chytrým telefonům stále více času a využíváme například sociální sítě, internetové vyhledávání a další online služby. Během toho jsou nám zobrazována personalizovaná data a cílené reklamní nabídky. Také ve firemní i státní sféře výrazně roste stupeň využívání informačních technologií a v návaznosti na to objem produkovaných dat. S přibývajícími daty nastávají problémy s jejich zpracováním. Jedním z nich je obecně schopnost zpracovat tak veliké objemy dat, druhým je schopnost jejich zpracování v dostatečně krátkém, ideálně reálném čase. Často je přitom potřeba vyřešit oba tyto problémy naráz. Pro popis těchto dat a problémů spojených s jejich zpracováním se používá relativně nový pojem Big Data. 
 
 		 
 \section{Big Data a technologie pro práci s nimi}
@@ -586,6 +605,7 @@ Put je metodou sloužící k aktualizaci zdroje. Jde jistým způsobem o kombina
 
 
 \chapter{Implementace}
+\label{implementace}
 V následujících sekcích jsou podrobněji popsány způsoby implementace jednotlivých částí systému. Způsob jeho nasazení je znázorněn na obrázku \ref{fig:deployment_diagram}. Z důvodů zmíněných v sekci \ref{analysis-implementation} byl však místo počítačového clusteru použit virtualizovaný systém na lokálním počítači. 
 
 Při vývoji systému i psaní tohoto textu byl používán verzovací systém GIT. Repozitář této práce je možné nalézt na serveru GitHub\cite{ghrtyrtt}. 
@@ -875,7 +895,9 @@ Po vytvoření třídy dědící od třídy TestCase je nejrpve nutné vytvořit
 \end{itemize}
 
 Poté již stačí vytvořit jednotlivé testy. Za ty se automaticky považují všechny metody, jejichž název začíná slovem test. Ukázku testu zaměřeného na endpoint /user/<user\_id> zobrazuje zdrojový kód \ref{user-test}. U všech endpointů je testován především návratový kód, v některých případech i konkrétní odpověď webserveru. 
-\begin{figure}
+
+
+\lstset{captionpos=b, caption={Descriptive Caption Text},label=user-test}
 \begin{lstlisting}[language=json,firstnumber=1][ht]
 def test_user_detail(self):
 	response = self.client.get('/user/123/', query_string={})
@@ -883,9 +905,7 @@ def test_user_detail(self):
 	user = {'username': 'Jack', 'id': '123', 'profile_picture_url': 'http://profile.picture.url'}
 	self.assertEqual(response.json, user)
 \end{lstlisting}
-\caption{Test API endpointu /user/<user\_id>}
-\label{user-test}
-\end{figure} 
+
 
 \section{Web prezentující výsledky analýzy}
 Vytvořenou webovou stránku je možné nalézt na adrese http://tweetwishes.com, pro jeho plnou funkcionalitu však musí být spuštěn i samotný systém pro analýzu tweetů. Na webu jsou totiž v reálném čase zobrazována nová přání, statistiky a další údaje. Obrázky webu jsou k dispozici v příloze \ref{appendix-web}. 
