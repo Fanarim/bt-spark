@@ -31,6 +31,9 @@
   firstnumber=1,
   tabsize=2,
  }
+ 
+ 
+\newlistof{lstlistoflistings}{lol}{\lstlistlistingname}
 
 \usepackage{graphicx} %graphics files inclusion
 % \usepackage{amsmath} %advanced maths
@@ -68,21 +71,21 @@
 \authorFN{Viktora} %příjmení autora
 \authorWithDegrees{David Viktora} %jméno autora včetně současných akademických titulů
 \supervisor{Ing. Adam Šenk}
-\acknowledgements{Poděkování ....}
+\acknowledgements{Rád bych poděkoval především vedoucímu mé závěrečné práce Ing.  Adamu Šenkovi za vstřícný přístup a cenné podněty k teoretické i praktické části této práce.  }
 \abstractCS{Cílem této práce bylo vytvoření systému pro analýzu proudu dat v reálném čase v kontextu velkých objemů dat. Zpracovávanými daty jsou příspěvky ze sociální sítě Twitter. K samotné analýze byl použit framework Apache Spark, výsledky z něj jsou ukládány do klasické relační databáze a zpřístupněné pomocí REST API. Vytvořený systém umožňuje monitorovat přání uživatelů Twitteru. Díky analýze sentimentu těchto příspěvků by po drobných úpravách mohl být vyvinutý systém použit například při provádění předvolebních průzkumů či analýze oblíbenosti produktů vybrané společnosti. }
-\abstractEN{Sem doplňte ekvivalent abstraktu Vaší práce v~angličtině.}
+
+\abstractEN{The goal of this thesis was to implement a real-time data stream analysis system in the context of Big Data. The data being processed are posts from the Twitter social network. The analysis is implemented using Apache Spark framework, it's results are being saved to relational database and published using REST API. The implemented system allows monitoring of Twitter users' wishes. Thanks to analysing the sentiment of these wishes, after some minor changes, the system could be used for pre-election surveys or to analyse given products popularity. }
 \placeForDeclarationOfAuthenticity{V~Praze}
 \declarationOfAuthenticityOption{4} %volba Prohlášení (číslo 1-6)
-\keywordsCS{Apache Spark, proudové zpracování dat, Big Data, Twitter, sentimentální analýza, REST API}
-\keywordsEN{Nahraďte seznamem klíčových slov v angličtině oddělených čárkou.}
+\keywordsCS{Apache Spark, proudové zpracování dat, Big Data, Twitter, sentimentální analýza, REST API\newpage}
+\keywordsEN{Apache Spark, data stream processing, Big Data, Twitter,
+sentiment analysis, REST API}
 
 
 \begin{document}
 
 % \newacronym{CVUT}{{\v C}VUT}{{\v C}esk{\' e} vysok{\' e} u{\v c}en{\' i} technick{\' e} v Praze}
 % \newacronym{FIT}{FIT}{Fakulta informa{\v c}n{\' i}ch technologi{\' i}}
-
-\lstlistoflistings
 
 \begin{introduction}
 	V současné době generujeme obrovská množství dat - podle některých odhadů to například v roce 2012 mohlo být až 2,5 exabajtů za den\cite{bbc-bigdata}, od té doby se rychlost jejich přibývání stále zvyšuje. Spolu s nárůstem objemu dat je potřeba vyvinout nové metody umožňující jejich zpracování v přijatelném čase. 
