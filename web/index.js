@@ -4,6 +4,7 @@ var APIurl = 'http://twitter-wish-api.herokuapp.com/';
 var totalTweets = ['Total tweets']
 var englishTweets = ['English tweets']
 var wishes = ['Wishes']
+var sentiment_average = ['Average sentiment']
 var times = ['times']
 var statsChart = c3.generate({
     bindto: '#statsChart',
@@ -14,6 +15,26 @@ var statsChart = c3.generate({
         totalTweets,
         englishTweets,
         wishes,
+        times
+      ]
+    },
+    axis: {
+        x: {
+            type: 'timeseries',
+            tick: {
+                format: '%H:%M:%S'
+            }
+        }
+    }
+});
+
+var sentimentChart = c3.generate({
+    bindto: '#sentimentChart',
+    data: {
+      x: 'times',
+      xFormat: '%Y-%m-%d %H:%M:%S',
+      columns: [
+        sentiment_average,
         times
       ]
     },

@@ -1,5 +1,5 @@
 var APIurl = 'http://twitter-wish-api.herokuapp.com/';
-var weburl = 'http://tweet-wishes.s3-website.eu-central-1.amazonaws.com/';
+var weburl = 'http://tweetwishes.com/';
 var tweetId = location.search.split('id=')[1]
 
 $.getJSON( APIurl + 'wish/' + tweetId + '/', function(data)
@@ -29,14 +29,14 @@ $.getJSON( APIurl + 'wish/' + tweetId + '/', function(data)
   }
 );
 
-// $.getJSON( APIurl + 'wish/' + tweetId + '/hashtags/', function(data)
-//   {
-//     var hashtags = data.hashtags;
-//     for (i = 0; i < hashtags.length; i++) {
-//
-//     }
-//   }
-// );
+$.getJSON( APIurl + 'wish/' + tweetId + '/hashtags/', function(data)
+  {
+    var hashtags = data.hashtags;
+    for (i = 0; i < hashtags.length; i++) {
+      document.getElementById('tweet_contains_hashtags').innerHTML  += ' <a href="' + weburl + 'hashtag.html?id=' + hashtags[i].hashtag + '"><span class="label label-success">#' + hashtags[i].hashtag + '</span></a>'
+    }
+  }
+);
 
 $.getJSON( APIurl + 'wish/' + tweetId + '/mentions/', function(data)
   {

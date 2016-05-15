@@ -35,14 +35,17 @@ function getStats() {
     totalTweets = ['Total tweets'];
     englishTweets = ['English tweets'];
     wishes = ['Wishes'];
+    sentiment_everage = ['Average sentiment'];
     times = ['times'];
     for (i = 0; i < stats.length; i++){
       totalTweets.push(stats[i].tweets_total);
       englishTweets.push(stats[i].tweets_english);
       wishes.push(stats[i].wishes_total);
+      sentiment_average.push(Number(stats[i].sentiment_average.toFixed(1)));
       times.push(stats[i].datetime);
     }
   });
+
   statsChart.load({
     columns: [
       totalTweets,
@@ -51,6 +54,14 @@ function getStats() {
       times,
     ],
     type: 'line'
+  });
+
+  sentimentChart.load({
+    columns: [
+      sentiment_average,
+      times,
+    ],
+    type: 'line',
   });
 }
 
