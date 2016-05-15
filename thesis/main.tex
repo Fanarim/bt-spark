@@ -71,7 +71,7 @@
 \authorFN{Viktora} %příjmení autora
 \authorWithDegrees{David Viktora} %jméno autora včetně současných akademických titulů
 \supervisor{Ing. Adam Šenk}
-\acknowledgements{Rád bych poděkoval především vedoucímu mé závěrečné práce Ing.  Adamu Šenkovi za vstřícný přístup a cenné podněty k teoretické i praktické části této práce.  }
+\acknowledgements{Rád bych poděkoval především vedoucímu mé závěrečné práce Ing. Adamu Šenkovi za vstřícný přístup a cenné podněty k teoretické i praktické části této práce.  }
 \abstractCS{Cílem této práce bylo vytvoření systému pro analýzu proudu dat v reálném čase v kontextu velkých objemů dat. Zpracovávanými daty jsou příspěvky ze sociální sítě Twitter. K samotné analýze byl použit framework Apache Spark, výsledky z něj jsou ukládány do klasické relační databáze a zpřístupněné pomocí REST API. Vytvořený systém umožňuje monitorovat přání uživatelů Twitteru. Díky analýze sentimentu těchto příspěvků by po drobných úpravách mohl být vyvinutý systém použit například při provádění předvolebních průzkumů či analýze oblíbenosti produktů vybrané společnosti. }
 
 \abstractEN{The goal of this thesis was to implement a real-time data stream analysis system in the context of Big Data. The data being processed are posts from the Twitter social network. The analysis is implemented using Apache Spark framework, it's results are being saved to relational database and published using REST API. The implemented system allows monitoring of Twitter users' wishes. Thanks to analysing the sentiment of these wishes, after some minor changes, the system could be used for pre-election surveys or to analyse given products popularity. }
@@ -241,7 +241,7 @@ V této kapitole se nejdříve v sekci \ref{text-mining} věnuji dostupným meto
 	Text Clustering neboli shlukování textů je metoda umožňující seskupování podobných dokumentů. Místo do předem daných kategorií jsou tyto dokumenty přiřazovány na základě jejich podobnosti do dynamicky vytvářených skupin. I zde je rozdělení dosaženo pomocí četnosti jednotlivých použítých slov. Každý dokument je obvykle přiřazen do jediné kategorie. 
 
 \subsection{Document Summarization}
-	Vytvářením krátkých shrnujících textů se zabývá metoda zvaná Document Summarization. Jednodušší varianta této metody funguje na principu výběru klíčových vět dokumentu a jejich správného seřazení. Ta složitější pak spočívá v opravdu podrobném rozboru dokumentu, především pak v jeho syntaktické analýze. Ná základě té pak dochází k vytvoření kompletně nového textu shrnujícího text původní. Praktické provedení takové analýzy a následné vytvoření shrnutí je nicméně velice složité a nejsme tak prozatím obvykle schopni dosáhnout tak dobrých výsledků jako pomocí prvně zmíněné varianty\cite{aaaa}. 
+	Vytvářením krátkých shrnujících textů se zabývá metoda zvaná Document Summarization. Jednodušší varianta této metody funguje na principu výběru klíčových vět dokumentu a jejich správného seřazení. Ta složitější pak spočívá v opravdu podrobném rozboru dokumentu, především pak v jeho syntaktické analýze. Ná základě té pak dochází k vytvoření kompletně nového textu shrnujícího text původní. Praktické provedení takové analýzy a následné vytvoření shrnutí je nicméně velice složité a nejsme tak prozatím obvykle schopni dosáhnout tak dobrých výsledků jako pomocí prvně zmíněné varianty\cite{summarization-quora}. 
 
 
 \subsection{Sentiment Analysis}
@@ -254,7 +254,7 @@ V této kapitole se nejdříve v sekci \ref{text-mining} věnuji dostupným meto
 \textit{This movie was actually neither that funny, nor super witty.}	
 \vspace{\baselineskip}
 
-	V rámci této práce bude použita knihovna Stanford NLP\cite{sssss}, která mimo jiné obsahuje právě funkce pro analýzu sentimentu. Ty jsou již výrazně propracovanější a výše zmiňovanou větu ohodnotí jako negativní. Podrobněji se použité knihovně věnuji v sekci \ref{stanford-nlp}.
+	V rámci této práce bude použita knihovna Stanford NLP\cite{stanford-nlp-web}, která mimo jiné obsahuje právě funkce pro analýzu sentimentu. Ty jsou již výrazně propracovanější a výše zmiňovanou větu ohodnotí jako negativní. Podrobněji se použité knihovně věnuji v sekci \ref{stanford-nlp}.
 
 
 \section{Sociální síť Twitter}
@@ -420,7 +420,7 @@ Stejně tak jsou tabulce \textit{hashtags} uloženy všechny hashtagy použité 
 \section{Návrh API}
 \label{rest}
 \subsection{REST architektura}
-	Jedním z požadavků pro API poskytující výsledky analýzy dat je využití REST neboli Representational State Transfer architektury. Tato architektura rozhraní byla představena v roce 2000 Royem Fieldingem, spoluautorem protokolu HTTP\cite{jjjlkll}. Proto není překvapením že REST pro přenos dat využívá právě tento protokol. Jedná se o bezestavovou architekturu, která poskytuje jednoduchý a především jednotný přístup ke zdrojům. Za zdroj pak považujeme samotná data či stavy aplikace. 
+	Jedním z požadavků pro API poskytující výsledky analýzy dat je využití REST neboli Representational State Transfer architektury. Tato architektura rozhraní byla představena v roce 2000 Royem Fieldingem, spoluautorem protokolu HTTP\cite{rest-diser}. Proto není překvapením že REST pro přenos dat využívá právě tento protokol. Jedná se o bezestavovou architekturu, která poskytuje jednoduchý a především jednotný přístup ke zdrojům. Za zdroj pak považujeme samotná data či stavy aplikace. 
 	
 	Každý zdroj má svoji vlastní URI\footnote{Uniform Resource Identifier je řetězec jednoznačně určující zdroj informací}. REST definuje čtyři základní metody pro přístup k těmto zdrojům. Tyto základní metody protokolu HTTP jsou označovány jako CRUD - umožňují totiž vytvoření dat (Create), jejich získání (Retrieve), aktualizování (Update) a smazání (Delete):
 \begin{itemize}
@@ -449,7 +449,7 @@ Put je metodou sloužící k aktualizaci zdroje. Jde jistým způsobem o kombina
 
 	
 \subsection{JSON}	
-	Jedním z nejčastěji používaných formátů pro přenos dat v kombinaci s RESTovým API je JSON, neboli JavaScript Object Notation. Použit bude i v rámci této práce. Skládá se z dvojic klíčů a hodnot a jeho hlavními výhodami jsou jednoduchá struktura, přehlednost a čitelnost\cite{jsondadasd}. 
+	Jedním z nejčastěji používaných formátů pro přenos dat v kombinaci s RESTovým API je JSON, neboli JavaScript Object Notation. Použit bude i v rámci této práce. Skládá se z dvojic klíčů a hodnot a jeho hlavními výhodami jsou jednoduchá struktura, přehlednost a čitelnost\cite{json-web}. 
 	
 	Většina programovacích jazyků navíc obsahuje knhovny a funkce, které umožňují jednoduché zpracování tohoto formátu. Například v jazyce Python formát JSON v podstatě odpovídá klasickému slovníku. Ukázka \ref{json-example} zobrazuje zápis objektu obsahujícího pole se dvěma uživateli. 
 \begin{lstlisting}[caption={JSON obsahující pole se dvěma uživateli},label=json-example][h]
@@ -624,7 +624,7 @@ Put je metodou sloužící k aktualizaci zdroje. Jde jistým způsobem o kombina
 \label{implementace}
 V následujících sekcích jsou podrobněji popsány způsoby implementace jednotlivých částí systému. Způsob jeho nasazení je znázorněn na obrázku \ref{fig:deployment_diagram}. Z důvodů zmíněných v sekci \ref{analysis-implementation} byl však místo počítačového clusteru použit virtualizovaný systém na lokálním počítači. 
 
-Při vývoji systému i psaní tohoto textu byl používán verzovací systém GIT. Repozitář této práce je možné nalézt na serveru GitHub\cite{ghrtyrtt}. 
+Při vývoji systému i psaní tohoto textu byl používán verzovací systém GIT. Repozitář této práce je možné nalézt na serveru GitHub\cite{github}. 
 
 \begin{figure}[h!]
    	\centering
@@ -636,15 +636,15 @@ Při vývoji systému i psaní tohoto textu byl používán verzovací systém G
 \section{Analýza proudu dat}
 \label{analysis-implementation}
 \subsection{Výběr technologií}
-Framework Spark, který byl použit při implementaci analýzy proudu dat, nabízí API pro několik jazyků - Scala, Java, Python a R. API pro poslední dva zmiňované jazyky však neposkytují veškeré funkcionality Sparku, příkladem může být použití Twitter Streaming API jako zdroje dat\cite{adaadsdasdasdasd}. Protože má právě Twitter sloužit jako zdroj dat pro tuto práci, v úvahu připadaly pouze jazyky Java a Scala. 
+Framework Spark, který byl použit při implementaci analýzy proudu dat, nabízí API pro několik jazyků - Scala, Java, Python a R. API pro poslední dva zmiňované jazyky však neposkytují veškeré funkcionality Sparku, příkladem může být použití Twitter Streaming API jako zdroje dat\cite{streaming-guide}. Protože má právě Twitter sloužit jako zdroj dat pro tuto práci, v úvahu připadaly pouze jazyky Java a Scala. 
 
-Jak již bylo zmíněno v kapitole \ref{spark-core}, výpočty lze distribuovat pro operace typu transformace, tedy například map, filter a reduce. Protože Scala je funkcionální jazyk obsahující podobné funkce již v základu, je v kontextu distribuovaných výpočtů ideální. I proto je samotný Spark naimplementovaný ve Scale\cite{kkkkjjjhh}. Další výhodou je možnost použití existujících knihoven pro Javu. Především z těchto důvodů byla Scala použita i pro tuto práci. 
+Jak již bylo zmíněno v kapitole \ref{spark-core}, výpočty lze distribuovat pro operace typu transformace, tedy například map, filter a reduce. Protože Scala je funkcionální jazyk obsahující podobné funkce již v základu, je v kontextu distribuovaných výpočtů ideální. I proto je samotný Spark naimplementovaný ve Scale\cite{spark-scala}. Další výhodou je možnost použití existujících knihoven pro Javu. Především z těchto důvodů byla Scala použita i pro tuto práci. 
 
 \subsubsection{Stanford NLP knihovna}
 \label{stanford-nlp}
-	Pro analýzu sentimentu byla namísto vlastní jednoduché implementace analýzy sentimentu použita Java knihovna Stanford NLP\cite{fghjkkl}. Jedná se o knihovnu obecně poskytující funckionality pro zpracování a analýzu lidské řeči. Zahrnuje právě analyzátor pro určení sentimentu. 
+	Pro analýzu sentimentu byla namísto vlastní jednoduché implementace analýzy sentimentu použita Java knihovna Stanford NLP\cite{stanford-nlp-web}. Jedná se o knihovnu obecně poskytující funckionality pro zpracování a analýzu lidské řeči. Zahrnuje právě analyzátor pro určení sentimentu. 
 	
-	Použitý model je nejdříve potřeba vytrénovat na vzorových datech. Bez manuálního přetrénování je algoritmus již vytrénován na datasetu složeného z necelých 10 tisíc vět z oblasti filmových hodnocení. Tato trénovací data je možné najít na stránce Stanford Dataset Treebank\cite{ssdassa}. V rámci této práce nebude použitý model přetrénováván přímo pro kontext sociální sítě Twitter, bylo by totiž potřeba manuálně ohodnotit řádově tisíce vět. 
+	Použitý model je nejdříve potřeba vytrénovat na vzorových datech. Bez manuálního přetrénování je algoritmus již vytrénován na datasetu složeného z necelých 10 tisíc vět z oblasti filmových hodnocení. Tato trénovací data je možné najít na stránce Stanford Dataset Treebank\cite{nlp-treebank}. V rámci této práce nebude použitý model přetrénováván přímo pro kontext sociální sítě Twitter, bylo by totiž potřeba manuálně ohodnotit řádově tisíce vět. 
 	
 	Výsledkem analýzy sentimentu pomocí Stanford NLP je hodnota v intervalu 0 až 4, kde 0 reprezentuje negativní a 4 pozitivní větu. Jednotlivé tweety tedy bylo nutné rozdělit na věty a každou z nich analyzovat zvlášť. Celkový sentiment tweetu byl pak určen na základě hodnocení jednotlivých vět a jejich délce. 
 
@@ -713,7 +713,7 @@ stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_general_3s", prop)
 \subsection{Výběr technologií}
 	Při výběru konkrétní databáze bylo nejdříve nutné rozhodnout, zda použít klasickou relační databázi nebo sáhnout po NoSQL databázi. NoSQL databáze, někdy také označované jako Not Only SQL, zpravidla nejsou relační a nemají pevně dané schéma. Na druhou stranu tyto databáze nabízejí větší možnosti škálování, často jsou distribuované a umožňují pojmout výrazně větší objemy dat než databáze klasické\cite{nosql-dbs}. NoSQL databáze se často využívají právě v projektech pracujících s Big Daty. 
 	
-	Jedněmi z nejrozšířenějších NoSQL databází jsou tzv. dokumentově orientované databáze. Příkladem takové databáze je MongoDB\cite{mongodsfsdf}. Data v nich jsou obvykle uložena ve formátu podobném JSONu, přičemž narozdíl od relačních databází často provádíme jejich denormalizaci. To umožňuje rychlejší načtení informací z databáze, aktualizace dat je ale naopak časově náročnější\cite{sadfasdfasdf}. 
+	Jedněmi z nejrozšířenějších NoSQL databází jsou tzv. dokumentově orientované databáze. Příkladem takové databáze je MongoDB\cite{mongo}. Data v nich jsou obvykle uložena ve formátu podobném JSONu, přičemž narozdíl od relačních databází často provádíme jejich denormalizaci. To umožňuje rychlejší načtení informací z databáze, aktualizace dat je obvykle ale naopak časově náročnější\cite{nosql-speed}. 
 	
 	Z několika důvodů jsem však pro tuto práci zvolil klasickou relační databázi. Po vyfiltrování jednotlivých přání a jejich analýze nebudu pracovat s tak velkými objemy dat, které by relační databáze nebyla schopna pojmout. Tato data navíc mezi sebou mají jasné vztahy, které je možné zanést do schématu databáze a usnadnit si tak práci s nimi. Relační databáze jsou také využívány výrazně delší dobu a jsou vývojově vyspělejší. 
 	
@@ -724,7 +724,7 @@ stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_general_3s", prop)
 	
 \subsubsection{Amazon RDS}
 \label{amazon-aws}
-	Konkrétně byla pro nasazení databáze využita služba Amazon AWS\cite{gghjjkk}. Amazon Web Services je kolekce cloudových služeb zahrnujících například cloudové úložiště, virtuální servery nebo právě databázové servery - tzv. Amazon RDS, neboli Relational Database Service. 
+	Konkrétně byla pro nasazení databáze využita služba Amazon AWS\cite{aws}. Amazon Web Services je kolekce cloudových služeb zahrnujících například cloudové úložiště, virtuální servery nebo právě databázové servery - tzv. Amazon RDS, neboli Relational Database Service. 
 	
 	Nabízené virtuální servery (Amazon EC2) jsou příkladem modelu IaaS - tedy Infrastructure as a Service. Uživatel se v případě IaaS nemusí starat o infrastrukturu, jsou mu ale poskytnuty přístupové údaje v tomto případě k linuxovému serveru a o veškeré další nastavení a provoz se stará sám. Amazon RDS je pak příkladem modelu Paas, neboli Platform as a Service. V případě PaaS obecně odpadá i nutnost instalace softwaru a dalších administrátorských úkonů. Uživatel se stará pouze o konkrétné software provozovaný na dané platformě. U Amazon RDS tak není třeba manuálně instalovat databázi nebo třeba nastavovat připojení systému k síti. Na druhou stranu to ani není možné a obecně model PaaS může přinášet i značná omezení. 
 	
@@ -743,9 +743,9 @@ stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_general_3s", prop)
 \label{agregace-dat}
 	Jedním z funkčních požadavků této práce je agregace statistických dat dle času. Agregovat data se vyplácí z několika důvodů. Tím hlavním je ale snížení náročnosti dotazů na tato data. Pokud například uživatel požaduje statistiky za poslední týden, nepotřebuje obvykle data za každých několik sekund, ale stačí mu již agregovaná data například po hodinách. Aniž by přišel o nějaké informace, jsou mu místo tisíců záznamů vráceny desítky. Agregace je možné dosáhnout například pomocí CRONu nebo přímo na úrovni databáze pomocí Event Scheduleru. 
 	
-	CRON je unixový systémový démon zajišťující provádění uživatelem definovaných příkazů v daném čase\cite{dsfhgjplpjlpllp}. Stačilo by tedy napsat jednoduchý script, který by se připojil k databázi a provedl sloučení dat. Tento skript by pak byl pomocí CRONu pravidelně spouštěn. Protože byl pro nasazení databáze zvolen Amazon RDS, nemáme přístup k celému systému na kterém databáze běží, ale pouze k samotné databázi. CRON by tedy vyžadoval další UNIXový systém a není proto vhodným řešením. 
+	CRON je unixový systémový démon zajišťující provádění uživatelem definovaných příkazů v daném čase\cite{cron}. Stačilo by tedy napsat jednoduchý script, který by se připojil k databázi a provedl sloučení dat. Tento skript by pak byl pomocí CRONu pravidelně spouštěn. Protože byl pro nasazení databáze zvolen Amazon RDS, nemáme přístup k celému systému na kterém databáze běží, ale pouze k samotné databázi. CRON by tedy vyžadoval další UNIXový systém a není proto vhodným řešením. 
 	
-	Event Scheduler\cite{eschsfdsdfookk} poskytovaný přímo jako součást MySQL je naopak řešením ideálním. Jeho využití je oproti CRONu omezenější, nicméně pro námi požadovanou agregaci dat je jeho funkcionalita postačující. Půjde navíc o čistší řešení, protože bude operace modifikující databázi řešena přímo na její úrovni. 
+	Event Scheduler\cite{event-scheduler} poskytovaný přímo jako součást MySQL je naopak řešením ideálním. Jeho využití je oproti CRONu omezenější, nicméně pro námi požadovanou agregaci dat je jeho funkcionalita postačující. Půjde navíc o čistší řešení, protože bude operace modifikující databázi řešena přímo na její úrovni. 
 	
 	Příkaz pro vytvoření eventu agregujího data z tabulky \textit{stats\_general\_40s} do tabulky \textit{stats\_general\_20m} je k dispozici jako zdrojový kód \ref{fig:mysql-event-agr}:
 
@@ -781,7 +781,7 @@ DO
 
 \section{API webserver}
 \subsection{Výběr technologií}
-	Frameworky umožňující implementaci RESTového API existují pro víceméně všechny rozšířené programovací jazyky, některé z nich se však pro tyto účely hodí víc než jiné. Velice oblíbeným je například jazyk Python, který jsem především z důvodů jako jsou skvělá přehlednost kódu a rozsáhlá komunita zvolil i já. Z konkrétních frameworků jsem se poté rozhodoval především mezi minimalistickým Flaskem\cite{fsfsadfshgjhjkuyyuy} a komplexnějším Djangem\cite{dfsbvvcbreergfdfg}. 
+	Frameworky umožňující implementaci RESTového API existují pro víceméně všechny rozšířené programovací jazyky, některé z nich se však pro tyto účely hodí víc než jiné. Velice oblíbeným je například jazyk Python, který jsem především z důvodů jako jsou skvělá přehlednost kódu a rozsáhlá komunita zvolil i já. Z konkrétních frameworků jsem se poté rozhodoval především mezi minimalistickým Flaskem\cite{flask} a komplexnějším Djangem\cite{django}. 
 	
 	Oba tyto frameworky mají kvalitní dokumentaci a stojí za nimi rozsáhlá komunita. Django je ale určený především pro tvorbu komplexních webových aplikací, kdežto Flask je označován za tzv. micro-framework. Poskytuje tedy jen základní funkcionality, které je možné rozšířit instalací dalších pluginů. Protože cílem je vytvoření pouze RESTového API, je Flask ideálním nástrojem bez pro tento projekt zbytečných funkcí. 
 	
@@ -839,7 +839,7 @@ def user(user_id):
 \end{lstlisting} 
 
 \subsection{Nasazení}
-Stejně jako v případě databáze, i pro webserver byly využity cloudové služby. Volba probíhala především mezi již probíraným Amazon AWS nebo službou zvanou Heroku\cite{dsfsfhhgnmbnmbnbmnmbnbmn}. Pro webserver by v případě Amazon AWS bylo nutno použít službu EC2, tedy virtuální server. EC2 je příkladem v kapitole \ref{amazon-aws} již popisovaného modelu IaaS. Heroku je však příkladem platformy (PaaS) umožňující mimojiné i jednoduché spouštění aplikací psaných v Pythonu. Protože v případě Heroku odpadá nutnost administrace linuxového serveru a první nasazení aplikace je na něm otázkou několika minut, je pro námi požadovaný jednoduchý webserver skvělou volbou. 
+Stejně jako v případě databáze, i pro webserver byly využity cloudové služby. Volba probíhala především mezi již probíraným Amazon AWS nebo službou zvanou Heroku\cite{heroku}. Pro webserver by v případě Amazon AWS bylo nutno použít službu EC2, tedy virtuální server. EC2 je příkladem v kapitole \ref{amazon-aws} již popisovaného modelu IaaS. Heroku je však příkladem platformy (PaaS) umožňující mimojiné i jednoduché spouštění aplikací psaných v Pythonu. Protože v případě Heroku odpadá nutnost administrace linuxového serveru a první nasazení aplikace je na něm otázkou několika minut, je pro námi požadovaný jednoduchý webserver skvělou volbou. 
 
 \subsubsection{Heroku}
 Po vytvoření účtu na Heroku je potřeba stáhnout si tzv. Heroku Toolbelt. Jedná se o CLI\footnote{Command line interface nástroje jsou nástroje pracující v prostředí příkazové řádky} nástroj sloužící právě ke správě a monitorování aplikací běžících v Heroku cloudu. Při vytváření nové aplikace si uživatel stejně jako v případě Amazon AWS nejdříve zvolí variantu služby na základě jeho hardwarových a jiných požadavků. 
@@ -1002,6 +1002,36 @@ Zajímavé by bylo také rozšíření systému o další metody z oblasti text 
 
 \bibitem{nosql-dbs}NOSQL Databases [online]. [cit. 2016-04-26]. Dostupné z: http://nosql-database.org/
 
+\bibitem{summarization-quora}GANESAN, Kavita, ChengXiang ZHAI a Jiawei HAN. \textit{Opinosis: A Graph-Based Approach to Abstractive Summarization of Highly Redundant Opinions} [online]. [cit. 2016-05-15]. Dostupné z: http://dl.acm.org/ft\_gateway.cfm?id=1873820\&type=pdf\&coll=DL\&dl=\\GUIDE\&CFID=84550979\&CFTOKEN=79883382. University of Illinois at Urbana-Champaign.
+
+\bibitem{stanford-nlp-web}\textit{Software - The Stanford Natural Language Processing Group} [online]. [cit. 2016-05-15]. Dostupné z: http://nlp.stanford.edu/software/
+
+\bibitem{rest-diser}FIELDING, Roy Thomas. \textit{Representational State Transfer (REST)} [online]. 2000 [cit. 2016-05-15]. Dostupné z: https://www.ics.uci.edu/\~fielding/pubs/dissertation/rest\_arch\_style.htm. University of California, Irvine.
+
+\bibitem{json-web}\textit{Introducing JSON} [online]. [cit. 2016-05-15]. Dostupné z: http://www.json.org/
+
+\bibitem{spark-scala}Apache Spark: A Delight for Developers. In: \textit{The modern platform for data management and analytics.} [online]. [cit. 2016-05-15]. Dostupné z: http://blog.cloudera.com/blog/2014/03/apache-spark-a-delight-for-developers/
+
+\bibitem{github}\textit{Fanarim/bt-spark: Twitter stream analysis in Apache Spark - bachelor thesis} [online]. [cit. 2016-05-15]. Dostupné z: https://github.com/Fanarim/bt-spark
+
+\bibitem{nlp-treebank}Recursive Deep Models for Semantic Compositionality Over a Sentiment Treebank. \textit{The Stanford Natural Language Processing Group }[online]. [cit. 2016-05-15]. Dostupné z: http://nlp.stanford.edu/sentiment/treebank.html
+
+\bibitem{mongo}\textit{MongoDB for GIANT Ideas} | MongoDB [online]. [cit. 2016-05-15]. Dostupné z: https://www.mongodb.com/
+
+\bibitem{nosql-speed}What makes NoSQL type databases fast and scalable compared to relational SQL based databases? In: \textit{Quora} [online]. [cit. 2016-05-15]. Dostupné z: https://www.quora.com/What-makes-NoSQL-type-databases-fast-and-scalable-compared-to-relational-SQL-based-databases
+
+\bibitem{aws}\textit{Amazon Web Services (AWS) - Cloud Computing Services} [online]. [cit. 2016-05-15]. Dostupné z: https://aws.amazon.com/
+
+\bibitem{cron}CronHowto - Community Help Wiki. \textit{Official Ubuntu Documentation }[online]. [cit. 2016-05-15]. Dostupné z: https://help.ubuntu.com/community/CronHowto
+
+\bibitem{event-scheduler}MySQL :: MySQL 5.7 Reference Manual :: 21.4 Using the Event Scheduler. \textit{MySQL :: Developer Zone} [online]. [cit. 2016-05-15]. Dostupné z: https://dev.mysql.com/doc/refman/5.7/en/event-scheduler.html
+
+\bibitem{flask}\textit{Welcome | Flask (A Python Microframework)} [online]. [cit. 2016-05-15]. Dostupné z: http://flask.pocoo.org/
+
+\bibitem{django}\textit{The Web framework for perfectionists with deadlines | Django} [online]. [cit. 2016-05-15]. Dostupné z: https://www.djangoproject.com/
+
+\bibitem{heroku}Cloud Application Platform | Heroku [online]. [cit. 2016-05-15]. Dostupné z: https://www.heroku.com/home
+  
   
 \end{thebibliography}
 
@@ -1333,8 +1363,10 @@ Zajímavé by bylo také rozšíření systému o další metody z oblasti text 
 \begin{figure}
 	\dirtree{%
 		.1 flask\_api\DTcomment{Zdrojové kódy pro webserver poskytující REST API}.
+		.2 run\_howto.txt\DTcomment{Instrukce pro spuštění webserveru}.
 		.1 stream\_analysis\DTcomment{Zdrojové kódy pro systém na analýzu tweetů}.
-		.2 run\_howto.txt\DTcomment{Instrukce pro spuštění systému}.
+		.2 installation.txt\DTcomment{Instrukce pro přípravu systému}.
+		.2 run\_howto.txt\DTcomment{Instrukce pro spuštění}.
 		.1 thesis\DTcomment{Zdrojové kódy tohoto textu}.
 		.1 web\DTcomment{zdrojové kódy webové aplikace}.
 		.1 db\_model.png\DTcomment{Obrázek struktury databáze}.
