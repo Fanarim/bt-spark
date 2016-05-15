@@ -115,11 +115,11 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `tweet_wishes`.`stats_general_3s`
+-- Table `tweet_wishes`.`stats_general_40s`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `tweet_wishes`.`stats_general_3s` ;
+DROP TABLE IF EXISTS `tweet_wishes`.`stats_general_40s` ;
 
-CREATE TABLE IF NOT EXISTS `tweet_wishes`.`stats_general_3s` (
+CREATE TABLE IF NOT EXISTS `tweet_wishes`.`stats_general_40s` (
   `datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `tweets_total` INT NULL DEFAULT NULL,
   `tweets_english` INT NULL DEFAULT NULL,
@@ -130,11 +130,11 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `tweet_wishes`.`stats_general_10m`
+-- Table `tweet_wishes`.`stats_general_20m`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `tweet_wishes`.`stats_general_10m` ;
+DROP TABLE IF EXISTS `tweet_wishes`.`stats_general_20m` ;
 
-CREATE TABLE IF NOT EXISTS `tweet_wishes`.`stats_general_10m` (
+CREATE TABLE IF NOT EXISTS `tweet_wishes`.`stats_general_20m` (
   `datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `tweets_total` INT NULL DEFAULT NULL,
   `tweets_english` INT NULL DEFAULT NULL,
@@ -164,7 +164,7 @@ DEFAULT CHARACTER SET = utf8mb4;
 -- Events for database 'tweet_wishes'
 -- -----------------------------------------------------
 /*!50106 SET @save_time_zone= @@TIME_ZONE */ ;
-/*!50106 DROP EVENT IF EXISTS `stats_general_10m_clean` */;
+/*!50106 DROP EVENT IF EXISTS `stats_general_20m_clean` */;
 DELIMITER ;;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;;
@@ -176,13 +176,13 @@ DELIMITER ;;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;;
 /*!50003 SET @saved_time_zone      = @@time_zone */ ;;
 /*!50003 SET time_zone             = 'UTC' */ ;;
-/*!50106 CREATE*/ /*!50117 DEFINER=`user_rw`@`%`*/ /*!50106 EVENT `stats_general_10m_clean` ON SCHEDULE EVERY 1 DAY STARTS '2016-01-01 00:00:00' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Clean old data from stats_general_10m' DO delete from stats_general_10m where datetime < timestamp(utc_timestamp() - interval 3 day) */ ;;
+/*!50106 CREATE*/ /*!50117 DEFINER=`user_rw`@`%`*/ /*!50106 EVENT `stats_general_20m_clean` ON SCHEDULE EVERY 1 DAY STARTS '2016-01-01 00:00:00' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Clean old data from stats_general_20m' DO delete from stats_general_20m where datetime < timestamp(utc_timestamp() - interval 3 day) */ ;;
 /*!50003 SET time_zone             = @saved_time_zone */ ;;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;;
 /*!50003 SET character_set_results = @saved_cs_results */ ;;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;;
-/*!50106 DROP EVENT IF EXISTS `stats_general_10m_to_1d` */;;
+/*!50106 DROP EVENT IF EXISTS `stats_general_20m_to_1d` */;;
 DELIMITER ;;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;;
@@ -194,13 +194,13 @@ DELIMITER ;;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;;
 /*!50003 SET @saved_time_zone      = @@time_zone */ ;;
 /*!50003 SET time_zone             = 'UTC' */ ;;
-/*!50106 CREATE*/ /*!50117 DEFINER=`user_rw`@`%`*/ /*!50106 EVENT `stats_general_10m_to_1d` ON SCHEDULE EVERY 1 DAY STARTS '2016-01-01 00:02:00' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Aggregate general stats 10m -> 1d' DO begin insert into stats_general_1d (tweets_total, tweets_english, wishes_total, sentiment_average) select SUM(tweets_total), SUM(tweets_english), SUM(wishes_total), AVG(sentiment_average) from stats_general_10m where datetime > timestamp(utc_timestamp() - interval 1 day); end */ ;;
+/*!50106 CREATE*/ /*!50117 DEFINER=`user_rw`@`%`*/ /*!50106 EVENT `stats_general_20m_to_1d` ON SCHEDULE EVERY 1 DAY STARTS '2016-01-01 00:02:00' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Aggregate general stats 20m -> 1d' DO begin insert into stats_general_1d (tweets_total, tweets_english, wishes_total, sentiment_average) select SUM(tweets_total), SUM(tweets_english), SUM(wishes_total), AVG(sentiment_average) from stats_general_20m where datetime > timestamp(utc_timestamp() - interval 1 day); end */ ;;
 /*!50003 SET time_zone             = @saved_time_zone */ ;;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;;
 /*!50003 SET character_set_results = @saved_cs_results */ ;;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;;
-/*!50106 DROP EVENT IF EXISTS `stats_general_3s_clean` */;;
+/*!50106 DROP EVENT IF EXISTS `stats_general_40s_clean` */;;
 DELIMITER ;;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;;
@@ -212,13 +212,13 @@ DELIMITER ;;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;;
 /*!50003 SET @saved_time_zone      = @@time_zone */ ;;
 /*!50003 SET time_zone             = 'UTC' */ ;;
-/*!50106 CREATE*/ /*!50117 DEFINER=`user_rw`@`%`*/ /*!50106 EVENT `stats_general_3s_clean` ON SCHEDULE EVERY 10 MINUTE STARTS '2016-01-01 00:00:00' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Clean old data from stats_general_3s' DO delete from stats_general_3s where datetime < timestamp(utc_timestamp() - interval 1 hour) */ ;;
+/*!50106 CREATE*/ /*!50117 DEFINER=`user_rw`@`%`*/ /*!50106 EVENT `stats_general_40s_clean` ON SCHEDULE EVERY 20 MINUTE STARTS '2016-01-01 00:00:00' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Clean old data from stats_general_40s' DO delete from stats_general_40s where datetime < timestamp(utc_timestamp() - interval 1 hour) */ ;;
 /*!50003 SET time_zone             = @saved_time_zone */ ;;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;;
 /*!50003 SET character_set_results = @saved_cs_results */ ;;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;;
-/*!50106 DROP EVENT IF EXISTS `stats_general_3s_to_10m` */;;
+/*!50106 DROP EVENT IF EXISTS `stats_general_40s_to_20m` */;;
 DELIMITER ;;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;;
@@ -230,7 +230,7 @@ DELIMITER ;;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;;
 /*!50003 SET @saved_time_zone      = @@time_zone */ ;;
 /*!50003 SET time_zone             = 'UTC' */ ;;
-/*!50106 CREATE*/ /*!50117 DEFINER=`user_rw`@`%`*/ /*!50106 EVENT `stats_general_3s_to_10m` ON SCHEDULE EVERY 10 MINUTE STARTS '2016-01-01 00:01:00' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Aggregate general stats 3s -> 10m' DO begin insert into stats_general_10m (tweets_total, tweets_english, wishes_total, sentiment_average) select SUM(tweets_total), SUM(tweets_english), SUM(wishes_total), AVG(sentiment_average) from stats_general_3s where datetime > timestamp(utc_timestamp() - interval 10 minute); end */ ;;
+/*!50106 CREATE*/ /*!50117 DEFINER=`user_rw`@`%`*/ /*!50106 EVENT `stats_general_40s_to_20m` ON SCHEDULE EVERY 20 MINUTE STARTS '2016-01-01 00:01:00' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Aggregate general stats 40s -> 20m' DO begin insert into stats_general_20m (tweets_total, tweets_english, wishes_total, sentiment_average) select SUM(tweets_total), SUM(tweets_english), SUM(wishes_total), AVG(sentiment_average) from stats_general_40s where datetime > timestamp(utc_timestamp() - interval 20 minute); end */ ;;
 /*!50003 SET time_zone             = @saved_time_zone */ ;;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;;

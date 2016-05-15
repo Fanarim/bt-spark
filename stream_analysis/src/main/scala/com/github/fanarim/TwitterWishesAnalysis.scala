@@ -272,7 +272,7 @@ object TwitterWishesAnalysis {
 					"tweets_english",
 					"wishes_total",
 					"sentiment_average")
-			stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_general_3s", prop)
+			stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_general_40s", prop)
 		}
 
 		//------------------------------------------------------------------------------------

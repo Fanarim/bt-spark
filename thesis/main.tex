@@ -151,9 +151,9 @@ sentiment analysis, REST API}
 \begin{itemize}
 \item \textbf{Apache Flink} je nejnovějším frameworkem, který v relativně velké míře konkuruje Sparku. Stejně jako Spark, podporuje Flink oba způsoby zpracování dat, primárně je ale zaměřený na streamy. Narozdíl od Sparku ale podporuje streamové zpracování v pravém slova smyslu a lze s ním tak dosáhnout výrazně kratší doby zpracování\cite{streaming-benchmark}. I právě proto se předpokládá, že v oblasti zpracování proudů dat v budoucnu předstihne Spark\cite{flink-future}. Jeho další výhodou je například možnost využití existujících programů pro Storm či MapReduce. Hlavní nevýhodou je momentálně fakt, že je teprve v počátcích svého vývoje a často se tak uživatel může setkat s bugy či chybějící dokumentací. 
 	
-\item \textbf{Apache Storm} jako jediný ze zmiňovaných frameworků nabízí pouze streamové zpracování, i on však poskytuje pravé streamové zpracování. Jeho API je oproti Flinku více nízkoúrovňové a vývoj v něm tak může být pracnější. Obecně ale funguje na podobném principu jako právě Flink. Oproti zbývajícím dvěma technologiím Storm postrádá například tzv. Streaming Windows a další funkce\cite{so-flink-storm}.
+\item \textbf{Apache Storm} jako jediný ze zmiňovaných frameworků nabízí pouze streamové zpracování, i on však poskytuje pravé streamové zpracování. Jeho API je oproti Flinku více nízkoúrovňové a vývoj v něm tak může být pracnější. Obecně ale funguje na podobném principu jako právě Flink. 
 	
-\item \textbf{Apache Spark} je rozhodně nejrozšířenější technologií s největší komunitou a pokročilejším stupněm vývoje. Podrobněji se mu věnují v další sekci. Pro porovnání s dalšími technologiemi ale lze říct, že v oblasti proudového zpracování se hodí především pro ty případy užití, kdy není nutné co nejrychlejší zpracování a řádově několikasekundové zpoždění nehraje roli. Je pak momentálně oproti zbylým technologiím vhodnou volbou díky svojí vyspělosti a jednoduchosti. Pokud je ale nutné opravdu real-time zpracování, je třeba volit mezi Flinkem a Stormem. Ty fungují na podobném principu, nicméně Flink má některé funkcionality, které ve Stormu chybí\cite{so-flink-storm}. Flink také nabízí vysokoúrovňové API a do budoucna se jeví jako perspektivnější framework. 
+\item \textbf{Apache Spark} je rozhodně nejrozšířenější technologií s největší komunitou a pokročilejším stupněm vývoje. Podrobněji se mu věnuji v další sekci. Pro porovnání s dalšími technologiemi ale lze říct, že v oblasti proudového zpracování se hodí především pro ty případy užití, kdy není nutné co nejrychlejší zpracování a řádově několikasekundové zpoždění nehraje roli. Je pak momentálně oproti zbylým technologiím vhodnou volbou díky svojí vyspělosti a jednoduchosti. Pokud je ale nutné opravdu real-time zpracování, je třeba volit mezi Flinkem a Stormem. Ty fungují na podobném principu, nicméně Flink má podle některých uživatelů funkcionality, které ve Stormu chybí\cite{so-flink-storm}. Flink také nabízí vysokoúrovňové API a do budoucna se jeví jako perspektivnější framework. 
 \end{itemize}		
 	
 	
@@ -210,7 +210,7 @@ sentiment analysis, REST API}
 	
 
 \subsubsection{MLlib}
-	MLlib je framework určený pro strojové učení. Právě díky vlastnostem Sparku (především díky využívání operační paměti) poskytuje výrazně lepší výsledky než klasické technologie pro machine learning. Výhodou tohoto frameworku je to, že v něm jsou již naimplementovány nejpoužívanější algoritmy. Není tak nutná jejich reimplementace uživatelem. 
+	MLlib je framework určený pro strojové učení. Právě díky vlastnostem Sparku (především díky využívání operační paměti a distribuci výpočtů) poskytuje často lepší výsledky než klasické technologie pro machine learning\cite{MLlib}. Výhodou tohoto frameworku je to, že v něm jsou již naimplementovány nejpoužívanější algoritmy. Není tak nutná jejich reimplementace uživatelem. 
 
 	
 \subsubsection{Graphx}
@@ -615,7 +615,7 @@ Put je metodou sloužící k aktualizaci zdroje. Jde jistým způsobem o kombina
 \multicolumn{5}{l}{\parbox[t]{12.8cm}{Bez použití následujích parametrů vrátí obecné statistiky za posledních 10 minut.  }  } \\
 \textbf{from}         &         & timestamp       &        & od včetně                           \\
 \textbf{to}           &         & timestamp       &        & do vyjímaje                         \\
-\textbf{density}        &         & "3s"/"10m"/"1d"         &        & hustota statistických dat   \\
+\textbf{density}        &         & "40s"/"20m"/"1d"         &        & hustota statistických dat   \\
 \end{tabular}
 \end{table}
 
@@ -698,7 +698,7 @@ val stats = ssqlc.createDataFrame(Seq((currentDatetime, tweetCount,
 		"tweets_english",
 		"wishes_total",
 		"sentiment_average")
-stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_general_3s", prop)
+stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_general_40s", prop)
 \end{lstlisting}
 
 	
@@ -975,6 +975,8 @@ Zajímavé by bylo také rozšíření systému o další metody z oblasti text 
 \bibitem{flink-future}Fast Big Data: Apache Flink vs Apache Spark for Streaming Data. \textit{Analytics, Data Mining, and Data Science} [online]. [cit. 2016-04-17]. Dostupné z: http://www.kdnuggets.com/2015/11/fast-big-data-apache-flink-spark-streaming.html
 
 \bibitem{spark-components}The 5-Minute Guide to Understanding the Significance of Apache Spark. \textit{Big Data Hadoop Blog | MapR} [online]. [cit. 2016-04-17]. Dostupné z: https://www.mapr.com/blog/5-minute-guide-understanding-significance-apache-spark
+
+\bibitem{MLlib}\textit{MLlib | Apache Spark} [online]. [cit. 2016-05-15]. Dostupné z: http://spark.apache.org/mllib/
 
 \bibitem{streaming-guide}Spark Streaming Programming Guide. \textit{Overview - Spark 1.6.1 Documentation} [online]. [cit. 2016-04-17]. Dostupné z: http://spark.apache.org/docs/latest/streaming-programming-guide.html
 
@@ -1305,7 +1307,7 @@ Zajímavé by bylo také rozšíření systému o další metody z oblasti text 
 \multicolumn{5}{l}{\parbox[t]{12.8cm}{Bez použití následujích parametrů vrátí obecné statistiky za posledních 10 minut.  }  } \\
 \textbf{from}         &         & timestamp       &        & od včetně                           \\
 \textbf{to}           &         & timestamp       &        & do vyjímaje                         \\
-\textbf{density}        &         & "3s"/"10m"/"1d"         &        & hustota statistických dat   \\
+\textbf{density}        &         & "40s"/"20m"/"1d"         &        & hustota statistických dat   \\
  & & & & \\
  Příklad odpovědi:   \\
 \end{tabular}

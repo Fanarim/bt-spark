@@ -247,22 +247,22 @@ def stats_history():
     check_valid_arguments(request.args, ["to", "from", "density"])
     time_from, time_to = validate_and_set_interval(request.args)
     if 'density' in request.args:
-        if request.args['density'] in ["3s", "10m", "1d"]:
+        if request.args['density'] in ["40s", "20m", "1d"]:
             time_density = request.args['density']
         else:
             raise ProcessingException(
                 description='Invalid value for "density" parameter',
                 code=400)
     else:
-            time_density = "3s"
-    if time_density == "3s":
-        stats = Stats3s.query\
-            .filter(func.unix_timestamp(Stats3s.datetime) < time_to)\
-            .filter(func.unix_timestamp(Stats3s.datetime) >= time_from)
-    if time_density == "10m":
-        stats = Stats10m.query\
-            .filter(func.unix_timestamp(Stats10m.datetime) < time_to)\
-            .filter(func.unix_timestamp(Stats10m.datetime) >= time_from)
+            time_density = "40s"
+    if time_density == "40s":
+        stats = Stats40s.query\
+            .filter(func.unix_timestamp(Stats40s.datetime) < time_to)\
+            .filter(func.unix_timestamp(Stats40s.datetime) >= time_from)
+    if time_density == "20m":
+        stats = Stats20m.query\
+            .filter(func.unix_timestamp(Stats20m.datetime) < time_to)\
+            .filter(func.unix_timestamp(Stats20m.datetime) >= time_from)
     if time_density == "1d":
         stats = Stats1d.query\
             .filter(func.unix_timestamp(Stats1d.datetime) < time_to)\

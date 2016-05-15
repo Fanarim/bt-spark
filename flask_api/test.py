@@ -72,15 +72,15 @@ class UnitTesting(TestCase):
         db.session.execute(
             text('INSERT INTO tweet_mentions_user VALUES (889999, 1414);'))
 
-        db.session.add(Stats3s(datetime.datetime.utcfromtimestamp(time_now - 20), 164, 19, 0, 2))
-        db.session.add(Stats3s(datetime.datetime.utcfromtimestamp(time_now - 17), 184, 22, 1, 1.58))
-        db.session.add(Stats3s(datetime.datetime.utcfromtimestamp(time_now - 14), 156, 24, 2, 3.45))
-        db.session.add(Stats3s(datetime.datetime.utcfromtimestamp(time_now - 11), 175, 27, 0, 2))
+        db.session.add(Stats40s(datetime.datetime.utcfromtimestamp(time_now - 160), 164, 19, 0, 2))
+        db.session.add(Stats40s(datetime.datetime.utcfromtimestamp(time_now - 120), 184, 22, 1, 1.58))
+        db.session.add(Stats40s(datetime.datetime.utcfromtimestamp(time_now - 80), 156, 24, 2, 3.45))
+        db.session.add(Stats40s(datetime.datetime.utcfromtimestamp(time_now - 40), 175, 27, 0, 2))
 
-        db.session.add(Stats10m(datetime.datetime.utcfromtimestamp(time_now - 2400), 32045, 8262, 152, 1.86))
-        db.session.add(Stats10m(datetime.datetime.utcfromtimestamp(time_now - 1800), 34105, 8451, 121, 1.58))
-        db.session.add(Stats10m(datetime.datetime.utcfromtimestamp(time_now - 1200), 18812, 9571, 114, 2.45))
-        db.session.add(Stats10m(datetime.datetime.utcfromtimestamp(time_now - 600), 28411, 8225, 163, 2.25))
+        db.session.add(Stats20m(datetime.datetime.utcfromtimestamp(time_now - 4800), 32045, 8262, 152, 1.86))
+        db.session.add(Stats20m(datetime.datetime.utcfromtimestamp(time_now - 3600), 34105, 8451, 121, 1.58))
+        db.session.add(Stats20m(datetime.datetime.utcfromtimestamp(time_now - 2400), 18812, 9571, 114, 2.45))
+        db.session.add(Stats20m(datetime.datetime.utcfromtimestamp(time_now - 1200), 28411, 8225, 163, 2.25))
 
         db.session.commit()
 
@@ -270,12 +270,12 @@ class UnitTesting(TestCase):
         assert len(response.json['stats']) == 4
 
     def test_stats_general_density(self):
-        response = self.client.get('/stats/general/', query_string={'from': 0, 'density': '10m'})
+        response = self.client.get('/stats/general/', query_string={'from': 0, 'density': '20m'})
         assert response.status_code == 200
         assert len(response.json['stats']) == 4
 
     def test_stats_general_empty(self):
-        response = self.client.get('/stats/general/', query_string={'density': '10m'})
+        response = self.client.get('/stats/general/', query_string={'density': '20m'})
         assert response.status_code == 200
         assert len(response.json['stats']) == 0
 

@@ -102,7 +102,7 @@ class Hashtag(db.Model):
             return dict(hashtag=self.hashtag)
 
 
-class Stats3s(db.Model):
+class Stats40s(db.Model):
     def __init__(self,
                  datetime,
                  tweets_total,
@@ -115,7 +115,7 @@ class Stats3s(db.Model):
         self.wishes_total = wishes_total
         self.sentiment_average = sentiment_average
 
-    __tablename__ = 'stats_general_3s'
+    __tablename__ = 'stats_general_40s'
     datetime = db.Column(db.DateTime, primary_key=True)
     tweets_total = db.Column(db.Integer)
     tweets_english = db.Column(db.Integer)
@@ -130,7 +130,7 @@ class Stats3s(db.Model):
                     sentiment_average=self.sentiment_average)
 
 
-class Stats10m(db.Model):
+class Stats20m(db.Model):
     def __init__(self,
                  datetime,
                  tweets_total,
@@ -143,7 +143,7 @@ class Stats10m(db.Model):
         self.wishes_total = wishes_total
         self.sentiment_average = sentiment_average
 
-    __tablename__ = 'stats_general_10m'
+    __tablename__ = 'stats_general_20m'
     datetime = db.Column(db.DateTime, primary_key=True)
     tweets_total = db.Column(db.Integer)
     tweets_english = db.Column(db.Integer)
