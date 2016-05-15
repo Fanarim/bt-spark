@@ -88,7 +88,7 @@ sentiment analysis, REST API}
 % \newacronym{FIT}{FIT}{Fakulta informa{\v c}n{\' i}ch technologi{\' i}}
 
 \begin{introduction}
-	V~současné době generujeme obrovská množství dat - podle některých odhadů to například v~roce 2012 mohlo být až 2,5 exabajtů za den\cite{bbc-bigdata}, od té doby se rychlost jejich přibývání stále zvyšuje. Spolu s~nárůstem objemu dat je potřeba vyvinout nové metody umožňující jejich zpracování v~přijatelném čase. 
+	V~současné době generujeme obrovská množství dat -- podle některých odhadů to například v~roce 2012 mohlo být až 2,5 exabajtů za den\cite{bbc-bigdata}, od té doby se rychlost jejich přibývání stále zvyšuje. Spolu s~nárůstem objemu dat je potřeba vyvinout nové metody umožňující jejich zpracování v~přijatelném čase. 
 	
 	Cílem této práce je pomocí frameworku Apache Spark vyvinout systém pro analýzů proudu příspěvků ze sociální sítě Twitter. Tato analýza by měla probíhat v~reálném čase a umožňovat sledování příspěvků reprezentujících přání jejich autorů. Krom obecných statistik bude systém provádět i některé z~metod pro analýzu textu. Výsledky této analýzy budou ukládány do databáze a zpřístupněny pomocí REST API. Implementovaný systém by mohl být využit například pro hodnocení úspěšnosti reklamních kampaní nebo obecně při provádění různých průzkumů na sociální sítí Twitter. 
 	
@@ -117,7 +117,7 @@ sentiment analysis, REST API}
 	Právě kvůli těmto vlastnostem se při práci s~velkými objemy dat klasické technologie používané v~minulosti stále častěji ukazují jako nedostatečně rychlé nebo obecně neschopné tato data zpracovat. Je proto nutné sáhnout po nových technologiích určených pro práci s~nimi. Bez technologií pro Big Data se v~dnešní době neobejdou třeba již zmiňované internetové vyhledávače nebo sociální sítě, využití ale nacházejí i v~mnoha dalších oblastech. Jejich rozvoj je také předpokladem pro další rozšíření tzv. Internet of Things\cite{bigdata-iot}.  
 
 \subsection{Strukturovaná a nestrukturovaná data}	
-	Data obecně rozdělujeme často do dvou kategorií - na data strukturovaná a nestrukturovaná. Strukturovaná data jsou obvykle uložena v~klasické relační databázi, nebo obecně utříděna po řádcích a s~přesně definovanými sloupci. Ostatní data, která nemají takto pevně danou strukturu, jsou data nestrukturovaná. Ještě donedávna docházelo ke zpracování téměř výhradně dat strukturovaných. Ta nestrukturovaná však často nabízejí obrovský potenciál k~jejich využití. Klasickým příkladem nestrukturovaných dat je lidská řeč v~psané formě - ta rozhodně obsahuje spoustu informací, ale ve formě kterou je počítačově složité analyzovat. Může se jednat například o~články, konverzace nebo příspěvky na sociálních sítích.  Právě příspěvkům na sociální síti Twitter se věnuje i tato práce. 
+	Data obecně rozdělujeme často do dvou kategorií -- na data strukturovaná a nestrukturovaná. Strukturovaná data jsou obvykle uložena v~klasické relační databázi, nebo obecně utříděna po řádcích a s~přesně definovanými sloupci. Ostatní data, která nemají takto pevně danou strukturu, jsou data nestrukturovaná. Ještě donedávna docházelo ke zpracování téměř výhradně dat strukturovaných. Ta nestrukturovaná však často nabízejí obrovský potenciál k~jejich využití. Klasickým příkladem nestrukturovaných dat je lidská řeč v~psané formě -- ta rozhodně obsahuje spoustu informací, ale ve formě kterou je počítačově složité analyzovat. Může se jednat například o~články, konverzace nebo příspěvky na sociálních sítích.  Právě příspěvkům na sociální síti Twitter se věnuje i tato práce. 
 	
 	Analýzou lidské řeči se zabývá obor zvaný Natural Language Processing či Text Mining, obecně vytěžováním znalostí z~dat pak tzv. Data Mining. Často skloňovaným pojmem je také Machine Learning, v~češtině strojové učení. Pro všechny tyto obory jsou technologie pro Big Data obrovským přínosem -- díky nim je možné získat opravdu cenné informace snáze a rychleji než bylo možné dříve. Například analýzou dat pohybu uživatele po webové stránce a jeho chováním můžeme odhalit nedostatky tohoto webu a jejich odstraněním zvýšit míru konverze. Hovoříme-li v~kontextu sociální sítě Twitter, možnosti jsou ještě zajímavější. Na základě příspěvků a vyplněných informací jednotlivých uživatelů můžeme například odhadovat jejich volební preference nebo nabízet velice přesně cílenou reklamu. Konkrétnějším příkladem může být zajímavý projekt ze Stanfordské univerzity usilující o~odhad vývoje cen akcií na základě analýzy sentimentu příspěvků z~Twitteru\cite{stock-stanford}. Obecně metodám Text Miningu a především právě analýze sentimentu se věnuji v~kapitole \ref{text-mining}.  
 
@@ -136,7 +136,7 @@ sentiment analysis, REST API}
     	\label{fig:mapreduce}
 	\end{figure}
 	
-	Především v~posledních letech se objevují další komplexnější nástroje pro práci s~velkými daty. Tyto nástroje obvykle obsahují i další technologie, mimo jiné umožňující například správu počítačového clusteru a zajišťující konzistenci dat. Tyto frameworky principielně data zpracovávají dvěma různými způsoby - jde o~tzv. batchové zpracování nebo o~zpracování streamové. 
+	Především v~posledních letech se objevují další komplexnější nástroje pro práci s~velkými daty. Tyto nástroje obvykle obsahují i další technologie, mimo jiné umožňující například správu počítačového clusteru a zajišťující konzistenci dat. Tyto frameworky principielně data zpracovávají dvěma různými způsoby -- jde o~tzv. batchové zpracování nebo o~zpracování streamové. 
 	
 \subsection{Batchové zpracování Big dat}
 	Batchové neboli dávkové zpracování je vhodné především pro takové úkoly, jejichž výsledky není nutné znát ihned. Data jsou nejprve po určitou dobu shromažďována a až poté je jednorázově spuštěna úloha pro jejich zpracování. Toto zpracování obvykle zabere relativně dlouhý čas. Zmiňovaný MapReduce se využívá právě pro batchové zpracování dat. 
@@ -182,7 +182,7 @@ sentiment analysis, REST API}
 	Kdykoli je na konkrétním RDD vykonána některá z~operací umožňujících paralelní zpracování, tzv. transformace (například map, filter nebo reduce), driver neboli počítač řídící ostatní počítače naplánuje její zpracování na všech počítačích v~clusteru. Ty poté vytvoří nová RDD s~výsledky. Operace na RDD jsou ale "lazy", což znamaná, že se neprovádějí dokud na RDD neaplikujeme nějakou akci. Akce je opakem transformace a jejím výsledkem není vytvoření nového RDD. Příkladem akce je vypsání obsahu RDD na standartní výstup. 
 
 \subsubsection{Spark SQL}
-	Další důležitou komponentou je Spark SQL, dříve nazývaný jako Apache Shark. Ten umožňuje práci s~především strukturovanými daty. Zavádí také novou strukturu zvanou Data Frame (DF). Stejně jako RDD, je i Data Frame distribuovaný po clusteru. Jeho struktura je ale narozdíl od RDD pevně daná - konceptuelně odpovídá klasické tabulce v~relační databázi. Vnitřně v~něm dochází k~optimalizacím urychlujícím operaci s~ním. 
+	Další důležitou komponentou je Spark SQL, dříve nazývaný jako Apache Shark. Ten umožňuje práci s~především strukturovanými daty. Zavádí také novou strukturu zvanou Data Frame (DF). Stejně jako RDD, je i Data Frame distribuovaný po clusteru. Jeho struktura je ale narozdíl od RDD pevně daná -- konceptuelně odpovídá klasické tabulce v~relační databázi. Vnitřně v~něm dochází k~optimalizacím urychlujícím operaci s~ním. 
 	
 	Hlavní předností Spark SQL je možnost používat klasické SQL nebo HiveQL\footnote{HiveQL je jazyk používaný v~Apache Hive. Je podobný jazyku SQL, některé funkcionality však postrádá a jiné má navíc. } dotazy, jejichž výsledky jsou uloženy právě jako Data Frame. Například komunikace s~klasickou relační databází je možná pomocí JDBC/ODBC\footnote{Jednotné API pro přístup a práci s~relačními databázemi.}. 
 
@@ -225,17 +225,17 @@ sentiment analysis, REST API}
 
 
 \chapter{Analýza}
-V~této kapitole se nejdříve v~sekci \ref{text-mining} věnuji dostupným metodám pro analýzu textu, především pak metodě zvané sentimentální analýza. V~sekci \ref{twitter} se zabývám sociální sítí Twitter a jí poskytovaným rozhraním, které bude v~rámci této práce využito. Poslední sekce \ref{pozadavky} je pak zaměřena na definování požadavků na implementovaný systém. 
+V~této kapitole se nejdříve v~sekci \ref{text-mining} věnuji dostupným metodám pro analýzu textu, především pak metodě zvané sentimentální analýza. V~sekci \ref{twitter} se zabývám sociální sítí Twitter a jím poskytovaným rozhraním, které bude v~rámci této práce využito. Poslední sekce \ref{pozadavky} je pak zaměřena na definování požadavků na implementovaný systém. 
 
 
 \section{Metody pro analýzu textu}
 \label{text-mining}
-	Získáváním informací z~běžného textu se zabývá obor zvaný Text Mining. Jde o~obor na pomezí strojového učení a klasického data miningu který umožňuje získávání strukturovaných dat z~běžného textu, tedy dat nestrukturovaných. K~tomu jsou obvykle použity techniky právě ze zmiňovaných disciplín. Několik základních metod pro dolování dat z~textu popisuji v~následujících sekcích. 
+	Získáváním informací z~běžného textu se zabývá obor zvaný Text Mining. Jde o~obor na pomezí strojového učení a klasického data miningu, který umožňuje získávání strukturovaných dat z~běžného textu, tedy dat nestrukturovaných. K~tomu jsou obvykle použity techniky právě ze zmiňovaných disciplín. Několik základních metod pro dolování dat z~textu popisuji v~následujících sekcích. 
 	
 	Protože příspěvky ze sociální sítě Twitter, jejichž analýze se tato práce věnuje, jsou relativně krátké a obsahově specifické, v~rámci této práce bude použita pouze metoda zvaná Analýza sentimentu. Té se věnuji nejprve obecně v~sekci \ref{sentiment-analysis}. Její použití v~kontextu této práce pak podrobněji popisuji v~kapitole \ref{analysis-implementation}. 
 	
 \subsection{Text Categorization}
-	Text Categorization, někdy také Text Classification je metodou umožňující rozdělení analyzovaných dokumentů do předem daných skupin, jako například sport, politika a věda. Kategorizace je založena na četnosti jednotlivých slov v~analyzovaném textu - pokud například text často obsahuje slova spadající do kategorie sport, bude i celý text do této kategorie zařazen. Rozdělení slov do jednotlivých kategorií je dosaženo buďto manuálně nebo právě pomocí technik strojového učení. Jeden dokument může být obvykle zařezen do více kategorií. 
+	Text Categorization, někdy také Text Classification je metodou umožňující rozdělení analyzovaných dokumentů do předem daných skupin, jako například sport, politika a věda. Kategorizace je založena na četnosti jednotlivých slov v~analyzovaném textu -- pokud například text často obsahuje slova spadající do kategorie sport, bude i celý text do této kategorie zařazen. Rozdělení slov do jednotlivých kategorií je dosaženo buďto manuálně nebo právě pomocí technik strojového učení. Jeden dokument může být obvykle zařezen do více kategorií. 
 
 \subsection{Text Clustering}
 	Text Clustering neboli shlukování textů je metoda umožňující seskupování podobných dokumentů. Místo do předem daných kategorií jsou tyto dokumenty přiřazovány na základě jejich podobnosti do dynamicky vytvářených skupin. I~zde je rozdělení dosaženo pomocí četnosti jednotlivých použítých slov. Každý dokument je obvykle přiřazen do jediné kategorie. 
@@ -248,7 +248,7 @@ V~této kapitole se nejdříve v~sekci \ref{text-mining} věnuji dostupným meto
 \label{sentiment-analysis}
 	Sentiment analysis, v~češtině analýza sentimentu, je metodou pro určování celkové nálady či pozitivity daného textu. Výsledkem této analýzy tedy nejsou žádné faktické informace, ale hodnota určující subjektivní názor autora textu na dané téma. 
 	
-	Jednodušší verze algoritmů pro analýzu sentimentu fungují na podobném principu jako předchozí metody. Text je rozdělen na jednotlivá slova, z~nichž každému je přiděleno negativní, neutrální nebo pozitivní hodnocení. Tato hodnocení jsou posléze zprůměrována. Tímto způsobem však dochází ke ztrátě podstatných informací - dochází k~zanedbání pořadí slov a především nejsou zohledňovány například negace, které mohou změnit celý význam věty. Příkladem může být následující věta:
+	Jednodušší verze algoritmů pro analýzu sentimentu fungují na podobném principu jako předchozí metody. Text je rozdělen na jednotlivá slova, z~nichž každému je přiděleno negativní, neutrální nebo pozitivní hodnocení. Tato hodnocení jsou posléze zprůměrována. Tímto způsobem však dochází ke ztrátě podstatných informací -- dochází k~zanedbání pořadí slov a především nejsou zohledňovány například negace, které mohou změnit celý význam věty. Příkladem může být následující věta:
 
 \vspace{\baselineskip}
 \textit{This movie was actually neither that funny, nor super witty.}	
@@ -260,20 +260,20 @@ V~této kapitole se nejdříve v~sekci \ref{text-mining} věnuji dostupným meto
 \section{Sociální síť Twitter}
 \label{twitter}
 	
-	Twitter je v~současnosti jednou z~nejpoužívanějších sociálních sítí. Poskytuje svým uživatelům mikroblogovací funkcionality - umožňuje zveřejňovat 140 znaků dlouhé zprávy (tzv. tweety) a číst zprávy publikované ostatními. Účet na něm má odhadem 1,3 milardy uživatelů, denně se jich pak na Twitter přihlásí asi 100 milionů\cite{twitter-stats}. Tito uživatelé pak každý den zveřejní 500 milionů tweetů, což odpovídá približně 6000 tweetů každou sekundu\cite{twitter-stats-2}. 
+	Twitter je v~současnosti jednou z~nejpoužívanějších sociálních sítí. Poskytuje svým uživatelům mikroblogovací funkcionality -- umožňuje zveřejňovat 140 znaků dlouhé zprávy (tzv. tweety) a číst zprávy publikované ostatními. Účet na něm má odhadem 1,3 milardy uživatelů, denně se jich pak na Twitter přihlásí asi 100 milionů\cite{twitter-stats}. Tito uživatelé pak každý den zveřejní 500 milionů tweetů, což odpovídá približně 6000 tweetů každou sekundu\cite{twitter-stats-2}. 
 
 \subsection{Vysvětlení pojmů}
 Pro bližší pochopení fungování sociální sítě Twitter a analýzy příspěvků z~ní pro účely této práce je potřeba vysvětlit několik základních termínů:
 
 \subsubsection{Tweet}
 
-Tweet je tím nejdůležitejším pojmem na Twitteru. Jak již bylo řečeno, jedná se o~zprávu o~maximální délce 140 znaků. Důvody pro toto omezení jsou v~dnešní době víceméně historické - Twitter byl totiž už od svých počátků zamýšlen pro použití na mobilních telefonech. Protože klasické textové zprávy posílané právě pomocí mobilních telefonů jsou omezeny na 160 znaků, bylo toto omezení při vzniku Twitteru bráno v~potaz. Samotný 140 znaků dlouhý tweet by zabral většinu délky SMS zprávy, zbylých 20 znaků bylo vyhrazeno pro jméno autora zprávy\cite{twitter-140}. Nicméně i dnes má toto omezení smysl - nutí uživatele zprávy zkracovat a zmiňovat to nejdůležitější. 
+Tweet je tím nejdůležitejším pojmem na Twitteru. Jak již bylo řečeno, jedná se o~zprávu o~maximální délce 140 znaků. Důvody pro toto omezení jsou v~dnešní době víceméně historické -- Twitter byl totiž už od svých počátků zamýšlen pro použití na mobilních telefonech. Protože klasické textové zprávy posílané právě pomocí mobilních telefonů jsou omezeny na 160 znaků, bylo toto omezení při vzniku Twitteru bráno v~potaz. Samotný 140 znaků dlouhý tweet by zabral většinu délky SMS zprávy, zbylých 20 znaků bylo vyhrazeno pro jméno autora zprávy\cite{twitter-140}. Nicméně i dnes má toto omezení smysl -- nutí uživatele zprávy zkracovat a zmiňovat to nejdůležitější. 
 
 Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všechny. Uživatel však má možnost nastavit si vyšší úroveň soukromí. Přímo na hlavní stránce se uživateli zobrazují příspěvky těch uživatelů, jejichž je tzv. follower. 
 
 \subsection{Follower}
 
-	Followerem neboli "sledujícím"\ jiného uživatele se člověk stane jednoduše kliknutím na tlačítko Follow na profilu vybraného uživatele. To způsobí právě zobrazování zpráv sledovaného uživatele na hlavní stránce Twitteru. Každý uživatel si může zobrazit seznam uživatelů kteří ho sledují. 
+	Followerem neboli \uv{sledujícím} jiného uživatele se člověk stane jednoduše kliknutím na tlačítko Follow na profilu vybraného uživatele. To způsobí právě zobrazování zpráv sledovaného uživatele na hlavní stránce Twitteru. Každý uživatel si může zobrazit seznam uživatelů kteří ho sledují. 
 
 
 \subsubsection{Retweet}
@@ -283,7 +283,7 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 
 \subsubsection{Hashtag}
 
-	Hashtag je řetězec začínající znakem "\#". Hashtagy vkládají samotní uživatelé do jimi publikovaných tweetů. Na základě použitého hashtagu je pak možno vyhledat i ostatní zprávy, které ho obsahují. Příkladem může být hashtag \#rio2016 používaný pro tweety týkající se nadcházejících olympijských her v~brazilském Rio de Janeiru. Dostupné hashtagy však nejsou nijak omezeny, použit může být libovolný řetězec. 
+	Hashtag je řetězec začínající znakem \uv{\#}. Hashtagy vkládají samotní uživatelé do jimi publikovaných tweetů. Na základě použitého hashtagu je pak možno vyhledat i ostatní zprávy, které ho obsahují. Příkladem může být hashtag \#rio2016 používaný pro tweety týkající se nadcházejících olympijských her v~brazilském Rio de Janeiru. Dostupné hashtagy však nejsou nijak omezeny, použit může být libovolný řetězec. 
 
 
 \subsubsection{Mention}
@@ -297,7 +297,7 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 	
 	Získat lze samozřejmě i přístup ke všem veřejně publikovaným příspěvkům. Nejde však již o~volně dostupná API a přístup k~nim je placený. Tuto službu nabízí portál Gnip.com\cite{gnip}. Pro tuto práci je použito pouze veřejně dostupné API. 
 	
-	Pro různé případy užití se hodí využít různá rozhraní. Klasický případ vužití RESTového API ukazuje obrázek \ref{fig:twitter_rest} - uživatel navštíví webovou stránkou a chce zobrazit například údaje o~konkrétním uživateli. Server tento požadavek přijme a sám odešle požadavek na API poskytované Twitterem. Ten mu odpoví, server data zpracuje a vrátí je původnímu uživateli. 
+	Pro různé případy užití se hodí využít různá rozhraní. Klasický případ vužití RESTového API ukazuje obrázek \ref{fig:twitter_rest} -- uživatel navštíví webovou stránkou a chce zobrazit například údaje o~konkrétním uživateli. Server tento požadavek přijme a sám odešle požadavek na API poskytované Twitterem. Ten mu odpoví, server data zpracuje a vrátí je původnímu uživateli. 
 
 \begin{figure}[ht]
    	\centering
@@ -324,9 +324,9 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 
 \section{Požadavky na systém}
 \label{pozadavky}
-	Jak podrobněji popisuji v~kapitole \ref{navrh}, výsledný systém jehož vytvoření je cílem této práce se bude skládat ze tří klíčových částí - systému pro analýzu textu, databáze a webserveru zpřístupňujícího data pomocí RESTového API. Pojmu REST API se podrobněji věnuji v~sekci \ref{rest}. 
+	Jak podrobněji popisuji v~kapitole \ref{navrh}, výsledný systém jehož vytvoření je cílem této práce se bude skládat ze tří klíčových částí -- systému pro analýzu textu, databáze a webserveru zpřístupňujícího data pomocí RESTového API. Pojmu REST API se podrobněji věnuji v~sekci \ref{rest}. 
 	
-	 První zmiňovaná část, systém pro analýzu textu, bude využívat framework Apache Spark. Jako zdroj dat bude použita sociální síť Twitter poskytující vzorek přispěvků z~ní, tzv. tweetů, pomocí veřejného API. Tomu se podrobněji věnuji v~kapitole \ref{twitter-api}. Z~těchto příspěvků budou vyfiltrovány ty, které reprezentují přání jejich autorů. Kromě měření běžných statistik bude systém provádět analýzu sentimentu těchto přání. Tato analýza bude probíhat v~reálném čase, respektive se zpožděním v~řádu maximálně několika desítek sekund.  Výsledky analýzy z~této části budou persistovány ve vhodné relační databázi. Na ní bude napojen webový server zpřístupňující data pomocí RESTful API. 
+	 První zmiňovaná část, systém pro analýzu textu, bude využívat framework Apache Spark. Jako zdroj dat bude použita sociální síť Twitter poskytující vzorek přispěvků z~ní, tzv. tweetů, pomocí veřejného API. Tomu se podrobněji věnuji v~kapitole \ref{twitter-api}. Z~těchto příspěvků budou vyfiltrovány ty, které reprezentují přání jejich autorů. Kromě měření běžných statistik bude systém provádět analýzu sentimentu těchto přání. Tato analýza bude probíhat v~reálném čase, respektive se zpožděním v~řádu maximálně několika desítek sekund.  Výsledky analýzy z~této části budou persistovány ve vhodné databázi. Na ní bude napojen webový server zpřístupňující data pomocí RESTful API. 
 
 \subsection{Funkční požadavky}
 \subsubsection{Systém pro analýzu textu}
@@ -361,7 +361,6 @@ RESTful API bude poskytovat následující data:
 \begin{itemize}
 \item Omezení počtu vrácených výsledků
 \item Nastavení časového intervalu
-\item Poskytnutí pouze některých hodnot, například pouze statistik počtu anglických tweetů namísto veškerých statistických údajů
 \end{itemize}
 
 \subsection{Nefunkční požadavky}
@@ -422,12 +421,12 @@ Stejně tak jsou tabulce \textit{hashtags} uloženy všechny hashtagy použité 
 \subsection{REST architektura}
 	Jedním z~požadavků pro API poskytující výsledky analýzy dat je využití REST neboli Representational State Transfer architektury. Tato architektura rozhraní byla představena v~roce 2000 Royem Fieldingem, spoluautorem protokolu HTTP\cite{rest-diser}. Proto není překvapením že REST pro přenos dat využívá právě tento protokol. Jedná se o~bezestavovou architekturu, která poskytuje jednoduchý a především jednotný přístup ke zdrojům. Za zdroj pak považujeme samotná data či stavy aplikace. 
 	
-	Každý zdroj má svoji vlastní URI\footnote{Uniform Resource Identifier je řetězec jednoznačně určující zdroj informací}. REST definuje čtyři základní metody pro přístup k~těmto zdrojům. Tyto základní metody protokolu HTTP jsou označovány jako CRUD - umožňují totiž vytvoření dat (Create), jejich získání (Retrieve), aktualizování (Update) a smazání (Delete):
+	Každý zdroj má svoji vlastní URI\footnote{Uniform Resource Identifier je řetězec jednoznačně určující zdroj informací}. REST definuje čtyři základní metody pro přístup k~těmto zdrojům. Tyto základní metody protokolu HTTP jsou označovány jako CRUD -- umožňují totiž vytvoření dat (Create), jejich získání (Retrieve), aktualizování (Update) a smazání (Delete):
 \begin{itemize}
 
 \item\textbf{GET}
 
-Get je tou nejzákladnější metodou, která slouží k~získání zdroje. Při používání webového prohlížeče se s~ním setkáváme neustále - jedná se totiž o~metodu sloužící jako klasický požadavek na webovou stránku. Případné parametry jsou přidány přimo do URI. Například pro získání informací o~uživateli Jan můžeme použít požadavek \ref{get-example}.
+Get je tou nejzákladnější metodou, která slouží k~získání zdroje. Při používání webového prohlížeče se s~ním setkáváme neustále -- jedná se totiž o~metodu sloužící jako klasický požadavek na webovou stránku. Případné parametry jsou přidány přimo do URI. Například pro získání informací o~uživateli Jan můžeme použít požadavek \ref{get-example}.
 \begin{lstlisting}[caption={Ukázka požadavku GET},label=get-example][h]
 GET /api/user/jan
 Host: www.my-web.com
@@ -443,7 +442,7 @@ Metoda Delete slouží ke smazání konkrétního zdroje definovaného pomocí U
 
 \item\textbf{PUT}
 
-Put je metodou sloužící k~aktualizaci zdroje. Jde jistým způsobem o~kombinaci GET a POST - používá přímo URI již existujícího zdroje jako GET, zároveň ale jako POST v~těle HTTP požadavku odesílá nová data sloužící k~aktualizaci tohoto zdroje. 
+Put je metodou sloužící k~aktualizaci zdroje. Jde jistým způsobem o~kombinaci GET a POST -- používá přímo URI již existujícího zdroje jako GET, zároveň ale jako POST v~těle HTTP požadavku odesílá nová data sloužící k~aktualizaci tohoto zdroje. 
 
 \end{itemize}
 
@@ -475,7 +474,7 @@ Put je metodou sloužící k~aktualizaci zdroje. Jde jistým způsobem o~kombina
 \end{lstlisting}
 	
 \subsection{API enpointy}
-	Kromě použití architektury REST je také nutné splnit všechny funkční požadavky definované v~sekci \ref{pozadavky}. Jelikož API data pouze zpřístupňuje ale nikterak je neupravuje, veškeré API endpointy budou využívat pouze výše popsanou metodu GET. Podrobný popis implementovaných API endpointů je možné najít v~příloze \ref{appendix-api}. Zjednodušený popis je pak dostupný přímo zde: 
+	Kromě použití architektury REST je také nutné splnit všechny funkční požadavky definované v~sekci \ref{pozadavky}. Jelikož API data pouze zpřístupňuje ale nikterak je neupravuje, veškeré API endpointy budou využívat jen výše popsanou metodu GET. Podrobný popis implementovaných API endpointů je možné najít v~příloze \ref{appendix-api}. Zjednodušený popis je pak dostupný přímo zde: 
 	
 
 \begin{table}[h]
@@ -636,30 +635,30 @@ Při vývoji systému i psaní tohoto textu byl používán verzovací systém G
 \section{Analýza proudu dat}
 \label{analysis-implementation}
 \subsection{Výběr technologií}
-Framework Spark, který byl použit při implementaci analýzy proudu dat, nabízí API pro několik jazyků - Scala, Java, Python a R. API pro poslední dva zmiňované jazyky však neposkytují veškeré funkcionality Sparku, příkladem může být použití Twitter Streaming API jako zdroje dat\cite{streaming-guide}. Protože má právě Twitter sloužit jako zdroj dat pro tuto práci, v~úvahu připadaly pouze jazyky Java a Scala. 
+Framework Spark, který byl použit při implementaci analýzy proudu dat, nabízí API pro několik jazyků -- Scala, Java, Python a R. API pro poslední dva zmiňované jazyky však neposkytují veškeré funkcionality Sparku, příkladem může být použití Twitter Streaming API jako zdroje dat\cite{streaming-guide}. Protože má právě Twitter sloužit jako zdroj dat pro tuto práci, v~úvahu připadaly pouze jazyky Java a Scala. 
 
 Jak již bylo zmíněno v~kapitole \ref{spark-core}, výpočty lze distribuovat pro operace typu transformace, tedy například map, filter a reduce. Protože Scala je funkcionální jazyk obsahující podobné funkce již v~základu, je v~kontextu distribuovaných výpočtů ideální. I~proto je samotný Spark naimplementovaný ve Scale\cite{spark-scala}. Další výhodou je možnost použití existujících knihoven pro Javu. Především z~těchto důvodů byla Scala použita i pro tuto práci. 
 
 \subsubsection{Stanford NLP knihovna}
 \label{stanford-nlp}
-	Pro analýzu sentimentu byla namísto vlastní jednoduché implementace analýzy sentimentu použita Java knihovna Stanford NLP\cite{stanford-nlp-web}. Jedná se o~knihovnu obecně poskytující funckionality pro zpracování a analýzu lidské řeči. Zahrnuje právě analyzátor pro určení sentimentu. 
+	Pro analýzu sentimentu byla namísto vlastní jednoduché implementace analýzy sentimentu použita knihovna Stanford NLP\cite{stanford-nlp-web}. Jedná se o~knihovnu poskytující funkcionality pro zpracování a analýzu lidské řeči. Zahrnuje právě analyzátor pro určení sentimentu. 
 	
-	Použitý model je nejdříve potřeba vytrénovat na vzorových datech. Bez manuálního přetrénování je algoritmus již vytrénován na datasetu složeného z~necelých 10 tisíc vět z~oblasti filmových hodnocení. Tato trénovací data je možné najít na stránce Stanford Dataset Treebank\cite{nlp-treebank}. V~rámci této práce nebude použitý model přetrénováván přímo pro kontext sociální sítě Twitter, bylo by totiž potřeba manuálně ohodnotit řádově tisíce vět. 
+	Ten je nejdříve potřeba vytrénovat na vzorových datech. Bez manuálního přetrénování je algoritmus již vytrénován na datasetu složeného z~necelých 10 tisíc vět z~oblasti filmových hodnocení. Tato trénovací data je možné najít na stránce Stanford Dataset Treebank\cite{nlp-treebank}. V~rámci této práce nebude použitý model přetrénováván přímo pro kontext sociální sítě Twitter, bylo by totiž potřeba manuálně ohodnotit řádově tisíce vět. 
 	
 	Výsledkem analýzy sentimentu pomocí Stanford NLP je hodnota v~intervalu 0 až 4, kde 0 reprezentuje negativní a 4 pozitivní větu. Jednotlivé tweety tedy bylo nutné rozdělit na věty a každou z~nich analyzovat zvlášť. Celkový sentiment tweetu byl pak určen na základě hodnocení jednotlivých vět a jejich délce. 
 
 \subsection{Nasazení}
 Aby implementovaný systém zvládal analyzovat všechny publikované tweety, bylo by nutné jeho nasazení na počítačovém clusteru. K~tomu je systém připravený a krom instalace potřebného software na jednotlivé stroje by nasazení nemělo vyžadovat další úpravy zdrojových kódů. Jak jsem ale popsal v~sekci \ref{twitter-api}, ve volně dostupném API Twitter poskytuje pouze asi 1\% publikovaných zpráv. Protože navíc počítačový cluster nemám k~dispozici a jeho pronájem by byl velice nákladný, je program spouštěn na lokálním počítači ve virtualizovaném prostředí. 
 
-K~dispozici má Spark 8GB RAM a 3 výpočetní jádra. Je ho spuštěn v~tzv. lokálním režimu, ve kterém je na každém jádře spuštěn jeden výpočetní uzel. I~kvůli omezeným zdrojům bylo v~průběhu implementace nutné zvětšit délku intervalu, ve kterém Spark data zpracovává. Většina tohoto času je však overhead a s~nárůstem objemu zpracovávaných dat není celková doba jejich analýzy výrazně navýšena. 
+K~dispozici má Spark 8GB RAM a 3 výpočetní jádra. Je spouštěn v~tzv. lokálním režimu, ve kterém je na každém jádře vytvořen jeden výpočetní uzel. I~kvůli omezeným zdrojům bylo v~průběhu implementace nutné zvětšit délku intervalu, ve kterém Spark data zpracovává. Většina tohoto času je však overhead a s~nárůstem objemu zpracovávaných dat není celková doba jejich analýzy výrazně navýšena. 
 
 \subsection{Popis implementace}
 
-Celkový pohled na implementovaný systém zobrazuje diagram aktivit na obrázku \ref{fig:activity_diagram}. Po úspěšné inicializaci Sparku a přihlášení k~Twitter Streaming API začnou probíhat dvě nezávislé větve programu. Samotné střádání dat z~Twitteru vždy po dobu 40 vteřin řeší samotný Spark. Po uběhnutí daného intervalu jsou data poskytnuta jako RDD ke zpracování a ihned začíná další střádání dat. 
+Celkový pohled na implementovaný systém zobrazuje diagram aktivit na obrázku \ref{fig:activity_diagram}. Po úspěšné inicializaci Sparku a přihlášení k~Twitter Streaming API začnou probíhat dvě nezávislé větve programu. Střádání dat z~Twitteru vždy po dobu 40 vteřin řeší samotný Spark. Po uběhnutí daného intervalu jsou data poskytnuta jako RDD ke zpracování a ihned začíná střádání dat dalších. 
 
-Druhá větev má za úkol zpracování dat poskytnutých větví první. Ke zpracování další batche dochází kdykoli je dokončeno zpracování té předchozí a zároveň jsou k~dispozici nová data. Program se tak může dostávat do zpoždění pokud data zpracovávat v~daném intervalu nestíhá. Při zpracování dat z~každého intervalu jsou nejprve vyfiltrovány anglické příspěvky reprezentující přání jejich autorů. Poté je vypočítán sentiment těchto přání a data o~nich jsou uložena do databáze. 
+Druhá větev má za úkol zpracování dat poskytnutých větví první. Ke zpracování další batche dochází kdykoli je dokončeno zpracování té předchozí a zároveň jsou k~dispozici nová data. Program se tak může dostávat do zpoždění pokud zpracování v~daném intervalu nestíhá. Při zpracování dat z~každého intervalu jsou nejprve vyfiltrovány anglické příspěvky reprezentující přání jejich autorů. Poté je vypočítán sentiment těchto přání a data o~nich jsou uložena do databáze. 
 
-Několik zajímavých částí této implementace zobrazují následující zdrojové kódy. Před začátkem zpracování dat je krom připojení k~Twitteru také potřeba provést základní nastavení Sparku. Nutné je především vytvořit kontexty, jak ukazuje zdrojový kód \ref{fig:spark-context}. Tyto kontexty budou později použity při operacích prováděných při zpracování dat. Vytvořen je také samotný stream. 
+Několik zajímavých částí této implementace zobrazují následující zdrojové kódy. Před začátkem zpracování dat je krom připojení k~Twitteru potřeba provést základní nastavení Sparku. Nutné je především vytvořit kontexty, jak ukazuje zdrojový kód \ref{fig:spark-context}. Tyto kontexty budou později použity při operacích prováděných při zpracování dat. Vytvořen je také samotný stream. 
 
 
 \begin{lstlisting}[caption={Vytvoření kontextů a streamu},label=fig:spark-context][h]
@@ -687,7 +686,7 @@ tweetWishesStream = tweetWishesStream
 \end{lstlisting}
 
 
-V~další části již nastává samotná analýza vyfiltrovaných přání. Zdrojový kód \ref{fig:spark-stats-db} zobrazuje vytvoření DataFramu obsahujícího obecné statistiky v~daném časovém intervalu a jejich uložení do databáze. 
+V~další části již nastává samotná analýza vyfiltrovaných přání. Zdrojový kód \ref{fig:spark-stats-db} zobrazuje vytvoření DataFrame obsahujícího obecné statistiky v~daném časovém intervalu a jejich uložení do databáze. 
 
 \begin{lstlisting}[caption={Ukládání statistik do databáze},label=fig:spark-stats-db][h]
 // write stats to DB
@@ -724,9 +723,9 @@ stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_general_40s", prop)
 	
 \subsubsection{Amazon RDS}
 \label{amazon-aws}
-	Konkrétně byla pro nasazení databáze využita služba Amazon AWS\cite{aws}. Amazon Web Services je kolekce cloudových služeb zahrnujících například cloudové úložiště, virtuální servery nebo právě databázové servery - tzv. Amazon RDS, neboli Relational Database Service. 
+	Konkrétně byla pro nasazení databáze využita služba Amazon AWS\cite{aws}. Amazon Web Services je kolekce cloudových služeb zahrnujících například cloudové úložiště, virtuální servery nebo právě databázové servery -- tzv. Amazon RDS, neboli Relational Database Service. 
 	
-	Nabízené virtuální servery (Amazon EC2) jsou příkladem modelu IaaS - tedy Infrastructure as a Service. Uživatel se v~případě IaaS nemusí starat o~infrastrukturu, jsou mu ale poskytnuty přístupové údaje v~tomto případě k~linuxovému serveru a o~veškeré další nastavení a provoz se stará sám. Amazon RDS je pak příkladem modelu Paas, neboli Platform as a Service. V~případě PaaS obecně odpadá i nutnost instalace softwaru a dalších administrátorských úkonů. Uživatel se stará pouze o~konkrétné software provozovaný na dané platformě. U~Amazon RDS tak není třeba manuálně instalovat databázi nebo třeba nastavovat připojení systému k~síti. Na druhou stranu to ani není možné a obecně model PaaS může přinášet i značná omezení. 
+	Nabízené virtuální servery (Amazon EC2) jsou příkladem modelu IaaS -- tedy Infrastructure as a Service. Uživatel se v~případě IaaS nemusí starat o~infrastrukturu, jsou mu ale poskytnuty přístupové údaje v~tomto případě k~linuxovému serveru a o~veškeré další nastavení a provoz se stará sám. Amazon RDS je pak příkladem modelu Paas, neboli Platform as a Service. V~případě PaaS obecně odpadá i nutnost instalace softwaru a dalších administrátorských úkonů. Uživatel se stará pouze o~konkrétné software provozovaný na dané platformě. U~Amazon RDS tak není třeba manuálně instalovat databázi nebo třeba nastavovat připojení systému k~síti. Na druhou stranu to ani není možné a obecně model PaaS může přinášet i značná omezení. 
 	
 	Veškeré služby poskytované v~rámci Amazon AWS je možno provozovat v~celkem 12 regionech pokrývajících většinu světa. Česká Republika například spadá pod datacentrum umístěné ve Frankfurtu. Hlavní výhodou Amazon AWS a podobných služeb je výrazné usnadnění instalace i administrace a především jednoduchá škálovatelnost, obvykle je také zaručena určitá dostupnost služeb. Jak ukazuje obrázek \ref{fig:aws_monitoring}, v~případě Amazonu je výhodou také relativně podrobný monitoring. Nevýhodou oproti vlastnímu serveru může být především vyšší cena, v~některých případech také zmiňované restrikce při nastavování služeb. 
 	
@@ -935,29 +934,29 @@ Prováděná analýza vedla k~zajímavým výsledkům. Jak ukazuje tabulka \ref{
 \begin{tabular}{|l|l|}
 \hline
 Datum            & Průměrný sentiment \\ \hline
-03.05.2016 13:21 & 1.7004735301984735 \\ \hline
-03.05.2016 13:41 & 1.771058910422855  \\ \hline
-03.05.2016 14:01 & 1.6613565487977775 \\ \hline
-03.05.2016 14:21 & 1.6832834826060925 \\ \hline
-03.05.2016 14:41 & 1.763837569453817  \\ \hline
-03.05.2016 15:01 & 1.841208280283295  \\ \hline
-03.05.2016 15:21 & 1.6983585294199037 \\ \hline
-03.05.2016 15:41 & 1.7667114602426401 \\ \hline
-03.05.2016 16:01 & 1.7561072580335788 \\ \hline
-03.05.2016 16:21 & 1.6315463907624073 \\ \hline
-03.05.2016 16:41 & 1.7154852218379493 \\ \hline
-03.05.2016 17:01 & 1.8176156332163043 \\ \hline
-03.05.2016 17:21 & 1.7561072580335788 \\ \hline
-03.05.2016 17:41 & 1.7078463146569909 \\ \hline
+13:21 & 1.7005 \\ \hline
+13:41 & 1.7711  \\ \hline
+14:01 & 1.6614 \\ \hline
+14:21 & 1.6833 \\ \hline
+14:41 & 1.7638  \\ \hline
+15:01 & 1.8412  \\ \hline
+15:21 & 1.6984 \\ \hline
+15:41 & 1.7667 \\ \hline
+16:01 & 1.7561 \\ \hline
+16:21 & 1.6315 \\ \hline
+16:41 & 1.7155 \\ \hline
+17:01 & 1.8176 \\ \hline
+17:21 & 1.7561 \\ \hline
+17:41 & 1.7078 \\ \hline
 \end{tabular}
-\caption{Tabulka průměrného sentimentu za několik hodin ze dne 3.5.}
+\caption{Průměrný sentiment za několik hodin ze dne 3.5. 2016}
 \label{sentiment-table}
 \end{table}
 
 \section{Využití systému}
 V~současném stavu je implementovaný systém určen především pro pobavení a prezentaci použitých technologií. Nabízí se však několik možných využítí, kterých by bylo možné dosáhnout jen drobnými úpravami tohoto systému. 
 
-Díky prováděné analýze sentimentu by mohlo jít obecně o~úlohy zabývající se tzv. opinion miningem - díky analýze sentimentu příspěvků obsahujících dané výrazy či hashtagy by bylo možné například provádět předvolební průzkumy, hodnotit úspěšnost reklamní kampaně či určovat oblíbenost zvolených produktů a značek. 
+Díky prováděné analýze sentimentu by mohlo jít obecně o~úlohy zabývající se tzv. opinion miningem -- díky analýze sentimentu příspěvků obsahujících dané výrazy či hashtagy by bylo možné například provádět předvolební průzkumy, hodnotit úspěšnost reklamní kampaně či určovat oblíbenost zvolených produktů a značek. 
 
 
 \section{Možná budoucí vylepšení}
