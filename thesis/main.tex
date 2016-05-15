@@ -90,9 +90,9 @@ sentiment analysis, REST API}
 \begin{introduction}
 	V současné době generujeme obrovská množství dat - podle některých odhadů to například v roce 2012 mohlo být až 2,5 exabajtů za den\cite{bbc-bigdata}, od té doby se rychlost jejich přibývání stále zvyšuje. Spolu s nárůstem objemu dat je potřeba vyvinout nové metody umožňující jejich zpracování v přijatelném čase. 
 	
-	Cílem této práce je pomocí frameworku Apache Spark vyvinout systém pro analýzů proudu příspěvků ze sociální sítě Twitter. Tato analýza by měla probíhat v reálném čase a umožňovat monitorovat příspěvky reprezentující přání jejich autorů. Krom obecných statistik bude systém provádět i některé z metod pro analýzu textu. Výsledky této analýzy budou ukládány do databáze a zpřístupněny pomocí REST API. Tento systém by mohl být využit například pro hodnocení úspěšnosti reklamních kampaní nebo obecně při provádění různých průzkumů na sociální sítí Twitter. 
+	Cílem této práce je pomocí frameworku Apache Spark vyvinout systém pro analýzů proudu příspěvků ze sociální sítě Twitter. Tato analýza by měla probíhat v reálném čase a umožňovat monitorovat příspěvky reprezentující přání jejich autorů. Krom obecných statistik bude systém provádět i některé z metod pro analýzu textu. Výsledky této analýzy budou ukládány do databáze a zpřístupněny pomocí REST API. Implementovaný systém by mohl být využit například pro hodnocení úspěšnosti reklamních kampaní nebo obecně při provádění různých průzkumů na sociální sítí Twitter. 
 	
-	V první kapitole této práce se budu věnovat především obecným trendům v oblasti zpracování velkých objemů dat a technologiím pro práci s nimi. Ve druhé kapitole seznámím čtenáře s metodami pro analýzu textu a se sociální sítí Twitter. Definuji v ní také požadavky pro implementovaný systém. Jeho bližšímu návrhu včetně například přesné definice REST API endpointů se budu věnovat v kapitole \ref{navrh}. Implementace systému bude popsána ve čtvrté kapitole a jeho testování v kapitole \ref{testovani}. Po té bude následovat zhodnocení dosažených výsledků. 
+	V první kapitole této práce se budu věnovat především obecným trendům v oblasti zpracování velkých objemů dat a technologiím pro práci s nimi. Ve druhé kapitole seznámím čtenáře s metodami pro analýzu textu a se sociální sítí Twitter. Definuji v ní také požadavky pro implementovaný systém. Jeho bližšímu návrhu včetně například přesné definice REST API endpointů se budu věnovat v kapitole \ref{navrh}. Implementace systému bude popsána ve čtvrté kapitole a jeho testování v kapitole \ref{testovani}. Poté bude následovat zhodnocení dosažených výsledků. 
 	
 
 	
@@ -293,7 +293,7 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 
 \subsection{Twitter Streaming API}
 \label{twitter-api}
-	Twitter poskytuje dvě rozhraní pro přistup k jeho datům. Jde o klasické REST API s mnoha různými endpointy\footnote{Konkrétní adresa umožňující přístup k datům.} a dále o několik streamových endpointů. Tato práce využívá streamové API, konkretně stream poskytující vzorek veřejně publikovaných tweetů\cite{twitter-api}. Počet tweetů které toto API poskytuje není přesně daný, nicméně experimentálně bylo zjištěno, že jde o přibližně 60 až 80 příspěvků za sekundu. To odpovídá asi 1\% publikovaných tweetů. 
+	Twitter poskytuje dvě rozhraní pro přistup k jeho datům. Jde o klasické REST API s mnoha různými endpointy\footnote{Konkrétní adresa umožňující přístup k vybraným datům.} a dále o několik streamových endpointů. Tato práce využívá streamové API, konkretně stream poskytující vzorek veřejně publikovaných tweetů\cite{twitter-api}. Počet tweetů které toto API poskytuje není přesně daný, nicméně experimentálně bylo zjištěno, že jde o přibližně 60 až 80 příspěvků za sekundu. To odpovídá asi 1\% publikovaných tweetů. 
 	
 	Získat lze samozřejmě i přístup ke všem veřejně publikovaným příspěvkům. Nejde však již o volně dostupná API a přístup k nim je placený. Tuto službu nabízí portál Gnip.com\cite{gnip}. Pro tuto práci je použito pouze veřejně dostupné API. 
 	
@@ -628,7 +628,7 @@ Při vývoji systému i psaní tohoto textu byl používán verzovací systém G
 
 \begin{figure}[h!]
    	\centering
-   	\includegraphics[width=1\textwidth]{images/deployment.jpg}
+   	\includegraphics[width=1\textwidth]{images/deployment.pdf}
    	\caption{Diagram nasazení implementovaného systému}
    	\label{fig:deployment_diagram}
 \end{figure}
@@ -899,22 +899,60 @@ def test_user_detail(self):
 
 
 \section{Web prezentující výsledky analýzy}
-Vytvořenou webovou stránku je možné nalézt na adrese http://tweetwishes.com, pro její plnou funkcionalitu však musí být spuštěn i samotný systém pro analýzu tweetů. Na webu jsou totiž v reálném čase zobrazována nová přání, statistiky a další údaje. Obrázky webu jsou k dispozici v příloze \ref{appendix-web}. 
+Vytvořenou webovou stránku je možné nalézt na adrese http://tweetwishes.com, pro její plnou funkcionalitu však musí být spuštěn i samotný systém pro analýzu tweetů běžící na lokálním počítači. Na webu jsou totiž v reálném čase zobrazována nová přání, statistiky a další údaje. 
 
-Web využívá velkou část implementovaných API endpointů. Ukázka jejich praktického použití je nejlepším způsobem otestování jejich správného návrhu a funkčnosti. Některé komponenty webu jsou zobrazeny na obrázcích XXXXXXXXXX. 
+Web využívá velkou část implementovaných API endpointů. Ukázka jejich praktického použití je nejlepším způsobem otestování jejich správného návrhu a funkčnosti. Některé komponenty webu jsou zobrazeny na obrázcích \ref{fig:web-last-tweets}, \ref{fig:web-detail} a \ref{fig:web-stats}. Obrázky některých stránek webu jako celku jsou pak k dispozici v příloze \ref{appendix-web}. 
 
+	\begin{figure}[ht]
+    	\centering
+    	\includegraphics[width=1\textwidth]{images/web-wishes.png}
+    	\caption{Poslední publikovaná přání včetně analýzy sentimentu}
+    	\label{fig:web-last-tweets}
+	\end{figure}
+
+	\begin{figure}[ht]
+    	\centering
+    	\includegraphics[width=1\textwidth]{images/web-detail.png}
+    	\caption{Detail jednoho z přání}
+    	\label{fig:web-detail}
+	\end{figure}
+	
+	\begin{figure}[ht]
+    	\centering
+    	\includegraphics[width=1\textwidth]{images/web-stats.png}
+    	\caption{Statistiky zpracovaných tweetů}
+    	\label{fig:web-stats}
+	\end{figure}
 
 \chapter{Zhodnocení výsledků}
 \label{zhodnoceni}
 Implementovaný systém dle požadavků provádí analýzu příspěvků publikovaných na Twitteru. Přestože původní plán rychlosti zpracování těchto příspěvků počítal s kratší doubou analýzy, její výsledky jsou dostupné na webu již během několika desítek sekund po publikování tweetů. Toto zpoždění je způsobeno slabým výpočetním výkonem a overheadem potřebným pro inicializaci Sparku a distribuci operací a dat. 
 
-Prováděná analýza vedla k zajímavým výsledkům. Jak ukazuje graf na obrázku \ref{fig:sentiment-graph}, výrazně převažují negativní přání nad těmi pozitivními. Monitorováním nejpoužívanějších hashtagů bylo například možné sledovat vývoj amerických prezidentských voleb, velice aktivní byly také uživatelé z Filipín. I ti vyjadřovali svá přání týkající se voleb nového filipínského prezidenta. Kromě politických témat se v přáních často objevovala sportovní témata či příspěvky týkající se hudebních a filmových hvězd. 
-\begin{figure}[h]
-   	\centering
-   	\includegraphics[width=1\textwidth]{images/cvut-logo-bw.pdf}
-   	\caption{Zde bude graf vývoje sentimentu}
-   	\label{fig:sentiment-graph}
-\end{figure}
+Prováděná analýza vedla k zajímavým výsledkům. Jak ukazuje tabulka \ref{sentiment-table}, výrazně převažují negativní přání nad těmi pozitivními. Sentiment jednotlivých přání nabírá hodnod v rozmezí 0 až 4, kde 0 je negativní text a 4 naopak pozitivní. Monitorováním nejpoužívanějších hashtagů bylo například možné sledovat vývoj amerických prezidentských voleb, velice aktivní byly také uživatelé z Filipín. I ti vyjadřovali svá přání týkající se voleb nového filipínského prezidenta. Kromě politických témat se v přáních často objevovala sportovní témata či příspěvky týkající se hudebních a filmových hvězd. 
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+Datum            & Průměrný sentiment \\ \hline
+03.05.2016 13:21 & 1.7004735301984735 \\ \hline
+03.05.2016 13:41 & 1.771058910422855  \\ \hline
+03.05.2016 14:01 & 1.6613565487977775 \\ \hline
+03.05.2016 14:21 & 1.6832834826060925 \\ \hline
+03.05.2016 14:41 & 1.763837569453817  \\ \hline
+03.05.2016 15:01 & 1.841208280283295  \\ \hline
+03.05.2016 15:21 & 1.6983585294199037 \\ \hline
+03.05.2016 15:41 & 1.7667114602426401 \\ \hline
+03.05.2016 16:01 & 1.7561072580335788 \\ \hline
+03.05.2016 16:21 & 1.6315463907624073 \\ \hline
+03.05.2016 16:41 & 1.7154852218379493 \\ \hline
+03.05.2016 17:01 & 1.8176156332163043 \\ \hline
+03.05.2016 17:21 & 1.7561072580335788 \\ \hline
+03.05.2016 17:41 & 1.7078463146569909 \\ \hline
+\end{tabular}
+\caption{Tabulka průměrného sentimentu za několik hodin ze dne 3.5.}
+\label{sentiment-table}
+\end{table}
 
 \section{Využití systému}
 V současném stavu je implementovaný systém určen především pro pobavení a prezentaci použitých technologií. Nabízí se však několik možných využítí, kterých by bylo možné dosáhnout jen drobnými úpravami tohoto systému. 
@@ -1330,6 +1368,27 @@ Zajímavé by bylo také rozšíření systému o další metody z oblasti text 
 
 \chapter{Ukázky webové aplikace}
 \label{appendix-web}
+	\begin{figure}[ht]
+    	\centering
+    	\includegraphics[width=1\textwidth]{images/web-user.png}
+    	\caption{Detail uživatele}
+    	\label{fig:web-userdetail}
+	\end{figure}
+
+	\begin{figure}[ht]
+    	\centering
+    	\includegraphics[width=1\textwidth]{images/web-homepage.png}
+    	\caption{Homepage webové stránky http://tweetwishes.com}
+    	\label{fig:web-homepage}
+	\end{figure}
+	
+		
+	\begin{figure}[ht]
+    	\centering
+    	\includegraphics[width=1\textwidth]{images/web-wish.png}
+    	\caption{Detail přání}
+    	\label{fig:web-wishdetail}
+	\end{figure}
 
 \chapter{Seznam použitých zkratek}
 % \printglossaries
