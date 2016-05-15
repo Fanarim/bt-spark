@@ -90,11 +90,11 @@ sentiment analysis, REST API}
 \begin{introduction}
 	V současné době generujeme obrovská množství dat - podle některých odhadů to například v roce 2012 mohlo být až 2,5 exabajtů za den\cite{bbc-bigdata}, od té doby se rychlost jejich přibývání stále zvyšuje. Spolu s nárůstem objemu dat je potřeba vyvinout nové metody umožňující jejich zpracování v přijatelném čase. 
 	
-	Cílem této práce je pomocí frameworku Apache Spark vyvinout systém pro analýzů proudu příspěvků ze sociální sítě Twitter. Tato analýza by měla probíhat v reálném čase a umožňovat monitorovat příspěvky reprezentující přání jejich autorů. Krom obecných statistik bude systém provádět i některé z metod pro analýzu textu. Výsledky této analýzy budou ukládány do databáze a zpřístupněny pomocí REST API. 
+	Cílem této práce je pomocí frameworku Apache Spark vyvinout systém pro analýzů proudu příspěvků ze sociální sítě Twitter. Tato analýza by měla probíhat v reálném čase a umožňovat monitorovat příspěvky reprezentující přání jejich autorů. Krom obecných statistik bude systém provádět i některé z metod pro analýzu textu. Výsledky této analýzy budou ukládány do databáze a zpřístupněny pomocí REST API. Tento systém by mohl být využit například pro hodnocení úspěšnosti reklamních kampaní nebo obecně při provádění různých průzkumů na sociální sítí Twitter. 
 	
-	Text této práce je členěn do šesti kapitol. V první kapitole se věnuji současné situaci v oblati zpracování dat. Zaměřuji se na vysvětlení některých pojmů a zabývám se také dostupnými technologiemi umožňujícími zpracování velkých objemů dat. Druhá kapitola pak obsahuje informace o nejrozšířenějších metodách analýzy textu a o sociální síti Twitter. Jsou v ní také definovány požadavky pro vyvinutý systém. 
+	V první kapitole této práce se budu věnovat především obecným trendům v oblasti zpracování velkých objemů dat a technologiím pro práci s nimi. Ve druhé kapitole seznámím čtenáře s metodami pro analýzu textu a se sociální sítí Twitter. Definuji v ní také požadavky pro implementovaný systém. Jeho bližšímu návrhu včetně například přesné definice REST API endpointů se budu věnovat v kapitole \ref{navrh}. Implementace systému bude popsána ve čtvrté kapitole a jeho testování v kapitole \ref{testovani}. Po té bude následovat zhodnocení dosažených výsledků. 
 	
-	V třetí kapitole nejprvne obecně analyzuji jednotlivé komponenty systému, abych posléze podrobněji popsal jejich implementaci a k tomu použité konkrétní technologie v kapitole \ref{implementace}. Pátá kapitola se věnuje testování implementovaného systému a v poslední kapitole jsou shrnuty dosažené výsledky a přínosy této práce. 
+
 	
 \end{introduction}
 
@@ -1367,6 +1367,7 @@ Zajímavé by bylo také rozšíření systému o další metody z oblasti text 
 		.1 flask\_api\DTcomment{Zdrojové kódy pro webserver poskytující REST API}.
 		.2 run\_howto.txt\DTcomment{Instrukce pro spuštění webserveru}.
 		.1 stream\_analysis\DTcomment{Zdrojové kódy pro systém na analýzu tweetů}.
+		.2 Tweets\_stream\_analysis-assembly-0.1.jar\DTcomment{Jar pro spuštění}.
 		.2 installation.txt\DTcomment{Instrukce pro přípravu systému}.
 		.2 run\_howto.txt\DTcomment{Instrukce pro spuštění}.
 		.1 thesis\DTcomment{Zdrojové kódy tohoto textu}.
