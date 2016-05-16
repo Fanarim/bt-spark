@@ -71,10 +71,10 @@
 \authorFN{Viktora} %příjmení autora
 \authorWithDegrees{David Viktora} %jméno autora včetně současných akademických titulů
 \supervisor{Ing. Adam Šenk}
-\acknowledgements{Rád bych poděkoval především vedoucímu mé závěrečné práce Ing. Adamu Šenkovi za vstřícný přístup a cenné podněty k~teoretické i praktické části této práce.  }
-\abstractCS{Cílem této práce bylo vytvoření systému pro analýzu proudu dat v~reálném čase v~kontextu velkých objemů dat. Zpracovávanými daty jsou příspěvky ze sociální sítě Twitter. K~samotné analýze byl použit framework Apache Spark, výsledky z~něj jsou ukládány do klasické relační databáze a zpřístupněné pomocí REST API. Vytvořený systém umožňuje monitorovat přání uživatelů Twitteru. Díky analýze sentimentu těchto příspěvků by po drobných úpravách mohl být vyvinutý systém použit například při provádění předvolebních průzkumů či analýze oblíbenosti produktů vybrané společnosti. }
+\acknowledgements{Rád bych poděkoval především vedoucímu mé závěrečné práce Ing. Adamu Šenkovi za vstřícný přístup a cenné podněty k~teoretické i praktické části této práce. Dále bych chtěl poděkovat Marku Dostálovi a Filipu Habartovi za četné rady a korekturu textu a také rodině a přátelům za jejich podporu v průběhu mého studia.  }
+\abstractCS{Cílem této práce bylo vytvoření systému pro analýzu proudu dat v~reálném čase v~kontextu velkých objemů dat. Zpracovávanými daty jsou příspěvky ze sociální sítě Twitter. K~samotné analýze byl použit framework Apache Spark, výsledky z~něj jsou ukládány do klasické relační databáze a~zpřístupněny pomocí REST API. V práci se věnuji všem částem vývoje včetně analýzy, návrhu, implementace a testování tohoto systému. Vytvořený systém umožňuje monitorovat přání uživatelů Twitteru. Díky analýze sentimentu těchto příspěvků by po drobných úpravách mohl být vyvinutý systém použit například při provádění předvolebních průzkumů či analýze oblíbenosti produktů vybrané společnosti. }
 
-\abstractEN{The goal of this thesis was to implement a real-time data stream analysis system in the context of Big Data. The data being processed are posts from the Twitter social network. The analysis is implemented using Apache Spark framework, it's results are being saved to relational database and published using REST API. The implemented system allows monitoring of Twitter users' wishes. Thanks to analysing the sentiment of these wishes, after some minor changes, the system could be used for pre-election surveys or to analyse given products popularity. }
+\abstractEN{The goal of this thesis was to implement a real-time data stream analysis system in the context of Big Data. The data being processed are posts from the Twitter social network. The analysis is implemented using Apache Spark framework, it's results are being saved to relational database and published using REST API. I take care of all development phases, including analysis, design, implementation and testing. The implemented system allows monitoring of Twitter users' wishes. Thanks to analysing the sentiment of these wishes, after some minor changes, the system could be used for pre-election surveys or to analyse given products popularity. }
 \placeForDeclarationOfAuthenticity{V~Praze}
 \declarationOfAuthenticityOption{4} %volba Prohlášení (číslo 1-6)
 \keywordsCS{Apache Spark, proudové zpracování dat, Big Data, Twitter, sentimentální analýza, REST API\newpage}
@@ -88,11 +88,11 @@ sentiment analysis, REST API}
 % \newacronym{FIT}{FIT}{Fakulta informa{\v c}n{\' i}ch technologi{\' i}}
 
 \begin{introduction}
-	V~současné době generujeme obrovská množství dat -- podle některých odhadů to například v~roce 2012 mohlo být až 2,5 exabajtů za den\cite{bbc-bigdata}, od té doby se rychlost jejich přibývání stále zvyšuje. Spolu s~nárůstem objemu dat je potřeba vyvinout nové metody umožňující jejich zpracování v~přijatelném čase. 
+	V~současné době generujeme obrovská množství dat -- podle některých odhadů to například v~roce 2012 mohlo být až 2,5 exabajtů za den\cite{bbc-bigdata}, od té doby se rychlost jejich přibývání stále zvyšuje. Spolu s~nárůstem objemu dat je potřeba vyvinout nové metody umožňující zpracování těchto dat v~přijatelném čase. 
 	
-	Cílem této práce je pomocí frameworku Apache Spark vyvinout systém pro analýzů proudu příspěvků ze sociální sítě Twitter. Tato analýza by měla probíhat v~reálném čase a umožňovat sledování příspěvků reprezentujících přání jejich autorů. Krom obecných statistik bude systém provádět i některé z~metod pro analýzu textu. Výsledky této analýzy budou ukládány do databáze a zpřístupněny pomocí REST API. Implementovaný systém by mohl být využit například pro hodnocení úspěšnosti reklamních kampaní nebo obecně při provádění různých průzkumů na sociální sítí Twitter. 
+	Cílem této práce je pomocí frameworku Apache Spark vyvinout systém pro analýzů proudu příspěvků ze sociální sítě Twitter. Tato analýza by měla probíhat v~reálném čase a umožňovat sledování příspěvků reprezentujících přání jejich autorů. Kromě obecných statistik bude systém provádět i některé z~metod pro analýzu textu. Výsledky této analýzy budou ukládány do databáze a~zpřístupněny pomocí REST API. Implementovaný systém by mohl být využit například pro hodnocení úspěšnosti reklamních kampaní nebo obecně při~provádění různých průzkumů na sociální sítí Twitter. 
 	
-	V~první kapitole této práce se budu věnovat především obecným trendům v~oblasti zpracování velkých objemů dat a technologiím pro práci s~nimi. Ve druhé kapitole seznámím čtenáře s~metodami pro analýzu textu a se sociální sítí Twitter. Definuji v~ní také požadavky pro implementovaný systém. Jeho bližšímu návrhu včetně například přesné definice REST API endpointů se budu věnovat v~kapitole \ref{navrh}. Implementace systému bude popsána ve čtvrté kapitole a jeho testování v~kapitole \ref{testovani}. Poté bude následovat zhodnocení dosažených výsledků. 
+	V~první kapitole této práce se budu věnovat především obecným trendům v~oblasti zpracování velkých objemů dat a technologiím pro práci s~nimi. Ve~druhé kapitole seznámím čtenáře s~metodami pro analýzu textu a se sociální sítí Twitter. Definuji v~ní také požadavky pro implementovaný systém. Jeho bližšímu návrhu včetně například přesné definice REST API endpointů se budu věnovat v~kapitole \ref{navrh}. Implementace systému bude popsána ve čtvrté kapitole a jeho testování v~kapitole \ref{testovani}. Poté bude následovat zhodnocení dosažených výsledků. 
 	
 
 	
@@ -110,24 +110,24 @@ sentiment analysis, REST API}
 
 		 
 \section{Big Data a technologie pro práci s~nimi}
-	Právě pojem Big Data je často označován za jeden z~největších buzzwords\footnote{Slova nebo fráze, které jsou v~dané době populární} současného IT světa. I~přes jeho popularitu nejsou přesně vymezené jeho hranice či definované pojmy zabývající se toutu oblastí. Obecně můžeme říci, že o~Big Datech hovoříme v~případech, kdy je potřeba zpracovávat objemy dat v~řádech gigabajtů a více. To je velice zjednodušený popis tohoto termínu, přesná definice však neexistuje a na celý problém se dá dívat různými způsoby. Rozšířené je například také tvrzení říkající, že o~Big Datech mluvíme zkrátka v~těch případech, kdy klasické databázové a softwarové nástroje především kvůli objemu těchto dat selhávají\cite{webopedia-bigdata}. 
+	Právě pojem Big Data je často označován za jeden z~největších buzzwords\footnote{Slova nebo fráze, které jsou v~dané době populární} současného IT světa. I~přes jeho popularitu nejsou přesně vymezené jeho hranice či definované pojmy zabývající se toutu oblastí. Obecně můžeme říci, že~o~Big Datech hovoříme v~případech, kdy je potřeba zpracovávat objemy dat v~řádech gigabajtů a více. To je velice zjednodušený popis tohoto termínu, přesná definice však neexistuje a na celý problém se dá dívat různými způsoby. Rozšířené je například také tvrzení říkající, že o~Big Datech mluvíme zkrátka v~těch případech, kdy klasické databázové a softwarové nástroje především kvůli objemu těchto dat selhávají\cite{webopedia-bigdata}. 
 
 	Přestože jednotná definice neexistuje, ustálilo se několik problémů, kterým je při práci s~Big Daty potřeba čelit. Jedná se o~takzvaná 3+1V -- \textit{Volume, Velocity, Variety} a později přidaná vlastnost \textit{Veracity}\cite{dp-customer-inteligence}. \textit{Volume} popisuje objem zpracovávaných dat, \textit{Velocity} pak rychlost, jakou data přibývají. Charakteristikou \textit{Variety} popisujeme různorodost dat a \textit{Veracity} určuje úplnost a míru důvěryhodnosti dat. Ne vždy se setkáme se všemi těmito problémy naráz, každá z~nich ale přidává na složitosti zpracování těchto dat. 
 	
-	Právě kvůli těmto vlastnostem se při práci s~velkými objemy dat klasické technologie používané v~minulosti stále častěji ukazují jako nedostatečně rychlé nebo obecně neschopné tato data zpracovat. Je proto nutné sáhnout po nových technologiích určených pro práci s~nimi. Bez technologií pro Big Data se v~dnešní době neobejdou třeba již zmiňované internetové vyhledávače nebo sociální sítě, využití ale nacházejí i v~mnoha dalších oblastech. Jejich rozvoj je také předpokladem pro další rozšíření tzv. Internet of Things\cite{bigdata-iot}.  
+	Právě kvůli těmto vlastnostem se při práci s~velkými objemy dat klasické technologie používané v~minulosti stále častěji ukazují jako nedostatečně rychlé nebo obecně neschopné tato data zpracovat. Je proto nutné sáhnout po~nových technologiích určených pro práci s~nimi. Bez technologií pro Big Data se v~dnešní době neobejdou třeba již zmiňované internetové vyhledávače nebo sociální sítě, využití ale nacházejí i v~mnoha dalších oblastech. Jejich rozvoj je také předpokladem pro další rozšíření tzv. Internet of Things\cite{bigdata-iot}.  
 
 \subsection{Strukturovaná a nestrukturovaná data}	
-	Data obecně rozdělujeme často do dvou kategorií -- na data strukturovaná a nestrukturovaná. Strukturovaná data jsou obvykle uložena v~klasické relační databázi, nebo obecně utříděna po řádcích a s~přesně definovanými sloupci. Ostatní data, která nemají takto pevně danou strukturu, jsou data nestrukturovaná. Ještě donedávna docházelo ke zpracování téměř výhradně dat strukturovaných. Ta nestrukturovaná však často nabízejí obrovský potenciál k~jejich využití. Klasickým příkladem nestrukturovaných dat je lidská řeč v~psané formě -- ta rozhodně obsahuje spoustu informací, ale ve formě kterou je počítačově složité analyzovat. Může se jednat například o~články, konverzace nebo příspěvky na sociálních sítích.  Právě příspěvkům na sociální síti Twitter se věnuje i tato práce. 
+	Data obecně rozdělujeme často do dvou kategorií -- na data strukturovaná a~nestrukturovaná. Strukturovaná data jsou obvykle uložena v~klasické relační databázi, nebo obecně utříděna po řádcích a s~přesně definovanými sloupci. Ostatní data, která nemají takto pevně danou strukturu, jsou data nestrukturovaná. Ještě donedávna docházelo ke zpracování téměř výhradně dat strukturovaných. Ta nestrukturovaná však často nabízejí obrovský potenciál k~jejich využití. Klasickým příkladem nestrukturovaných dat je lidská řeč v~psané formě -- ta rozhodně obsahuje spoustu informací, ale ve formě kterou je počítačově složité analyzovat. Může se jednat například o~články, konverzace nebo~příspěvky na sociálních sítích.  Právě příspěvkům na sociální síti Twitter se věnuje i tato práce. 
 	
-	Analýzou lidské řeči se zabývá obor zvaný Natural Language Processing či Text Mining, obecně vytěžováním znalostí z~dat pak tzv. Data Mining. Často skloňovaným pojmem je také Machine Learning, v~češtině strojové učení. Pro všechny tyto obory jsou technologie pro Big Data obrovským přínosem -- díky nim je možné získat opravdu cenné informace snáze a rychleji než bylo možné dříve. Například analýzou dat pohybu uživatele po webové stránce a jeho chováním můžeme odhalit nedostatky tohoto webu a jejich odstraněním zvýšit míru konverze. Hovoříme-li v~kontextu sociální sítě Twitter, možnosti jsou ještě zajímavější. Na základě příspěvků a vyplněných informací jednotlivých uživatelů můžeme například odhadovat jejich volební preference nebo nabízet velice přesně cílenou reklamu. Konkrétnějším příkladem může být zajímavý projekt ze Stanfordské univerzity usilující o~odhad vývoje cen akcií na základě analýzy sentimentu příspěvků z~Twitteru\cite{stock-stanford}. Obecně metodám Text Miningu a především právě analýze sentimentu se věnuji v~kapitole \ref{text-mining}.  
+	Analýzou lidské řeči se zabývá obor zvaný Natural Language Processing či Text Mining, obecně vytěžováním znalostí z~dat pak tzv. Data Mining. Často skloňovaným pojmem je také Machine Learning, v~češtině strojové učení. Pro~všechny tyto obory jsou technologie pro Big Data obrovským přínosem -- díky nim je možné získat opravdu cenné informace snáze a rychleji než bylo možné dříve. Například analýzou dat pohybu uživatele po webové stránce a~jeho chováním můžeme odhalit nedostatky tohoto webu a jejich odstraněním zvýšit míru konverze. Hovoříme-li v~kontextu sociální sítě Twitter, možnosti jsou ještě zajímavější. Na~základě příspěvků a vyplněných informací jednotlivých uživatelů můžeme například odhadovat jejich volební preference nebo nabízet velice přesně cílenou reklamu. Konkrétnějším příkladem může být zajímavý projekt ze Stanfordské univerzity usilující o~odhad vývoje cen akcií na~základě analýzy sentimentu příspěvků z~Twitteru\cite{stock-stanford}. Obecně metodám Text Miningu a především právě analýze sentimentu se věnuji v~kapitole \ref{text-mining}.  
 
 	Technologie pro Big Data je samozřejmě možné použít i na data strukturovaná, největší využití však nabízejí při zpracování těch nestrukturovaných. Protože nestruktorovaná data přibývají výrazně rychleji\cite{structured-unstructured}, a protože je jejich zpracování obvykle výpočetně náročnější, jsou právě technologie pro Big Data vhodnou volbou. 
  
 	
 \subsection{Principy zpracování velkých dat}
-	Jedny z~prvních konkrétních technologií pro práci s~Big Daty vznikaly na přelomu tisíciletí ve společnosti Google. Právě Google v~roce 2004 zveřejnil článek o~modelu MapReduce\cite{mapreduce-google}, který se stal stavebním kamenem pro většinu dalších technologií pro práci s~velkými objemy dat. MapReduce vlastně popisuje dvě nezávislé funkce. První z~nich je funkce Map, ve které jsou ze vstupních dat vygenerovány dvojice klíč a hodnota. Poté co je funkce Map dokončena, její výstup je použit jako vstup do funkce Reduce. Ta pak spojí vstupní data podle klíče\cite{mapreduce-description}. 
+	Jedny z~prvních konkrétních technologií pro práci s~Big Daty vznikaly na přelomu tisíciletí ve společnosti Google. Právě Google v~roce 2004 zveřejnil článek o~modelu MapReduce\cite{mapreduce-google}, který se stal stavebním kamenem pro většinu dalších technologií pro práci s~velkými objemy dat. MapReduce vlastně popisuje dvě nezávislé funkce. První z~nich je funkce Map, ve které jsou ze vstupních dat vygenerovány dvojice klíč a hodnota. Poté co je funkce Map dokončena, její výstup je použit jako vstup do funkce Reduce. Ta pak spojí vstupní data podle~klíče\cite{mapreduce-description}. 
 	
-	Klíčovou vlastností MapReduce modelu je možnost paralelizace Map fáze na počítačovém clusteru. Jeden z~počítačů v~clusteru například přijme požadavek od uživatele. Tento počítač rozdělí vstupní data ostatním počítačům v~clusteru a vyčká na provedení Map fáze těmito počítači. Výsledná data pak sám master spojí v~Reduce fázi a navrátí výsledek uživateli. Distribuce co největšího množství operací a výpočtů po počítačovém clusteru je v~dnešní době obecně hlavním principem fungování technologií pro zpracování velkých objemů dat. Paradoxně nemusí jít o~dražší řešení než nákup jednoho supervýkoného serveru. Clustery pro práci s~Big Daty jsou totiž obvykle tvořeny běžně dostupnými a relativně levnými servery. 
+	Klíčovou vlastností MapReduce modelu je možnost paralelizace Map fáze na počítačovém clusteru. Jeden z~počítačů v~clusteru například přijme požadavek od uživatele. Tento počítač rozdělí vstupní data ostatním počítačům v~clusteru a vyčká na provedení Map fáze těmito počítači. Výsledná data pak sám master spojí v~Reduce fázi a navrátí výsledek uživateli. Distribuce co~největšího množství operací a výpočtů po počítačovém clusteru je v~dnešní době obecně hlavním principem fungování technologií pro zpracování velkých objemů dat. Paradoxně nemusí jít o~dražší řešení než nákup jednoho supervýkoného serveru. Clustery pro práci s~Big Daty jsou totiž obvykle tvořeny běžně dostupnými a relativně levnými servery. 
 	
 	\begin{figure}[ht]
     	\centering
@@ -136,20 +136,20 @@ sentiment analysis, REST API}
     	\label{fig:mapreduce}
 	\end{figure}
 	
-	Především v~posledních letech se objevují další komplexnější nástroje pro práci s~velkými daty. Tyto nástroje obvykle obsahují i další technologie, umožňující mimo jiné například správu počítačového clusteru a zajišťující konzistenci dat. Tyto frameworky principielně data zpracovávají dvěma různými způsoby -- jde o~tzv. batchové zpracování nebo o~zpracování streamové. 
+	Především v~posledních letech se objevují další komplexnější nástroje~pro práci s~velkými daty. Tyto nástroje obvykle obsahují i další technologie, umožňující mimo jiné například správu počítačového clusteru a zajišťující konzistenci dat. Tyto frameworky principielně data zpracovávají dvěma různými způsoby -- jde o~tzv. batchové zpracování nebo o~zpracování streamové. 
 	
 \subsection{Batchové zpracování Big dat}
 	Batchové neboli dávkové zpracování je vhodné především pro takové úkoly, jejichž výsledky není nutné znát ihned. Data jsou nejprve po určitou dobu shromažďována a až poté je jednorázově spuštěna úloha pro jejich zpracování. Toto zpracování obvykle zabere relativně dlouhý čas. Zmiňovaný MapReduce se využívá právě pro batchové zpracování dat. 
 
-	Jedním z~prvních klíčových frameworků, který umožnil další vývoj v~oblasti Big dat, je jednoznačně open-source framework Hadoop\cite{hadoop-home}. Protože využívá MapReduce model podporuje právě batchové zpracování dat. Jeho první plná verze vyšla na konci roku 2011, ale byl využíván již přibližně od roku 2006 například ve společnosti Yahoo\cite{hadoop-history}. Je určen pro použití na počítačových clusterech složených z~řádově desítek až stovek běžně dostupných serverů. Hadoop se skládá ze tří hlavních komponent - Hadoop Distributed File System, Hadoop MapReduce a Hadoop YARN. HDFS neboli Hadoop Distributed File System je distribuovaný filesystem zajišťující rozprostření dat po jednotlivých počítačích v~clusteru. Klade důraz na toleranci výpadků částí clusteru. Pro zabránění ztráty dat v~případě takového výpadku dochází mimo jiné k~jejich replikaci na více strojů. Hadoop MapReduce je konkrétní implementace MapReduce modelu zmiňovaného dříve. Hadoop YARN pak slouží především k~řízení zdrojů v~clusteru, tedy například rozdělování práce jednotlivým serverům v~clusteru. Nevýhodou Hadoopu je fakt, že nepodporuje proudové zpracování dat, ale pouze zpracování batchové. 
+	Jedním z~prvních klíčových frameworků, který umožnil další vývoj v~oblasti Big Dat, je jednoznačně open-source framework Hadoop\cite{hadoop-home}. Protože využívá MapReduce model podporuje právě batchové zpracování dat. Jeho první plná verze vyšla na konci roku 2011, ale byl využíván již přibližně od roku 2006 například ve společnosti Yahoo\cite{hadoop-history}. Je určen pro použití na počítačových clusterech složených z~řádově desítek až stovek běžně dostupných serverů. Hadoop se skládá ze tří hlavních komponent - Hadoop Distributed File System, Hadoop MapReduce a Hadoop YARN. HDFS neboli Hadoop Distributed File System je distribuovaný filesystem zajišťující rozprostření dat po jednotlivých počítačích v~clusteru. Klade důraz na toleranci výpadků částí clusteru. Pro~zabránění ztráty dat v~případě takového výpadku dochází mimo jiné k~jejich replikaci na~více strojů. Hadoop MapReduce je konkrétní implementace Map\-Reduce modelu zmiňovaného dříve. Hadoop YARN pak slouží především k~řízení zdrojů v~clusteru, tedy například rozdělování práce jednotlivým serverům v~clusteru. Nevýhodou Hadoopu je fakt, že nepodporuje proudové zpracování dat, ale~pouze zpracování batchové. 
 	
 	V~současné době jsou k~dispozici i další batchově zaměřené frameworky, které často dosahují lepších výsledků než Hadoop a mimojiné obvykle umožňují vytváření úloh na vyšší úrovni. Díky nim například není nutné přímo vytvářet mapovací a reduce funkci. Nejrozšířenějím je bezesporu Apache Spark\cite{spark-home}, kterému se budu podrobněji věnovat v~následujících sekcích. Oproti \mbox{Hadoopu} dosahuje především díky cachování a dalším vylepšením často několikanásobně kratší doby zpracování. Krom batchového zpracování umožňuje i práci s~proudy dat. 
 
 \subsection{Streamové zpracování}
-	V~praxi často potřebujeme velké objemy dat zpracovávat v~co nejkratším čase a ideálně na každý nový podnět co nejdříve zareagovat. Batchové zpracování je v~takovém případě nevhodné. Řešením je již zmiňované streamové zpracování, nebo také zpracování proudů dat. Vstupem do takového programu není fixní soubor dat, ale neustálý proud dat nových. Kdykoli program obdrží nový datový objekt, zjednodušeně ho začne okamžitě zpracovávat a mezivýsledky předávat mezi jednotlivými částmi programu nezávisle na dalších vstupech. Technologií umožňujících streamové zpracování velkých objemů dat je několik, těmi nejzajímavějšími jsou ale Apache Spark, Apache Storm a Apache Flink. Každá z~těchto technologií funguje na trochu jiném principu a je vhodná pro jiné využití. 
+	V~praxi často potřebujeme velké objemy dat zpracovávat v~co nejkratším čase a ideálně na každý nový podnět co nejdříve zareagovat. Batchové zpracování je v~takovém případě nevhodné. Řešením je již zmiňované streamové zpracování, nebo také zpracování proudů dat. Vstupem do takového programu není fixní soubor dat, ale neustálý proud dat nových. Kdykoli program obdrží nový datový objekt, zjednodušeně ho začne okamžitě zpracovávat a mezivýsledky předávat mezi jednotlivými částmi programu nezávisle na dalších vstupech. Technologií umožňujících streamové zpracování velkých objemů dat je několik, těmi nejzajímavějšími jsou ale Apache Spark, Apache Storm a Apache Flink. Každá z~těchto technologií funguje na trochu jiném principu a je vhodná pro~jiné využití. 
 	
 \begin{itemize}
-\item \textbf{Apache Flink} je nejnovějším frameworkem, který v~relativně velké míře konkuruje Sparku. Stejně jako Spark, podporuje Flink oba způsoby zpracování dat, primárně je ale zaměřený na streamy. Narozdíl od Sparku ale podporuje streamové zpracování v~pravém slova smyslu a lze s~ním tak dosáhnout výrazně kratší doby zpracování\cite{streaming-benchmark}. I~právě proto se předpokládá, že v~oblasti zpracování proudů dat v~budoucnu předstihne Spark\cite{flink-future}. Jeho další výhodou je například možnost využití existujících programů pro Storm či MapReduce. Hlavní nevýhodou je momentálně fakt, že je teprve v~počátcích svého vývoje a často se tak uživatel může setkat s~bugy či chybějící dokumentací. 
+\item \textbf{Apache Flink} je nejnovějším frameworkem, který v~relativně velké míře konkuruje Sparku. Stejně jako Spark, podporuje Flink oba způsoby zpracování dat, primárně je ale zaměřený na streamy. Narozdíl od~Sparku ale podporuje streamové zpracování v~pravém slova smyslu a lze s~ním tak dosáhnout výrazně kratší doby zpracování\cite{streaming-benchmark}. I~právě proto se předpokládá, že v~oblasti zpracování proudů dat v~budoucnu předstihne Spark\cite{flink-future}. Jeho další výhodou je například možnost využití existujících programů pro Storm či MapReduce. Hlavní nevýhodou je momentálně fakt, že je teprve v~počátcích svého vývoje a často se tak uživatel může setkat s~bugy či chybějící dokumentací. 
 	
 \item \textbf{Apache Storm} jako jediný ze zmiňovaných frameworků nabízí pouze streamové zpracování. Narozdíl od Sparku jde však o~pravé streamové zpracování. Jeho API je oproti Flinku více nízkoúrovňové a vývoj v~něm tak může být pracnější. Obecně ale funguje na podobném principu jako právě Flink. 
 	
@@ -158,16 +158,16 @@ sentiment analysis, REST API}
 	
 	
 \section{Apache Spark}
-	Apache Spark je open-source framework pro distribuované zpracování dat. Vznikl na Kalifornské univerzitě v~Berkeley, která ho v~roce 2013 věnovala Apache Software Foundation. V~rámci této nadace je Spark momentálně jedním z~nejaktivněji vyvýjených projektů\cite{spark-toplevel}. Poskytuje API pro jazyky Java, Scala, Python a nově také R. Jak již bylo řečeno, Apache Spark podporuje batchové i proudové zpracování dat. 
+	Apache Spark je open-source framework pro distribuované zpracování dat. Vznikl na Kalifornské univerzitě v~Berkeley, která ho v~roce 2013 věnovala Apache Software Foundation. V~rámci této nadace je Spark momentálně jedním z~nejaktivněji vyvíjených projektů\cite{spark-toplevel}. Poskytuje API pro jazyky Java, Scala, Python a nově také R. Jak již bylo řečeno, Apache Spark podporuje batchové i proudové zpracování dat. 
 	
 	Primárně je Spark zaměřený na batchové zpracování, ve kterém může Hadoop až několikanásobně překonat svou rychlostí. Toho dosahuje několika vylepšeními -- především nepoužívá přímo MapReduce paradigma, které je v~některých ohledech příliš svazující, ale vlastní algoritmy založené na podobných principech. Hadoop například výsledky většiny operací ukládá na disk, kdežto Spark často využívá cachování a operační pamět. Je pak na operačním systému, jestli se rozhodne tato data zapsat na disk\cite{spark-mapreduce-difference}. Právě využívání operační paměti pak samozřejmě vede k~výraznému zrychlení. 
 		
-	Spark narozdíl od Apache Flink a Apache Storm nenabízí plnohodnotné proudové zpracování, ale takzvané micro-batchové zpracování. Spark nereaguje na každý nový datový objekt samostatně, ale nejdříve data po zadanou dobu střádá a poté je víceméně klasicky batchově zpracuje. Tento proces je pak neustále opakován. Oproti klasickému batchovému zpracování je interval sběru dat obvykle várazně kratší.  Přestože Spark při zpracování proudů dat obvykle nedosahuje takových rychlostí jako právě Flink nebo Storm, i s~ním je možné dosáhnout zpracování dat v~téměř reálném čase\cite{streaming-benchmark}. 
+	Spark narozdíl od Apache Flink a Apache Storm nenabízí plnohodnotné proudové zpracování, ale takzvané micro-batchové zpracování. Spark nereaguje na každý nový datový objekt samostatně, ale nejdříve data po zadanou dobu střádá a poté je víceméně klasicky batchově zpracuje. Tento proces je pak neustále opakován. Oproti klasickému batchovému zpracování je interval sběru dat obvykle výrazně kratší.  Přestože Spark při zpracování proudů dat obvykle nedosahuje takových rychlostí jako právě Flink nebo Storm, i s~ním je možné dosáhnout zpracování dat v~téměř reálném čase\cite{streaming-benchmark}. 
 
-	Stejně jako Hadoop využívá i Spark další technologie pro správu clusteru a distribuované ukládání dat. Jeho velikou výhodou je možnost výběrů mezi několika. Pro správu clusteru je možné využít cluster manager integrovaný přímo do Sparku, Hadoop YARN nebo Apache Mesos. Pro distribuované ukládání je pak výběr ještě rozsáhlejší, volit lze mezi již zmiňovaným HDFS, Cassandrou, OpenStack Swift, Amazon S3, Kudu nebo MapR-FS. Především při vývoji se pak hodí možnost využití pseudo-distribuovaného režimu, při kterém není žádný z~těchto systémů potřeba. Spark totiž při tomto nastavení běží na jediném počítači v~režimu, kdy jedno jádro odpovídá jednomu klientskému počítači v~clusteru. 
+	Stejně jako Hadoop využívá i Spark další technologie pro správu clusteru a distribuované ukládání dat. Jeho velikou výhodou je možnost výběrů mezi několika z nich. Pro správu clusteru je možné využít cluster manager integrovaný přímo do Sparku, Hadoop YARN nebo Apache Mesos. Pro distribuované ukládání je pak výběr ještě rozsáhlejší, volit lze mezi již zmiňovaným HDFS, Cassandrou, OpenStack Swift, Amazon S3, Kudu nebo MapR-FS. Především při vývoji se pak hodí možnost využití pseudo-distribuovaného režimu, při kterém není žádný z~těchto systémů potřeba. Spark totiž při tomto nastavení běží na jediném počítači v~režimu, kdy jedno jádro odpovídá jednomu klientskému počítači v~clusteru. 
 
 \subsection{Komponenty frameworku}
-	Jak znázorňuje obrázek \ref{fig:spark_components}, Apache Spark se skládá z~několika hlavních komponent. Jedná se především o~Spark Core, Spark SQL, Spark Streaming a další menší komponenty. Podrobněji se jim věnuji v~následujících sekcích. 
+	Jak znázorňuje obrázek \ref{fig:spark_components}, Apache Spark se skládá z~několika hlavních komponent. Jedná se především o~Spark Core, Spark SQL, Spark Streaming a~další menší komponenty. Podrobněji se jim věnuji v~následujících sekcích. 
 	\begin{figure}[ht]
     	\centering
     	\includegraphics[width=1\textwidth]{images/spark_engine.jpg}
@@ -177,12 +177,12 @@ sentiment analysis, REST API}
 	
 \subsubsection{Spark core}
 \label{spark-core}
-	Hlavní komponentou Sparku je Spark Core, který zajišťuje všechny jeho základní funkcionality. jde například o~plánování úloh a základní vstupní a výstupní operace. Ostatní komponenty nad ním staví. Základním pojmem je zde tzv. Resilient Distributed Dataset, neboli RDD. RDD je zjednodušeně řeřeno téměř libovolná kolekce dat, nad kterou je možné provádět paralelní výpočty. Je navíc zajištěna jejich konzistence - při výpadku některého ze strojů mohou být ztracená data obnovena pomocí informací na těch ostatních. 
+	Hlavní komponentou Sparku je Spark Core, který zajišťuje všechny jeho základní funkcionality. Jde například o~plánování úloh a základní vstupní a výstupní operace. Ostatní komponenty nad ním staví. Základním pojmem je zde tzv. Resilient Distributed Dataset, neboli RDD. RDD je zjednodušeně řeřeno téměř libovolná kolekce dat, nad kterou je možné provádět paralelní výpočty. Je navíc zajištěna jejich konzistence -- při výpadku některého ze strojů mohou být ztracená data obnovena pomocí informací na těch ostatních. 
 	
-	Kdykoli je na konkrétním RDD vykonána některá z~operací umožňujících paralelní zpracování, tzv. transformace (například map, filter nebo reduce), driver neboli počítač řídící ostatní počítače naplánuje její zpracování na všech počítačích v~clusteru. Ty poté vytvoří nová RDD s~výsledky. Operace na RDD jsou ale "lazy", což znamaná, že se neprovádějí dokud na RDD neaplikujeme nějakou akci. Akce je opakem transformace a jejím výsledkem není vytvoření nového RDD. Příkladem akce je vypsání obsahu RDD na standartní výstup. 
+	Kdykoli je na konkrétním RDD vykonána některá z~operací umožňujících paralelní zpracování, tzv. transformace (například map, filter nebo reduce), driver neboli počítač řídící ostatní servery naplánuje její zpracování na všech počítačích v~clusteru. Ty poté vytvoří nová RDD s~výsledky. Operace na RDD jsou ale "lazy", což znamaná, že se neprovádějí dokud na RDD neaplikujeme nějakou akci. Akce je opakem transformace a jejím výsledkem není vytvoření nového RDD. Příkladem akce je vypsání obsahu RDD na standardní výstup. 
 
 \subsubsection{Spark SQL}
-	Další důležitou komponentou je Spark SQL, dříve nazývaný jako Apache Shark. Ten umožňuje práci s~především strukturovanými daty. Zavádí také novou strukturu zvanou Data Frame (DF). Stejně jako RDD, je i Data Frame distribuovaný po clusteru. Jeho struktura je ale narozdíl od RDD pevně daná -- konceptuelně odpovídá klasické tabulce v~relační databázi. Vnitřně v~něm dochází k~optimalizacím urychlujícím operaci s~ním. 
+	Další důležitou komponentou je Spark SQL, dříve nazývaný jako Apache Shark. Ten umožňuje práci s~především strukturovanými daty. Zavádí také novou strukturu zvanou Data Frame (DF). Stejně jako RDD, je i Data Frame distribuovaný po clusteru. Jeho struktura je ale narozdíl od RDD pevně daná -- konceptuálně odpovídá klasické tabulce v~relační databázi. Vnitřně v~něm dochází k~optimalizacím urychlujícím operaci s~ním. 
 	
 	Hlavní předností Spark SQL je možnost používat klasické SQL nebo HiveQL\footnote{HiveQL je jazyk používaný v~Apache Hive. Je podobný jazyku SQL, některé funkcionality však postrádá a jiné má navíc. } dotazy, jejichž výsledky jsou uloženy právě jako Data Frame. Například komunikace s~klasickou relační databází je možná pomocí JDBC/ODBC\footnote{Jednotné API pro přístup a práci s~relačními databázemi.}. 
 
@@ -214,7 +214,7 @@ sentiment analysis, REST API}
 
 	
 \subsubsection{Graphx}
-	GraphX je ve Sparku relativně novým modulem, který je určený obecně pro práci s~grafy a paralelními grafovými výpočty. Grafové výpočty získávají stále více pozornosti, jednoduchým příkladem je algoritmus PageRank, který stál u~zrodu moderního vyhledávání společnosti Google\cite{google-pagerank}. 
+	GraphX je ve Sparku relativně novým modulem, který je určený obecně pro~práci s~grafy a paralelními grafovými výpočty. Grafové výpočty získávají stále více pozornosti, jednoduchým příkladem je algoritmus PageRank, který stál u~zrodu moderního vyhledávání společnosti Google\cite{google-pagerank}. 
 	
 
 
@@ -235,13 +235,13 @@ V~této kapitole se nejdříve v~sekci \ref{text-mining} věnuji dostupným meto
 	Protože příspěvky ze sociální sítě Twitter, jejichž analýze se tato práce věnuje, jsou relativně krátké a obsahově specifické, v~rámci této práce bude použita pouze metoda zvaná Analýza sentimentu. Té se věnuji nejprve obecně v~sekci \ref{sentiment-analysis}. Její použití v~kontextu této práce pak podrobněji popisuji v~kapitole \ref{analysis-implementation}. 
 	
 \subsection{Text Categorization}
-	Text Categorization, někdy také Text Classification je metodou umožňující rozdělení analyzovaných dokumentů do předem daných skupin, jako například sport, politika a věda. Kategorizace je založena na četnosti jednotlivých slov v~analyzovaném textu -- pokud například text často obsahuje slova spadající do kategorie sport, bude i celý text do této kategorie zařazen. Rozdělení slov do jednotlivých kategorií je dosaženo buďto manuálně nebo právě pomocí technik strojového učení. Jeden dokument může být obvykle zařezen do více kategorií. 
+	Text Categorization, někdy také Text Classification je metodou umožňující rozdělení analyzovaných dokumentů do předem daných skupin, jako například sport, politika a věda. Kategorizace je založena na četnosti jednotlivých slov v~analyzovaném textu -- pokud například text často obsahuje slova spadající do~kategorie sport, bude i celý text do~této kategorie zařazen. Rozdělení slov do~jednotlivých kategorií je dosaženo buďto manuálně nebo právě pomocí technik strojového učení. Jeden dokument může být obvykle zařezen do více kategorií. 
 
 \subsection{Text Clustering}
 	Text Clustering neboli shlukování textů je metoda umožňující seskupování podobných dokumentů. Místo do předem daných kategorií jsou tyto dokumenty přiřazovány na základě jejich podobnosti do dynamicky vytvářených skupin. I~zde je rozdělení dosaženo pomocí četnosti jednotlivých použítých slov. Každý dokument je obvykle přiřazen do jediné kategorie. 
 
 \subsection{Document Summarization}
-	Vytvářením krátkých shrnujících textů se zabývá metoda zvaná Document Summarization. Jednodušší varianta této metody funguje na principu výběru klíčových vět dokumentu a jejich správného seřazení. Ta složitější pak spočívá v~opravdu podrobném rozboru dokumentu, především pak v~jeho syntaktické analýze. Ná základě té pak dochází k~vytvoření kompletně nového textu shrnujícího obsahu textu původního. Praktické provedení takové analýzy a následné vytvoření shrnutí je nicméně velice složité a nejsme tak prozatím obvykle schopni dosáhnout tak dobrých výsledků jako pomocí prvně zmíněné varianty\cite{summarization-quora}. 
+	Vytvářením krátkých shrnujících textů se zabývá metoda zvaná Document Summarization. Jednodušší varianta této metody funguje na principu výběru klíčových vět dokumentu a jejich správného seřazení. Ta složitější pak spočívá v~opravdu podrobném rozboru dokumentu, především pak v~jeho syntaktické analýze. Ná základě té pak dochází k~vytvoření kompletně nového textu shrnujícího obsahu textu původního. Praktické provedení takové analýzy a~následné vytvoření shrnutí je nicméně velice složité a nejsme tak prozatím obvykle schopni dosáhnout tak dobrých výsledků jako pomocí prvně zmíněné varianty\cite{summarization-quora}. 
 
 
 \subsection{Sentiment Analysis}
@@ -263,13 +263,13 @@ V~této kapitole se nejdříve v~sekci \ref{text-mining} věnuji dostupným meto
 	Twitter je v~současnosti jednou z~nejpoužívanějších sociálních sítí. Poskytuje svým uživatelům mikroblogovací funkcionality -- umožňuje zveřejňovat 140 znaků dlouhé zprávy (tzv. tweety) a číst zprávy publikované ostatními. Účet na něm má odhadem 1,3 milardy uživatelů, denně se jich pak na Twitter přihlásí asi 100 milionů\cite{twitter-stats}. Tito uživatelé pak každý den zveřejní 500 milionů tweetů, což odpovídá približně 6000 tweetů každou sekundu\cite{twitter-stats-2}. 
 
 \subsection{Vysvětlení pojmů}
-Pro bližší pochopení fungování sociální sítě Twitter a analýzy příspěvků z~ní pro účely této práce je potřeba vysvětlit několik základních termínů:
+Pro bližší pochopení fungování sociální sítě Twitter a analýzy příspěvků z~ní je pro účely této práce potřeba vysvětlit několik základních termínů. 
 
 \subsubsection{Tweet}
 
 Tweet je tím nejdůležitejším pojmem na Twitteru. Jak již bylo řečeno, jedná se o~zprávu o~maximální délce 140 znaků. Důvody pro toto omezení jsou v~dnešní době víceméně historické -- Twitter byl totiž už od svých počátků zamýšlen pro použití na mobilních telefonech. Protože klasické textové zprávy posílané právě pomocí mobilních telefonů jsou omezeny na 160 znaků, bylo toto omezení při vzniku Twitteru bráno v~potaz. Samotný 140 znaků dlouhý tweet by zabral většinu délky SMS zprávy, zbylých 20 znaků bylo vyhrazeno pro jméno autora zprávy\cite{twitter-140}. Nicméně i dnes má toto omezení smysl -- nutí uživatele zprávy zkracovat a zmiňovat to nejdůležitější. 
 
-Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všechny. Uživatel však má možnost nastavit si vyšší úroveň soukromí. Přímo na hlavní stránce se uživateli zobrazují příspěvky těch uživatelů, jejichž je tzv. follower. 
+Všechny tweety zveřejněné uživatelem jsou standardně viditelné pro všechny. Uživatel však má možnost nastavit si vyšší úroveň soukromí. Přímo na hlavní stránce se uživateli zobrazují příspěvky těch uživatelů, jejichž je tzv. follower. 
 
 \subsection{Follower}
 
@@ -283,7 +283,7 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 
 \subsubsection{Hashtag}
 
-	Hashtag je řetězec znaků začínající symbolem \uv{\#}. Hashtagy vkládají samotní uživatelé do jimi publikovaných tweetů. Na základě použitého hashtagu je pak možno vyhledat i ostatní zprávy, které ho obsahují. Příkladem může být hashtag \#rio2016 používaný pro tweety týkající se nadcházejících olympijských her v~brazilském Rio de Janeiru. Dostupné hashtagy však nejsou nijak omezeny, použit může být libovolný řetězec. 
+	Hashtag je řetězec znaků začínající symbolem \uv{\#}. Hashtagy vkládají samotní uživatelé do jimi publikovaných tweetů. Na základě použitého hashtagu je pak možno vyhledat i ostatní zprávy, které ho obsahují. Příkladem může být hashtag \textit{\#rio2016} používaný pro tweety týkající se nadcházejících olympijských her v~brazilském Rio de Janeiru. Dostupné hashtagy však nejsou nijak omezeny, použit může být libovolný řetězec. 
 
 
 \subsubsection{Mention}
@@ -293,11 +293,11 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 
 \subsection{Twitter Streaming API}
 \label{twitter-api}
-	Twitter poskytuje dvě rozhraní pro přistup k~jeho datům. Jde o~klasické REST API s~mnoha různými endpointy\footnote{Konkrétní adresa umožňující přístup k~vybraným datům.} a dále o~několik streamových endpointů. Tato práce využívá streamové API, konkretně stream poskytující vzorek veřejně publikovaných tweetů\cite{twitter-api}. Počet tweetů které toto API poskytuje není přesně daný, nicméně experimentálně bylo zjištěno, že jde o~přibližně 60 až 80 příspěvků za sekundu. To odpovídá asi 1\% publikovaných tweetů. 
+	Twitter poskytuje dvě rozhraní pro přístup k~jeho datům. Jde o~klasické REST API s~mnoha různými endpointy\footnote{Konkrétní adresa umožňující přístup k~vybraným datům.} a dále o~několik streamových endpointů. Tato práce využívá streamové API, konkretně stream poskytující vzorek veřejně publikovaných tweetů\cite{twitter-api}. Počet tweetů které toto API poskytuje není přesně daný, nicméně experimentálně bylo zjištěno, že jde o~přibližně 60 až 80 příspěvků za sekundu. To odpovídá asi 1 \% publikovaných tweetů. 
 	
-	Získat lze samozřejmě i přístup ke všem veřejně publikovaným příspěvkům. Nejde však již o~volně dostupná API a přístup k~nim je placený. Tuto službu nabízí portál Gnip.com\cite{gnip}. Pro tuto práci je použito pouze veřejně dostupné API. 
+	Získat lze samozřejmě i přístup ke všem veřejně publikovaným příspěvkům. Nejde však již o~volně dostupná API a přístup k~nim je placený. Tuto službu nabízí portál Gnip.com\cite{gnip}. V rámci této práce je použito pouze veřejně dostupné API. 
 	
-	Pro různé případy užití se hodí využít různá rozhraní. Klasický případ vužití RESTového API ukazuje obrázek \ref{fig:twitter_rest} -- uživatel navštíví webovou stránkou a chce zobrazit například údaje o~konkrétním uživateli. Server tento požadavek přijme a sám odešle požadavek na API poskytované Twitterem. Ten mu odpoví, server data zpracuje a vrátí je původnímu uživateli. 
+	Pro různé případy užití se hodí využít různá rozhraní. Klasický případ využití RESTového API ukazuje obrázek \ref{fig:twitter_rest} -- uživatel navštíví webovou stránku a chce zobrazit například údaje o~konkrétním uživateli. Server tento požadavek přijme a sám odešle požadavek na API poskytované Twitterem. Ten mu odpoví, server data zpracuje a vrátí je původnímu uživateli. 
 
 \begin{figure}[h!]
    	\centering
@@ -324,7 +324,7 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 
 \section{Požadavky na systém}
 \label{pozadavky}
-	Jak podrobněji popisuji v~kapitole \ref{navrh}, výsledný systém jehož vytvoření je cílem této práce se bude skládat ze tří klíčových částí -- systému pro analýzu textu, databáze a webserveru zpřístupňujícího data pomocí RESTového API. Pojmu REST API se podrobněji věnuji v~sekci \ref{rest}. 
+	Jak podrobněji popisuji v~kapitole \ref{navrh}, výsledný systém, jehož vytvoření je cílem této práce, se bude skládat ze tří klíčových částí -- systému pro analýzu textu, databáze a webserveru zpřístupňujícího data pomocí RESTového API. Pojmu REST API se podrobněji věnuji v~sekci \ref{rest}. 
 	
 	 První zmiňovaná část, systém pro analýzu textu, bude využívat framework Apache Spark. Jako zdroj dat bude použita sociální síť Twitter poskytující vzorek přispěvků z~ní, tzv. tweetů, pomocí veřejného API. Tomu se podrobněji věnuji v~kapitole \ref{twitter-api}. Z~těchto příspěvků budou vyfiltrovány ty, které reprezentují přání jejich autorů. Kromě měření běžných statistik bude systém provádět analýzu sentimentu těchto přání. Tato analýza bude probíhat v~reálném čase, respektive se zpožděním v~řádu maximálně několika desítek sekund.  Výsledky analýzy z~této části budou persistovány ve vhodné databázi. Na ní bude napojen webový server zpřístupňující data pomocí RESTful API. 
 
@@ -332,32 +332,32 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 \subsubsection{Systém pro analýzu textu}
 Samotný systém pro analýzu textu musí splňovat následující požadavky:
 \begin{itemize}
-\item Získání a ukládání veškerých dat, jejichž zpřístupnění pomocí RESTového API je požadováno a jež nejsou získávána jiným způsobem
+\item Získání a ukládání veškerých dat, jejichž zpřístupnění pomocí RESTového API je požadováno v následujících požadavcích a jež nejsou získávána jiným způsobem
 \end{itemize}
 \subsubsection{Databáze}
  Databáze bude poskytovat následující funkcionality:
 \begin{itemize}
-\item Agregace statistických dat dle času - u~dat u~kterých je to možné bude docházet k~jejich seskupovaní po větších intervalech. Tím dojde ke snížení náročnosti dotazů na tato data. 
+\item Agregace statistických dat dle času -- u~dat, u~kterých je to možné bude docházet k~jejich seskupovaní po větších intervalech. Tím dojde ke snížení náročnosti dotazů na tato data. 
 \item Promazávání starých a již zagregovaných dat
 \end{itemize}
 \subsubsection{RESTful API}
 RESTful API bude poskytovat následující data:
 
 \begin{itemize}
-\item Jednotlivá přání a základní informace o~nich, včetně jejich sentimentu a informací o~jejich autorovi
+\item Jednotlivá přání a základní informace o~nich, včetně jejich sentimentu a~informací o~jejich autorovi
 \item Seznam uživatelů zmíněných v~konkrétním přání
-\item Seznam hastagů použitých v~konkrétním přání
+\item Seznam hashtagů použitých v~konkrétním přání
 \item Informace o~uživatelích, kteří jsou autory některého přání nebo byli v~některém zmíněni
 \item Seznam přání publikovaných daným uživatelem
 \item Seznam přání v~nichž byl daný uživatel zmíněn
 \item Seznam přání obsahujících daný hashtag
-\item Statistiky nejpouívanějších hashtagů
+\item Statistiky nejpoužívanějších hashtagů
 \item Statistiky nejvíce zmiňovaných uživatelů
 \item Statistiky o~počtech již analyzovaných tweetů, anglických tweetů a z~nich vyfiltrovaných přání v~daném časovém intervalu
 \item Statistika o~průměrném sentimentu v~daném intervalu
 \end{itemize}
 
-\noindent Pro data pro která je to vhodné bude API umožňovat:
+\noindent Pro data, pro která je to vhodné, bude API umožňovat:
 \begin{itemize}
 \item Omezení počtu vrácených výsledků
 \item Nastavení časového intervalu
@@ -366,13 +366,13 @@ RESTful API bude poskytovat následující data:
 \subsection{Nefunkční požadavky}
 \subsubsection{Kvalitativní}
 \begin{itemize}
-\item \textbf{Rychlost} - analýza textu bude probíhat v~reálném čase, respektive se zpožděním v~řádu maximálně několika desítek sekund
-\item \textbf{Škálovatelnost} - systém pro analýzu textu bude při nasazení na dostatečně výkoném počítačovém clusteru připraven pro zpracování tisíců příspěvků za sekundu
+\item \textbf{Rychlost} Analýza textu bude probíhat v~reálném čase, respektive se zpožděním v~řádu maximálně několika desítek sekund.
+\item \textbf{Škálovatelnost} Systém pro analýzu textu bude při nasazení na dostatečně výkoném počítačovém clusteru připraven pro zpracování tisíců příspěvků za sekundu.
 \end{itemize}
 \subsubsection{Omezující}
 \begin{itemize}
-\item \textbf{Framework pro analýzu} - k~analýze příspěvků z~Twitteru bude použit framework Apeche Spark a jeho komponenta Spark Streaming
-\item \textbf{Zpřístupnění dat} - data budou zpřístupněna pomocí RESTful API. To bude odpovídat běžným praktikám používaným právě při návrhu RESTových rozhraní
+\item \textbf{Framework pro analýzu} K~analýze příspěvků z~Twitteru bude použit framework Apeche Spark a jeho komponenta Spark Streaming.
+\item \textbf{Zpřístupnění dat} Data budou zpřístupněna pomocí RESTful API. To bude odpovídat běžným praktikám používaným právě při návrhu RESTových rozhraní.
 \end{itemize}
 
 
@@ -393,7 +393,7 @@ V~této kapitole se věnuji návrhu jednotlivých komponent implementovaného sy
 	
 \begin{itemize}
 \item \textbf{Vyfiltrování anglických přání.} Příspěvky publikované na Twitteru jsou napsány v~různých jazycích, tento systém bude však provádět analýzu pouze těch anglických. Je proto nejprve nutné anglické příspěvky vyfiltrovat. Samotné vyfiltrování příspěvků reprezentujících přání jejich autorů pak bude provedeno jednoduše nalezením tweetů obsahujících slova \textit{wish}, \textit{hope} nebo \textit{pray}. 
-\item \textbf{Ukládání přání a souvisejících údajů.} Veškerá vyfiltrovaná přání a dále údaje o~jeho autorovi, zmíněných uživatelých a obsažených hashtazích budou ukládány do databáze. 
+\item \textbf{Ukládání přání a souvisejících údajů.} Veškerá vyfiltrovaná přání a~dále údaje o~jeho autorovi, zmíněných uživatelých a obsažených hashtazích budou ukládány do databáze. 
 \item \textbf{Provedení analýzy sentimentu jednotlivých přání.} U~veškerých vyfiltrováních přání bude provede analýza sentimentu, jejíž výsledky budou taktéž uloženy do databáze. 
 \item \textbf{Ukládání obecných statistik.} Během zpracování budou ukládány také obecné statistiky o~počtech zpracovaných příspěvků a průměrném sentimentu v~daném časovém intervalu. 
 \end{itemize}
@@ -406,7 +406,7 @@ Databáze uchovávající výsledky analýzy dat musí pojmout všechna data, je
 \begin{figure}[ht]
    	\centering
    	\includegraphics[width=1\textwidth]{../db_model.png}
-   	\caption{Návrh schámatu databáze}
+   	\caption{Návrh schématu databáze}
    	\label{fig:db-structure}
 \end{figure}
 
@@ -414,19 +414,19 @@ V~horní části obrázku jsou umístěny tabulky uchovávající obecné statis
 
 Krom obecných statistik budou ukládána veškerá analyzovaná přání včetně výsledku jejich sentimentální analýzy. V~tabulce \textit{users} pak budou uloženy základní údaje o~všech uživatelích, kteří jsou autory některého z~analyzovaných přání nebo jsou v~něm zmíněni. Vztah vyjadřující zmínění uživatele v~tweetu bude vyjádřen tabulkou \textit{tweet\_mentions\_user}. 
 
-Stejně tak jsou tabulce \textit{hashtags} uloženy všechny hashtagy použité v~některém z~přání. Použití hashtagu v~přání vyjadřuje tabulka \textit{tweet\_contains\_hashtag}.
+Stejně tak jsou tabulce \textit{hashtags} uloženy všechny hashtagy použité v~některém z~přání. Tento vztah mezi hashtagem a přáním reprezentuje tabulka \textit{tweet\_contains\_hashtag}.  
 
 \section{Návrh API}
 \label{rest}
 \subsection{REST architektura}
-	Jedním z~požadavků pro API poskytující výsledky analýzy dat je využití REST neboli Representational State Transfer architektury. Tato architektura rozhraní byla představena v~roce 2000 Royem Fieldingem, spoluautorem protokolu HTTP\cite{rest-diser}. Proto není překvapením že REST pro přenos dat využívá právě tento protokol. Jedná se o~bezestavovou architekturu, která poskytuje jednoduchý a především jednotný přístup ke zdrojům. Za zdroj pak považujeme samotná data či stavy aplikace. 
+	Jedním z~požadavků pro API poskytující výsledky analýzy dat je využití REST neboli Representational State Transfer architektury. Tato architektura rozhraní byla představena v~roce 2000 Royem Fieldingem, spoluautorem protokolu HTTP\cite{rest-diser}. Proto není překvapením že REST pro přenos dat využívá právě tento protokol. Jedná se o~bezstavovou architekturu, která poskytuje jednoduchý a především jednotný přístup ke zdrojům. Za zdroj pak považujeme samotná data či stavy aplikace. 
 	
 	Každý zdroj má svoji vlastní URI\footnote{Uniform Resource Identifier je řetězec jednoznačně určující zdroj informací}. REST definuje čtyři základní metody pro přístup k~těmto zdrojům. Tyto základní metody protokolu HTTP jsou označovány jako CRUD -- umožňují totiž vytvoření dat (Create), jejich získání (Retrieve), aktualizování (Update) a smazání (Delete):
 \begin{itemize}
 
 \item\textbf{GET}
 
-Get je tou nejzákladnější metodou, která slouží k~získání zdroje. Při používání webového prohlížeče se s~ním setkáváme neustále -- jedná se totiž o~metodu sloužící jako klasický požadavek na webovou stránku. Případné parametry jsou přidány přimo do URI. Například pro získání informací o~uživateli Jan můžeme použít požadavek \ref{get-example}.
+Get je tou nejzákladnější metodou, která slouží k~získání zdroje. Při~používání webového prohlížeče se s~ním setkáváme neustále -- jedná se totiž o~metodu sloužící jako klasický požadavek na webovou stránku. Případné parametry jsou přidány přimo do URI. Například pro získání informací o~uživateli Jan můžeme použít požadavek \ref{get-example}.
 \begin{lstlisting}[caption={Ukázka požadavku GET},label=get-example][h]
 GET /api/user/jan
 Host: www.my-web.com
@@ -438,7 +438,7 @@ Post je metoda sloužící pro vytváření dat nových, která se používá na
 
 \item\textbf{DELETE}
 
-Metoda Delete slouží ke smazání konkrétního zdroje definovaného pomocí URI. HTTP požadavek pro smazání uživatele Jan by se nelišil od výše uvedeného příkladu požadavku GET, pouze by bylo nutné použít metodu DELETE. 
+Metoda Delete slouží ke smazání konkrétního zdroje definovaného pomocí URI. HTTP požadavek pro smazání uživatele Jan by se nelišil od~výše uvedeného příkladu požadavku GET, pouze by bylo nutné použít metodu DELETE. 
 
 \item\textbf{PUT}
 
@@ -510,7 +510,7 @@ Put je metodou sloužící k~aktualizaci zdroje. Jde jistým způsobem o~kombina
 \rowcolor[HTML]{EFEFEF}
 \large \textbf{/wish/\{wish\_id\}/mentions}        &         &                 &        & \multicolumn{1}{l}{}                \\
 \rowcolor[HTML]{EFEFEF}
-\textbf{GET}          &         &                 &        & Uživatelé zmíněný v~přání                        \\
+\textbf{GET}          &         &                 &        & Uživatelé zmínění v~přání                        \\
 \multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam uživatelů zmíněných v~přání s~daným \textit{wish\_id}.}  } \\  
  & & & & \\  
 \end{tabular}
@@ -523,7 +523,7 @@ Put je metodou sloužící k~aktualizaci zdroje. Jde jistým způsobem o~kombina
 \large \textbf{/wish/\{wish\_id\}/hashtags}        &         &                 &        & \multicolumn{1}{l}{}                \\
 \rowcolor[HTML]{EFEFEF}
 \textbf{GET}          &         &                 &        & Hashtagy použité v~přání                        \\
-\multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam hashtagů použitch v~přání s~daným \textit{wish\_id}.}  } \\    
+\multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam hashtagů použitých v~přání s~daným \textit{wish\_id}.}  } \\    
  & & & & \\
 \end{tabular}
 \end{table}
@@ -636,7 +636,7 @@ Put je metodou sloužící k~aktualizaci zdroje. Jde jistým způsobem o~kombina
 \label{implementace}
 V~následujících sekcích jsou podrobněji popsány způsoby implementace jednotlivých částí systému. Způsob jeho nasazení je znázorněn na obrázku \ref{fig:deployment_diagram}. Z~důvodů zmíněných v~sekci \ref{analysis-implementation} byl však místo počítačového clusteru použit virtualizovaný systém na lokálním počítači. 
 
-Při vývoji systému i psaní tohoto textu byl používán verzovací systém GIT. Repozitář této práce je možné nalézt na serveru GitHub\cite{github}. 
+Při vývoji systému i psaní tohoto textu byl používán verzovací systém Git. Repozitář této práce je možné nalézt na serveru GitHub\cite{github}. 
 
 \begin{figure}[h!]
    	\centering
@@ -656,12 +656,12 @@ Jak již bylo zmíněno v~kapitole \ref{spark-core}, výpočty lze distribuovat 
 \label{stanford-nlp}
 	Pro analýzu sentimentu byla namísto vlastní jednoduché implementace analýzy sentimentu použita knihovna Stanford NLP\cite{stanford-nlp-web}. Jedná se o~knihovnu poskytující funkcionality pro zpracování a analýzu lidské řeči. Zahrnuje právě analyzátor pro určení sentimentu. 
 	
-	Ten je nejdříve potřeba vytrénovat na vzorových datech. Bez manuálního přetrénování je algoritmus již vytrénován na datasetu složeného z~necelých 10 tisíc vět z~oblasti filmových hodnocení. Tato trénovací data je možné najít na stránce Stanford Dataset Treebank\cite{nlp-treebank}. V~rámci této práce nebude použitý model přetrénováván přímo pro kontext sociální sítě Twitter, bylo by totiž potřeba manuálně ohodnotit řádově tisíce vět. 
+	Ten je nejdříve potřeba vytrénovat na vzorových datech. Bez manuálního přetrénování je algoritmus již vytrénován na datasetu složeného z~necelých 10~tisíc vět z~oblasti filmových hodnocení. Tato trénovací data je možné najít na~stránce Stanford Dataset Treebank\cite{nlp-treebank}. V~rámci této práce nebude použitý model přetrénováván přímo pro kontext sociální sítě Twitter, bylo by totiž potřeba manuálně ohodnotit řádově tisíce vět. 
 	
 	Výsledkem analýzy sentimentu pomocí Stanford NLP je hodnota v~intervalu 0 až 4, kde 0 reprezentuje negativní a 4 pozitivní větu. Jednotlivé tweety tedy bylo nutné rozdělit na věty a každou z~nich analyzovat zvlášť. Celkový sentiment tweetu byl pak určen na základě hodnocení jednotlivých vět a jejich délce. 
 
 \subsection{Nasazení}
-Aby implementovaný systém zvládal analyzovat všechny publikované tweety, bylo by nutné jeho nasazení na počítačovém clusteru. K~tomu je systém připravený a krom instalace potřebného software na jednotlivé stroje by nasazení nemělo vyžadovat další úpravy zdrojových kódů. Jak jsem ale popsal v~sekci \ref{twitter-api}, ve volně dostupném API Twitter poskytuje pouze asi 1\% publikovaných zpráv. Protože navíc počítačový cluster nemám k~dispozici a jeho pronájem by byl velice nákladný, je program spouštěn na lokálním počítači ve virtualizovaném prostředí. 
+Aby implementovaný systém zvládal analyzovat všechny publikované tweety, bylo by nutné jeho nasazení na počítačovém clusteru. K~tomu je systém připravený a krom instalace potřebného software na jednotlivé stroje by nasazení nemělo vyžadovat další úpravy zdrojových kódů. Jak jsem ale popsal v~sekci \ref{twitter-api}, ve volně dostupném API Twitter poskytuje pouze asi 1 \% publikovaných zpráv. Protože navíc počítačový cluster nemám k~dispozici a jeho pronájem by byl velice nákladný, je program spouštěn na lokálním počítači ve virtualizovaném prostředí. 
 
 K~dispozici má Spark 8GB RAM a 3 výpočetní jádra. Je spouštěn v~tzv. lokálním režimu, ve kterém je na každém jádře vytvořen jeden výpočetní uzel. I~kvůli omezeným zdrojům bylo v~průběhu implementace nutné zvětšit délku intervalu, ve kterém Spark data zpracovává. Většina tohoto času je však overhead a s~nárůstem objemu zpracovávaných dat není celková doba jejich analýzy výrazně navýšena. 
 
@@ -723,9 +723,9 @@ stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_general_40s", prop)
 
 \section{Databáze}
 \subsection{Výběr technologií}
-	Při výběru konkrétní databáze bylo nejdříve nutné rozhodnout, zda použít klasickou relační databázi nebo sáhnout po NoSQL databázi. NoSQL databáze, někdy také označované jako Not Only SQL, zpravidla nejsou relační a nemají pevně dané schéma. Na druhou stranu tyto databáze nabízejí větší možnosti škálování, často jsou distribuované a umožňují pojmout výrazně větší objemy dat než databáze klasické\cite{nosql-dbs}. NoSQL databáze se často využívají právě v~projektech pracujících s~Big Daty. 
+	Při výběru konkrétní databáze bylo nejdříve nutné rozhodnout, zda použít klasickou relační databázi nebo sáhnout po NoSQL databázi. NoSQL databáze, někdy také označované jako Not Only SQL, zpravidla nejsou relační a nemají pevně dané schéma. Na druhou stranu tyto databáze nabízejí větší možnosti škálování, často jsou distribuované a umožňují pojmout výrazně větší objemy dat než databáze relační\cite{nosql-dbs}. NoSQL databáze se často využívají právě v~projektech pracujících s~Big Daty. 
 	
-	Jedněmi z~nejrozšířenějších NoSQL databází jsou tzv. dokumentově orientované databáze. Příkladem takové databáze je MongoDB\cite{mongo}. Data v~nich jsou obvykle uložena ve formátu podobném JSONu, přičemž narozdíl od relačních databází často provádíme jejich denormalizaci. To umožňuje rychlejší načtení informací z~databáze, aktualizace dat je obvykle ale naopak časově náročnější\cite{nosql-speed}. 
+	Jedněmi z~nejrozšířenějších NoSQL databází jsou tzv. dokumentově orientované databáze. Data v~nich jsou obvykle uložena ve formátu podobném JSONu, přičemž narozdíl od relačních databází často provádíme jejich denormalizaci. To umožňuje rychlejší načtení informací z~databáze, aktualizace dat je obvykle ale naopak časově náročnější\cite{nosql-speed}. Příkladem dokumentově orientované databáze je MongoDB\cite{mongo}. 
 	
 	Z~několika důvodů jsem však pro tuto práci zvolil klasickou relační databázi. Po vyfiltrování jednotlivých přání a jejich analýze nebudu pracovat s~tak velkými objemy dat, které by relační databáze nebyla schopna pojmout. Tato data navíc mezi sebou mají jasné vztahy, které je možné zanést do schématu databáze a usnadnit si tak práci s~nimi. Relační databáze jsou také využívány výrazně delší dobu a jsou vývojově vyspělejší. 
 	
@@ -738,7 +738,7 @@ stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_general_40s", prop)
 \label{amazon-aws}
 	Konkrétně byla pro nasazení databáze využita služba Amazon AWS\cite{aws}. Amazon Web Services je kolekce cloudových služeb zahrnujících například cloudové úložiště, virtuální servery nebo právě databázové servery -- tzv. Amazon RDS, neboli Relational Database Service. 
 	
-	Nabízené virtuální servery (Amazon EC2) jsou příkladem modelu IaaS -- tedy Infrastructure as a Service. Uživatel se v~případě IaaS nemusí starat o~infrastrukturu, jsou mu ale poskytnuty přístupové údaje v~tomto případě k~linuxovému serveru a o~veškeré další nastavení a provoz se stará sám. Amazon RDS je pak příkladem modelu Paas, neboli Platform as a Service. V~případě PaaS obecně odpadá i nutnost instalace softwaru a dalších administrátorských úkonů. Uživatel se stará pouze o~konkrétné software provozovaný na dané platformě. U~Amazon RDS tak není třeba manuálně instalovat databázi nebo třeba nastavovat připojení systému k~síti. Na druhou stranu to ani není možné a obecně model PaaS může přinášet i značná omezení. 
+	Nabízené virtuální servery (Amazon EC2) jsou příkladem modelu IaaS -- tedy Infrastructure as a Service. Uživatel se v~případě IaaS nemusí starat o~infrastrukturu, jsou mu ale poskytnuty přístupové údaje v~tomto případě k~linuxovému serveru a o~veškeré další nastavení a provoz se stará sám. Amazon RDS je pak příkladem modelu Paas, neboli Platform as a Service. V~případě PaaS obecně odpadá i nutnost instalace softwaru a dalších administrátorských úkonů. Uživatel se stará pouze o~konkrétní software provozovaný na dané platformě. U~Amazon RDS tak není třeba manuálně instalovat databázi nebo třeba nastavovat připojení systému k~síti. Na druhou stranu to ani není možné a obecně model PaaS může přinášet i značná omezení. 
 	
 	Veškeré služby poskytované v~rámci Amazon AWS je možno provozovat v~celkem 12 regionech pokrývajících většinu světa. Česká Republika například spadá pod datacentrum umístěné ve Frankfurtu. Hlavní výhodou Amazon AWS a podobných služeb je výrazné usnadnění instalace i administrace a především jednoduchá škálovatelnost, obvykle je také zaručena určitá dostupnost služeb. Jak ukazuje obrázek \ref{fig:aws_monitoring}, v~případě Amazonu je výhodou také relativně podrobný monitoring. Nevýhodou oproti vlastnímu serveru může být především vyšší cena, v~některých případech také zmiňované restrikce při nastavování služeb. 
 	
@@ -753,11 +753,11 @@ stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_general_40s", prop)
 	
 \subsection{Agregace dat v~čase}
 \label{agregace-dat}
-	Jedním z~funkčních požadavků této práce je agregace statistických dat dle času. Agregovat data se vyplácí z~několika důvodů. Tím hlavním je ale snížení náročnosti dotazů na tato data. Pokud například uživatel požaduje statistiky za poslední týden, nepotřebuje obvykle data za každých několik sekund, ale stačí mu již agregovaná data například po hodinách. Aniž by přišel o~nějaké informace, jsou mu místo tisíců záznamů vráceny desítky. Agregace je možné dosáhnout například pomocí CRONu nebo přímo na úrovni databáze pomocí Event Scheduleru. 
+	Jedním z~funkčních požadavků této práce je agregace statistických dat dle času. Agregovat data se vyplácí z~několika důvodů. Tím hlavním je ale snížení náročnosti dotazů na tato data. Pokud například uživatel požaduje statistiky za poslední týden, nepotřebuje obvykle data za každých několik sekund, ale~stačí mu již agregovaná data například po hodinách. Aniž by přišel o~nějaké informace, jsou mu místo tisíců záznamů vráceny desítky. Agregace je možné dosáhnout například pomocí CRONu nebo přímo na úrovni databáze pomocí Event Scheduleru. 
 	
 	CRON je unixový systémový démon zajišťující provádění uživatelem definovaných příkazů v~daném čase\cite{cron}. Stačilo by tedy napsat jednoduchý script, který by se připojil k~databázi a provedl sloučení dat. Tento skript by pak byl pomocí CRONu pravidelně spouštěn. Protože byl pro nasazení databáze zvolen Amazon RDS, nemáme přístup k~celému systému na kterém databáze běží, ale pouze k~samotné databázi. CRON by tedy vyžadoval další UNIXový systém a není proto vhodným řešením. 
 	
-	Event Scheduler\cite{event-scheduler} poskytovaný přímo jako součást MySQL je naopak řešením ideálním. Možnosti jeho využití jsou oproti CRONu omezenější, nicméně pro námi požadovanou agregaci dat je jeho funkcionalita postačující. Půjde navíc o~čistší řešení, protože bude operace modifikující databázi řešena přímo na její úrovni. 
+	Event Scheduler\cite{event-scheduler} poskytovaný přímo jako součást MySQL je naopak řešením ideálním. Možnosti jeho využití jsou oproti CRONu omezenější, nicméně pro námi požadovanou agregaci dat je jeho funkcionalita postačující. Půjde navíc o~čistší řešení, protože bude operace modifikující databázi řešena přímo na~její úrovni. 
 	
 	Příkaz pro vytvoření eventu agregujího data z~tabulky \textit{stats\_general\_40s} do tabulky \textit{stats\_general\_20m} je k~dispozici jako zdrojový kód \ref{fig:mysql-event-agr}:
 
@@ -795,9 +795,7 @@ DO
 \subsection{Výběr technologií}
 	Frameworky umožňující implementaci RESTového API existují pro víceméně všechny rozšířené programovací jazyky, některé z~nich se však pro tyto účely hodí víc než jiné. Velice oblíbeným je například jazyk Python, který jsem především z~důvodů jako jsou skvělá přehlednost kódu a rozsáhlá komunita zvolil i já. Z~konkrétních frameworků jsem se poté rozhodoval především mezi minimalistickým Flaskem\cite{flask} a komplexnějším Djangem\cite{django}. 
 	
-	Oba tyto frameworky mají kvalitní dokumentaci a stojí za nimi rozsáhlá komunita. Django je ale určený především pro tvorbu komplexních webových aplikací, kdežto Flask je označován za tzv. micro-framework. Poskytuje tedy jen základní funkcionality, které je možné rozšířit instalací dalších pluginů. Protože cílem je vytvoření pouze RESTového API, je Flask ideálním nástrojem bez pro tento projekt zbytečných funkcí. 
-	
-\noindent Při implementaci bylo použito několik pluginů pro Flask:
+	Oba tyto frameworky mají kvalitní dokumentaci a stojí za nimi rozsáhlá komunita. Django je ale určený především pro tvorbu komplexních webových aplikací, kdežto Flask je označován za tzv. micro-framework. Poskytuje tedy jen základní funkcionality, které je možné rozšířit instalací dalších pluginů. Protože cílem je vytvoření pouze RESTového API, je Flask ideálním nástrojem bez pro tento projekt zbytečných funkcí. Při implementaci bylo použito několik pluginů pro Flask:
 	
 \begin{itemize}
 \item \textbf{flask-sqlalchemy} - SQLAlchemy je asi nejrozšířenějším ORM\footnote{Objektově relační mapování umožňuje namapování tabulek v~relační databázi na konkrétní třídy v~programu} pro Python. Tento plugin integruje jeho funkcionality do frameworku Flask. Umožňuje tedy namapování jednotlivých tabulek databáze na třídy, se kterými je v~programu možno jednoduše pracovat místo manuálního vytváření SQL dotazů. 
@@ -856,7 +854,7 @@ Stejně jako v~případě databáze, i pro webserver byly využity cloudové slu
 \subsubsection{Heroku}
 Po vytvoření účtu na Heroku je potřeba stáhnout si tzv. Heroku Toolbelt. Jedná se o~CLI\footnote{Command line interface nástroje jsou nástroje pracující v~prostředí příkazové řádky} nástroj sloužící právě ke správě a monitorování aplikací běžících v~Heroku cloudu. Při vytváření nové aplikace si uživatel stejně jako v~případě Amazon AWS nejdříve zvolí variantu služby na základě jeho hardwarových a jiných požadavků. 
 
-Konkrétní způsob nasazení aplikace se pak mírně liší pro každý z~podporovaných jazyků, kterých je momentálně 8. V~případě pythonu je nejdříve nutné vytvořit několik souborů:
+Konkrétní způsob nasazení aplikace se pak mírně liší pro každý z~podporovaných jazyků, kterých je momentálně osm. V~případě pythonu je nejdříve nutné vytvořit několik souborů:
 
 \begin{itemize}
 \item \textbf{requirements.txt} - seznam požadovaných knihoven pro Python vygenerovaný pomocí nástroje pip\footnote{Balíčkovací systém umožňující instalaci a správu knihoven pro Python}, konkrétně příkazem \textit{pip freeze}.
@@ -864,9 +862,9 @@ Konkrétní způsob nasazení aplikace se pak mírně liší pro každý z~podpo
 \item \textbf{runtime.txt} - určení verze Pythonu použité pro spuštění aplikace
 \end{itemize}
 
-Nahrání aplikace na Heroku může probíhat několika způsoby, tím základním je ale pooužití GITu. Samotným vytvoření aplikace pomocí Heroku Toolbeltu dojde k~přidání remote repozitáře. Do něj poté stačí nahrát změny pomocí příkazu \textit{git push} a Heroku již v~případě nalezení výše zmíněných souborů zařídí spuštění aplikace. 
+Nahrání aplikace na Heroku může probíhat několika způsoby, tím základním je ale použití Gitu. Samotným vytvoření aplikace pomocí Heroku Toolbeltu dojde k~přidání remote repozitáře. Do něj poté stačí nahrát změny pomocí příkazu \textit{git push} a Heroku již v~případě nalezení výše zmíněných souborů zařídí spuštění aplikace. 
 
-Protože k~verzování této práce byl použit jeden společný repozitář namísto oddělených repozitářů pro každou komponentu, nastal samozřejmě problém s~nahráním pouze adresáře obsahujícího soubory pro webserver. I~toho je ale pomocí GITu možné dosáhnout. Jak ukazuje zdrojový kód \ref{git-subtree} použit byl příkaz \textit{git subtree}:
+Protože k~verzování této práce byl použit jeden společný repozitář namísto oddělených repozitářů pro každou komponentu, nastal samozřejmě problém s~nahráním pouze adresáře obsahujícího soubory pro webserver. I~toho je ale~pomocí GITu možné dosáhnout. Jak ukazuje zdrojový kód \ref{git-subtree} použit byl příkaz \textit{git subtree}:
 
 
 \begin{lstlisting}[caption={Příkaz pro nahrání podadresáře na Heroku},label=git-subtree][h]
@@ -878,17 +876,17 @@ git push heroku_remote `git subtree split --prefix flask_api master`:master --fo
 \section{Webová aplikace}
 	Protože nejlepším způsobem otestování jakéhokoli software je jeho reálné použití, byla jako součást této práce vytvořena i webová aplikace využívající API popsané v~předchozí kapitole. Ta poslouží také pro prezentaci výsledků prováděné analýzy. Protože web není součástí zadání této práce, budu se mu věnovat pouze z~hlediska testování API v~kapitole \ref{testovani}. Ukázky této aplikace jsou pak k~nalezení v~příloze \ref{appendix-web}.  
 	
-	Webová aplikace je napsána pomocí jazyků HTML, CSS a JavaScript, použity byly i komponenty frameworku Bootstrap. K~nasazení byl použit Amazon AWS, konkrétně služby Amazon S3 pro hostování dat a Amazon Route 53 pro nastavení vlastního doménového jména. Na webu jsou v~reálném čase zobrazovány výsledky analýzy. Konkrétně jde například o~nejnovější publikovaná přání, nejpoužívanější hashtagy či graf zobrazující obecné statistiky. 
+	Webová aplikace je napsána pomocí jazyků HTML, CSS a JavaScript, použity byly i komponenty frameworku Bootstrap. K~nasazení byl použit Amazon AWS, konkrétně služby Amazon S3 pro hostování dat a Amazon Route 53 pro~nastavení vlastního doménového jména. Na webu jsou v~reálném čase zobrazovány výsledky analýzy. Konkrétně jde například o~nejnovější publikovaná přání, nejpoužívanější hashtagy či graf zobrazující obecné statistiky. 
 
 
 \chapter{Testování}
 \label{testovani}
-Testovování je důležitou součástí vývoje každého software a jinak tomu není ani v~případě systému implementovaného v~rámci této práce. Kromě manuálního testování prováděného během vývoje systému byly implementovány i automatické testy poskytovaného API. Pro prezentaci výsledků analýzy a zároveň pro otestování celého systému byl vytvořen také web zobrazující informace o~analyzovaných přáních. 
+Testovování je důležitou součástí vývoje každého software a jinak tomu není ani v~případě systému implementovaného v~rámci této práce. Kromě manuálního testování prováděného během vývoje systému byly implementovány i~automatické testy poskytovaného API. Pro prezentaci výsledků analýzy a zároveň pro otestování celého systému byl vytvořen také web zobrazující informace o~analyzovaných přáních. 
 
 
 \section{Test API endpointů}
 \label{api-testing}
-Při testování implementovaného API bylo použito rozšíření pro framework Flask zvané \textit{Flask-testing}. To využívá knihovnu textit{unittest}, která je součástí standartní Python knihovny, a přidává několik funkcionalit zjednodušujících použití v~rámci Flasku. 
+Při testování implementovaného API bylo použito rozšíření pro framework Flask zvané \textit{Flask-testing}. To využívá knihovnu \textit{unittest}, která je součástí standardní Python knihovny, a přidává několik funkcionalit zjednodušujících použití v~rámci Flasku. 
 
 Po vytvoření třídy dědící od třídy \textit{TestCase} je nejprve nutné vytvořit několik metod:
 
@@ -898,7 +896,7 @@ Po vytvoření třídy dědící od třídy \textit{TestCase} je nejprve nutné 
 \item \textbf{tearDown} - metoda tearDown je naopak spouštěna na konci každého testu. V~ní je obvykle databáze naopak přemazána. 
 \end{itemize}
 
-Poté již stačí vytvořit jednotlivé testy. Za ty se automaticky považují všechny metody, jejichž název začíná slovem test. Ukázku testu zaměřeného na endpoint /user/<user\_id> zobrazuje zdrojový kód \ref{user-test}. U~všech endpointů je testován především návratový kód, v~některých případech i konkrétní odpověď webserveru. 
+Poté již stačí vytvořit jednotlivé testy. Za ty se automaticky považují všechny metody, jejichž název začíná slovem test. Ukázku testu zaměřeného na~endpoint /user/<user\_id> zobrazuje zdrojový kód \ref{user-test}. U~všech endpointů je testován především návratový kód, v~některých případech i konkrétní odpověď webserveru. 
 
 
 \begin{lstlisting}[caption={Test endpointu /user/<user\_id>},label=user-test][h]
@@ -911,9 +909,9 @@ def test_user_detail(self):
 
 
 \section{Web prezentující výsledky analýzy}
-Vytvořenou webovou stránku je možné nalézt na adrese \textit{http://tweetwishes.com}, pro její plnou funkcionalitu však musí být spuštěn i samotný systém pro analýzu tweetů běžící na lokálním počítači. Na webu jsou totiž v~reálném čase zobrazována nová přání, statistiky a další údaje. 
+Vytvořený web je možné nalézt na adrese \textit{http://tweetwishes.com}, pro její plnou funkcionalitu však musí být spuštěn i samotný systém pro analýzu tweetů běžící na lokálním počítači. Na webu jsou totiž v~reálném čase zobrazována nová přání, statistiky a další údaje. 
 
-Web využívá velkou část implementovaných API endpointů. Ukázka jejich praktického použití je nejlepším způsobem otestování jejich správného návrhu a funkčnosti. Některé komponenty webu jsou zobrazeny na obrázcích \ref{fig:web-last-tweets}, \ref{fig:web-detail} a \ref{fig:web-stats}. Obrázky některých stránek webu jako celku jsou pak k~dispozici v~příloze \ref{appendix-web}. 
+Web využívá velkou část implementovaných API endpointů. Ukázka jejich praktického použití je nejlepším způsobem otestování jejich správného návrhu a funkčnosti. Některé komponenty webu jsou zobrazeny na obrázcích \ref{fig:web-last-tweets}, \ref{fig:web-detail} a~\ref{fig:web-stats}. Obrázky některých stránek webu jako celku jsou pak k~dispozici v~příloze \ref{appendix-web}. 
 
 	\begin{figure}[ht]
     	\centering
@@ -938,9 +936,9 @@ Web využívá velkou část implementovaných API endpointů. Ukázka jejich pr
 
 \chapter{Zhodnocení výsledků}
 \label{zhodnoceni}
-Implementovaný systém dle požadavků provádí analýzu příspěvků publikovaných na Twitteru. Přestože původní plán rychlosti zpracování těchto příspěvků počítal s~kratší doubou analýzy, její výsledky jsou dostupné na webu již během několika desítek sekund po publikování tweetů. Toto zpoždění je způsobeno slabým výpočetním výkonem a overheadem potřebným pro inicializaci Sparku a distribuci operací a dat. 
+Implementovaný systém dle požadavků provádí analýzu příspěvků publikovaných na Twitteru. Přestože původní plán rychlosti zpracování těchto příspěvků počítal s~kratší dobou analýzy, její výsledky jsou dostupné na webu již během několika desítek sekund po publikování tweetů. Toto zpoždění je způsobeno slabým výpočetním výkonem a overheadem potřebným pro inicializaci Sparku a distribuci operací a dat. 
 
-Prováděná analýza vedla k~zajímavým výsledkům. Jak ukazuje tabulka \ref{sentiment-table}, výrazně převažují negativní přání nad těmi pozitivními. Sentiment jednotlivých přání nabírá hodnod v~rozmezí 0 až 4, kde 0 je negativní text a 4 naopak pozitivní. Monitorováním nejpoužívanějších hashtagů bylo například možné sledovat vývoj amerických prezidentských voleb, velice aktivní byly také uživatelé z~Filipín. I~ti vyjadřovali svá přání týkající se voleb nového filipínského prezidenta. Kromě politických témat se v~přáních často objevovala sportovní témata či příspěvky týkající se hudebních a filmových hvězd. 
+Prováděná analýza vedla k~zajímavým výsledkům. Jak ukazuje tabulka \ref{sentiment-table}, relativně výrazně převažují negativní přání nad těmi pozitivními. Pro označení neutrálního sentimentu je v algoritmu použita hodnota 2, dlouhodobě se však sentiment pohybuje v hodnotách kolem 1,7. Monitorováním nejpoužívanějších hashtagů bylo například možné sledovat vývoj amerických prezidentských voleb, velice aktivní byly také uživatelé z~Filipín. I~ti vyjadřovali svá přání týkající se voleb nového filipínského prezidenta. Kromě politických témat se v~přáních často objevovala sportovní témata či příspěvky týkající se hudebních a filmových hvězd. 
 
 \begin{table}[h]
 \centering
@@ -976,7 +974,7 @@ Mohlo by jít obecně o~úlohy zabývající se tzv. opinion miningem. Díky ana
 \section{Možná budoucí vylepšení}
 Jedním z~hlavních vylepšení systému by bylo bezesporu jeho nasazení na počítačový cluster. K~tomu je celý systém připravený. Stálo by pak také za zvážení zažádat o~přístup k~veškerým příspěvkům z~Twitteru pomocí služby Gnip popsané v~sekci \ref{twitter-api}. 
 
-Nabízí se i několik funkčních vylepšení celého systému. Jedním z~nich je zobecnění tohoto systému, díky kterému by jeho využití nebylo omezeno na analýzů přání uživatelů, ale bylo by ho možné využívat například i pro výše zmíněné účely. Filtrované výrazy by byly zadány například do konfiguračního souboru. Až na přejmenování tabulek a proměnných by jiné výraznější zásahy do systému nebyly nutné. 
+Nabízí se i několik funkčních vylepšení celého systému. Jedním z~nich je zobecnění tohoto systému, díky kterému by jeho využití nebylo omezeno na~analýzu přání uživatelů, ale bylo by ho možné využívat například i~pro~výše zmíněné účely. Filtrované výrazy by byly zadány například do konfiguračního souboru. Až na přejmenování tabulek a proměnných by jiné výraznější zásahy do systému nebyly nutné. 
 
 Systém by také jistě bylo možné optimalizovat a snížit tak rychlost analýzy tweetů. Jednou z~možností by bylo využití noSQL databáze a kompletní změna způsobu ukládání dat. Práce s~relační SQL databází pomocí SparkSQL je totiž v~některých směrech omezující a některé operace mohou dobu zpracování nežádoucím způsobem zvyšovat. 
 
@@ -984,9 +982,9 @@ Zajímavé by bylo také rozšíření systému o~další metody z~oblasti text 
 
 
 \begin{conclusion}
-	Cílem této bakalářské práce byla implementace systému pro analýzu proudu dat v~reálném čase za použití frameworku Apache Spark. Nad příspěvky ze sociální sítě Twitter měla být provedena některá z~rozšířených metod pro analýzu textu. Výsledky této analýzy měly být posléze ukládány do databáze a zpřístupněny pomocí REST API. 
+	Cílem této bakalářské práce byla implementace systému pro analýzu proudu dat v~reálném čase za použití frameworku Apache Spark. Nad příspěvky ze~sociální sítě Twitter měla být provedena některá z~rozšířených metod pro~analýzu textu. Výsledky této analýzy měly být posléze ukládány do databáze a~zpřístupněny pomocí REST API. 
 	
-	V~rámci kapitoly \ref{data-processing} jsem se zabýval hlavně technologiemi pro zpracování velkých objemů dat. Ve druhé kapitole jsem zmínil některé z~nejpoužívanějších metod pro analýzu textu a zaměřil jsem se především na analýzu sentimentu, která je prováděna v~rámci implementovaného systému. Také jsem v~této kapitole seznámil čtenáře se sociální sítí Twitter a stanovil požadavky pro implementovaný systém. Na jejich základě jsem ve třetí kapitole navrhl konkrétní funkcionality systému, včetně struktury databáze nebo požadovaných API \mbox{endpointů}. V~kaptitole \ref{implementace} jsem zvolil konkrétní technologie pro jednotlivé komponenty systému a popsal některé části jejich implementace. Pro samotnou implementaci systému ve frameworku Apache Spark byl použit funkcionální  jazyk Scala, k~ukládání dat posloužila relační databáze MySQL. REST API pak bylo implementováno pomocí jazyka Python, konkrétně pomocí frameworku Flask. Systém byl také náležitě otestován jak popisuji v~kapitole~\ref{testovani}. 
+	V~rámci kapitoly \ref{data-processing} jsem se zabýval hlavně technologiemi pro zpracování velkých objemů dat. Ve druhé kapitole jsem zmínil některé z~nejpoužívanějších metod pro analýzu textu a zaměřil jsem se především na~analýzu sentimentu, která je prováděna v~rámci implementovaného systému. Také jsem v~této kapitole seznámil čtenáře se sociální sítí Twitter a stanovil požadavky pro implementovaný systém. Na jejich základě jsem ve třetí kapitole navrhl konkrétní funkcionality systému, včetně struktury databáze nebo požadovaných API \mbox{endpointů}. V~kaptitole \ref{implementace} jsem zvolil konkrétní technologie pro jednotlivé komponenty systému a popsal některé části jejich implementace. Pro samotnou implementaci systému ve frameworku Apache Spark byl použit funkcionální  jazyk Scala, k~ukládání dat posloužila relační databáze MySQL. REST API pak bylo implementováno pomocí jazyka Python, konkrétně pomocí frameworku Flask. Systém byl také náležitě otestován jak popisuji v~kapitole~\ref{testovani}. 
 	
 	Zadání této práce považuji za splněné. Požadovaný systém byl úspěšně naimplementován, konkrétní dosažené výsledky a možnosti využití systému jsou podrobně rozebrány v~kapitole \ref{zhodnoceni}. 
 \end{conclusion}
@@ -995,95 +993,96 @@ Zajímavé by bylo také rozšíření systému o~další metody z~oblasti text 
 
 \begin{thebibliography}{1}
 
-\bibitem{bbc-bigdata} WALL, Matthew. Big Data: Are you ready for blast-off? In: \textit{BBC News} [online]. 2014 [cit. 2016-04-10]. Dostupné z: http://www.bbc.com/news/business-26383058
+\bibitem{bbc-bigdata} WALL, Matthew. Big Data: Are you ready for blast-off? In: \textit{BBC News} [online]. 2014 [cit. 2016-04-10]. Dostupné z:~http://www.bbc.com/news/business-26383058
 
-\bibitem{internet-live-stats} Internet Users. Internet Live Stats: \textit{Internet Usage \& Social Media Statistics} [online]. [cit. 2016-04-10]. Dostupné z: http://www.internetlivestats.com/internet-users/
+\bibitem{internet-live-stats} Internet Users. Internet Live Stats: \textit{Internet Usage \& Social Media Statistics} [online]. [cit. 2016-04-10]. Dostupné z:~http://www.internetlivestats.com/internet-users/
 
 \bibitem{bigdata-iot} Why Big Data And The Internet of Things Are A~Perfect Match. In: \textit{Datamation: IT Management, IT Salary, Cloud Computing, Open Source, Virtualization, Apps.} [online]. [cit. 2016-04-10]. Dostupné z: http://www.datamation.com/applications/why-big-data-and-the-internet-of-things-are-a-perfect-match.html
 
-\bibitem{webopedia-bigdata} What is big data? \textit{Webopedia: Online Tech Dictionary for IT Professionals} [online]. [cit. 2016-04-11]. Dostupné z: http://www.webopedia.com/TERM/B/big\_data.html
+\bibitem{webopedia-bigdata} What is big data? \textit{Webopedia: Online Tech Dictionary for IT Professionals} [online]. [cit. 2016-04-11]. Dostupné z:~http://www.webopedia.com/TERM/B/big\_data.html
 
 \bibitem{dp-customer-inteligence} TŘÍSKA, Martin. \textit{Customer Intelligence v~kontextu Big Data}. Praha, 2013. Diplomová práce. České vysoké učení technické v~Praze. Vedoucí práce Tomáš Bruckner.
 
-\bibitem{structured-unstructured}Structured vs. Unstructured Data: The Rise of Data Anarchy. In: \textit{Data Science Central} [online]. [cit. 2016-04-11]. Dostupné z: http://www.datasciencecentral.com/profiles/blogs/structured-vs-unstructured-data-the-rise-of-data-anarchy
+\bibitem{structured-unstructured}Structured vs. Unstructured Data: The Rise of Data Anarchy. In: \textit{Data Science Central} [online]. [cit. 2016-04-11]. Dostupné z:~http://www.datasciencecentral.com/profiles/blogs/structured-vs-unstructured-data-the-rise-of-data-anarchy
 
 \bibitem{stock-stanford}MITTAL, Anshul a Arpit GOEL. Stock Prediction Using Twitter Sentiment Analysis. 2012. Dostupné také z: http://cs229.stanford.edu/proj2011/GoelMittal-StockMarketPredictionUsingTwitterSentimentAnalysis.pdf. Standford University.
 
 \bibitem{mapreduce-google}DEAN, Jeffrey a Sanjay GHEMAWAT. \textit{MapReduce: simplified data processing on large clusters.} Google Inc., 2004.
 
-\bibitem{mapreduce-description}What is MapReduce. \textit{IBM} [online]. [cit. 2016-04-11]. Dostupné z: https://www-01.ibm.com/software/data/infosphere/hadoop/mapreduce/
+\bibitem{mapreduce-description}What is MapReduce. \textit{IBM} [online]. [cit. 2016-04-11]. Dostupné z:~https://www-01.ibm.com/software/data/infosphere/hadoop/mapreduce/
 
-\bibitem{mapreduce-img}MapReduce introduction. \textit{Computer Science} [online]. [cit. 2016-04-16]. Dostupné z: http://www.cs.uml.edu/~jlu1/doc/source/report/MapReduce.html
+\bibitem{mapreduce-img}MapReduce introduction. \textit{Computer Science} [online]. [cit. 2016-04-16]. Dostupné z:~http://www.cs.uml.edu/~jlu1/doc/source/report
+/MapReduce.html
 
 \bibitem{hadoop-history}The history of Hadoop: From 4 nodes to the future of data. In: \textit{Gigaom: The industry leader in emerging technology research} [online]. [cit. 2016-04-17]. Dostupné z: https://gigaom.com/2013/03/04/the-history-of-hadoop-from-4-nodes-to-the-future-of-data/
 
 \bibitem{spark-home}Apache Spark: Ligthtning-Fast Cluster Computing [online]. [cit. 2016-04-17]. Dostupné z: http://spark.apache.org/
 
-\bibitem{hadoop-home}Welcome to Apache Hadoop! [online]. [cit. 2016-04-17]. Dostupné z: http://hadoop.apache.org/
+\bibitem{hadoop-home}Welcome to Apache Hadoop! [online]. [cit. 2016-04-17]. Dostupné z:~http://hadoop.apache.org/
 
-\bibitem{streaming-benchmark}Benchmarking Streaming Computation Engines at Yahoo!. \textit{Yahoo Engineering} [online]. [cit. 2016-04-17]. Dostupné z: https://yahooeng.tumblr.com/post/135321837876/benchmarking-streaming-computation-engines-at
+\bibitem{streaming-benchmark}Benchmarking Streaming Computation Engines at Yahoo!. \textit{Yahoo Engineering} [online]. [cit. 2016-04-17]. Dostupné z:~https://yahooeng.tumblr.com/post/135321837876/benchmarking-streaming-computation-engines-at
 
 \bibitem{flink-future}Fast Big Data: Apache Flink vs Apache Spark for Streaming Data. \textit{Analytics, Data Mining, and Data Science} [online]. [cit. 2016-04-17]. Dostupné z: http://www.kdnuggets.com/2015/11/fast-big-data-apache-flink-spark-streaming.html
 
 \bibitem{spark-components}The 5-Minute Guide to Understanding the Significance of Apache Spark. \textit{Big Data Hadoop Blog | MapR} [online]. [cit. 2016-04-17]. Dostupné z: https://www.mapr.com/blog/5-minute-guide-understanding-significance-apache-spark
 
-\bibitem{MLlib}\textit{MLlib | Apache Spark} [online]. [cit. 2016-05-15]. Dostupné z: http://spark.apache.org/mllib/
+\bibitem{MLlib}\textit{MLlib | Apache Spark} [online]. [cit. 2016-05-15]. Dostupné z:~http://spark.apache.org/mllib/
 
-\bibitem{streaming-guide}Spark Streaming Programming Guide. \textit{Overview - Spark 1.6.1 Documentation} [online]. [cit. 2016-04-17]. Dostupné z: http://spark.apache.org/docs/latest/streaming-programming-guide.html
+\bibitem{streaming-guide}Spark Streaming Programming Guide. \textit{Overview - Spark 1.6.1 Documentation} [online]. [cit. 2016-04-17]. Dostupné z:~http://spark.apache.org/docs/latest/streaming-programming-guide.html
 
-\bibitem{so-flink-storm}What is/are the main difference(s) between Flink and Storm? \textit{Stack Overflow} [online]. [cit. 2016-04-17]. Dostupné z: http://stackoverflow.com/questions/30699119/what-is-are-the-main-differences-between-flink-and-storm
+\bibitem{so-flink-storm}What is/are the main difference(s) between Flink and Storm? \textit{Stack Overflow} [online]. [cit. 2016-04-17]. Dostupné z:~http://stackoverflow.com/questions/30699119/what-is-are-the-main-differences-between-flink-and-storm
 
-\bibitem{spark-toplevel}The Apache Software Foundation Announces Apache Spark as a Top-Level Project. \textit{The Apache Software Foundation} [online]. [cit. 2016-04-17]. Dostupné z: https://blogs.apache.org/foundation/entry/the\_apache\_software\_\\foundation\_announces50
+\bibitem{spark-toplevel}The Apache Software Foundation Announces Apache Spark as a Top-Level Project. \textit{The Apache Software Foundation} [online]. [cit. 2016-04-17]. Dostupné z:~https://blogs.apache.org/foundation/entry/the\_apache\_software\_\\foundation\_announces50
 
-\bibitem{spark-mapreduce-difference}What is the difference between Apache Spark and Apache Hadoop (Map-Reduce) ? \textit{Quora} [online]. [cit. 2016-04-17]. Dostupné z: https://www.quora.com/What-is-the-difference-between-Apache-Spark-and-Apache-Hadoop-Map-Reduce
+\bibitem{spark-mapreduce-difference}What is the difference between Apache Spark and Apache Hadoop (Map-Reduce) ? \textit{Quora} [online]. [cit. 2016-04-17]. Dostupné z:~https://www.quora.com/What-is-the-difference-between-Apache-Spark-and-Apache-Hadoop-Map-Reduce
 
-\bibitem{google-pagerank}Getting started with Apache Spark GraphX – Part 1. \textit{PhData} [online]. [cit. 2016-04-17]. Dostupné z: https://phdata.io/getting-started-with-apache-spark-graphx-part-1/
+\bibitem{google-pagerank}Getting started with Apache Spark GraphX – Part 1. \textit{PhData} [online]. [cit. 2016-04-17]. Dostupné z:~https://phdata.io/getting-started-with-apache-spark-graphx-part-1/
 
-\bibitem{twitter-stats}By The Numbers: 170+ Amazing Twitter Statistics. \textit{DMR} [online]. [cit. 2016-04-19]. Dostupné z: http://expandedramblings.com/index.php/march-2013-by-the-numbers-a-few-amazing-twitter-stats/
+\bibitem{twitter-stats}By The Numbers: 170+ Amazing Twitter Statistics. \textit{DMR} [online]. [cit. 2016-04-19]. Dostupné z:~http://expandedramblings.com/index.php/march-2013-by-the-numbers-a-few-amazing-twitter-stats/
 
-\bibitem{twitter-stats-2}Twitter Usage Statistics. \textit{Internet Live Stats: Internet Usage \& Social Media Statistics} [online]. [cit. 2016-04-19]. Dostupné z: http://www.internetlivestats.com/twitter-statistics/
+\bibitem{twitter-stats-2}Twitter Usage Statistics. \textit{Internet Live Stats: Internet Usage \& Social Media Statistics} [online]. [cit. 2016-04-19]. Dostupné z:~http://www.internetlivestats.com/twitter-statistics/
 
-\bibitem{twitter-140}Twitter Basics: Why 140-Characters, And How to Write More. \textit{Social Times: Covering the world of social media} [online]. [cit. 2016-04-19]. Dostupné z: http://www.adweek.com/socialtimes/twitter-basics-why-140-characters-and-how-to-write-more/442608
+\bibitem{twitter-140}Twitter Basics: Why 140-Characters, And How to Write More. \textit{Social Times: Covering the world of social media} [online]. [cit. 2016-04-19]. Dostupné z:~ http://www.adweek.com/socialtimes/twitter-basics-why-140-characters-and-how-to-write-more/442608
 
-\bibitem{twitter-api}GET statuses/sample. \textit{Twitter Developers} [online]. [cit. 2016-04-20]. Dostupné z: https://dev.twitter.com/streaming/reference/get/statuses/sample
+\bibitem{twitter-api}GET statuses/sample. \textit{Twitter Developers} [online]. [cit. 2016-04-20]. Dostupné z:~https://dev.twitter.com/streaming/reference/get/statuses/sample
 
-\bibitem{twitter-rest-stream}The Streaming APIs Overview. \textit{Twitter Developers} [online]. [cit. 2016-04-20]. Dostupné z: https://dev.twitter.com/streaming/overview
+\bibitem{twitter-rest-stream}The Streaming APIs Overview. \textit{Twitter Developers} [online]. [cit. 2016-04-20]. Dostupné z:~https://dev.twitter.com/streaming/overview
 
-\bibitem{twitter4j}Twitter4J - A~Java library for the Twitter API [online]. [cit. 2016-04-20]. Dostupné z: http://twitter4j.org/en/index.html
+\bibitem{twitter4j}Twitter4J - A~Java library for the Twitter API [online]. [cit. 2016-04-20]. Dostupné z:~http://twitter4j.org/en/index.html
 
-\bibitem{gnip}Gnip: Unleash the Power of Social Media [online]. [cit. 2016-04-20]. Dostupné z: https://gnip.com/
+\bibitem{gnip}Gnip: Unleash the Power of Social Media [online]. [cit. 2016-04-20]. Dostupné z:~https://gnip.com/
 
-\bibitem{nosql-dbs}NOSQL Databases [online]. [cit. 2016-04-26]. Dostupné z: http://nosql-database.org/
+\bibitem{nosql-dbs}NOSQL Databases [online]. [cit. 2016-04-26]. Dostupné z:~http://nosql-database.org/
 
-\bibitem{summarization-quora}GANESAN, Kavita, ChengXiang ZHAI a Jiawei HAN. \textit{Opinosis: A~Graph-Based Approach to Abstractive Summarization of Highly Redundant Opinions} [online]. [cit. 2016-05-15]. Dostupné z: http://dl.acm.org/ft\_gateway.cfm?id=1873820\&type=pdf\&coll=DL\&dl=\\GUIDE\&CFID=84550979\&CFTOKEN=79883382. University of Illinois at Urbana-Champaign.
+\bibitem{summarization-quora}GANESAN, Kavita, ChengXiang ZHAI a Jiawei HAN. \textit{Opinosis: A~Graph-Based Approach to Abstractive Summarization of Highly Redundant Opinions} [online]. [cit. 2016-05-15]. Dostupné z:~http://dl.acm.org/ft\_gateway.cfm?id=1873820\&type=pdf\&coll=DL\&\\0dl=GUIDE\&CFID=84550979\&CFTOKEN=79883382. University of Illinois at Urbana-Champaign.
 
-\bibitem{stanford-nlp-web}\textit{Software - The Stanford Natural Language Processing Group} [online]. [cit. 2016-05-15]. Dostupné z: http://nlp.stanford.edu/software/
+\bibitem{stanford-nlp-web}\textit{Software - The Stanford Natural Language Processing Group} [online]. [cit. 2016-05-15]. Dostupné z:~http://nlp.stanford.edu/software/
 
-\bibitem{rest-diser}FIELDING, Roy Thomas. \textit{Representational State Transfer (REST)} [online]. 2000 [cit. 2016-05-15]. Dostupné z: https://www.ics.uci.edu/\~fielding/pubs/dissertation/rest\_arch\_style.htm. University of California, Irvine.
+\bibitem{rest-diser}FIELDING, Roy Thomas. \textit{Representational State Transfer (REST)} [online]. 2000 [cit. 2016-05-15]. Dostupné z:~https://www.ics.uci.edu/\~fielding/pubs/dissertation/rest\_arch\_style.htm University of California, Irvine.
 
-\bibitem{json-web}\textit{Introducing JSON} [online]. [cit. 2016-05-15]. Dostupné z: http://www.json.org/
+\bibitem{json-web}\textit{Introducing JSON} [online]. [cit. 2016-05-15]. Dostupné z:~http://www.json.org/
 
-\bibitem{spark-scala}Apache Spark: A~Delight for Developers. In: \textit{The modern platform for data management and analytics.} [online]. [cit. 2016-05-15]. Dostupné z: http://blog.cloudera.com/blog/2014/03/apache-spark-a-delight-for-developers/
+\bibitem{spark-scala}Apache Spark: A~Delight for Developers. In: \textit{The modern platform for data management and analytics.} [online]. [cit. 2016-05-15]. Dostupné z:~http://blog.cloudera.com/blog/2014/03/apache-spark-a-delight-for-developers/
 
-\bibitem{github}\textit{Fanarim/bt-spark: Twitter stream analysis in Apache Spark - bachelor thesis} [online]. [cit. 2016-05-15]. Dostupné z: https://github.com/Fanarim/bt-spark
+\bibitem{github}\textit{Fanarim/bt-spark: Twitter stream analysis in Apache Spark - bachelor thesis} [online]. [cit. 2016-05-15]. Dostupné z:~https://github.com/Fanarim/bt-spark
 
-\bibitem{nlp-treebank}Recursive Deep Models for Semantic Compositionality Over a Sentiment Treebank. \textit{The Stanford Natural Language Processing Group }[online]. [cit. 2016-05-15]. Dostupné z: http://nlp.stanford.edu/sentiment/treebank.html
+\bibitem{nlp-treebank}Recursive Deep Models for Semantic Compositionality Over a Sentiment Treebank. \textit{The Stanford Natural Language Processing Group }[online]. [cit. 2016-05-15]. Dostupné z:~http://nlp.stanford.edu/sentiment/treebank.html
 
-\bibitem{mongo}\textit{MongoDB for GIANT Ideas} | MongoDB [online]. [cit. 2016-05-15]. Dostupné z: https://www.mongodb.com/
+\bibitem{mongo}\textit{MongoDB for GIANT Ideas} | MongoDB [online]. [cit. 2016-05-15]. Dostupné z:~https://www.mongodb.com/
 
-\bibitem{nosql-speed}What makes NoSQL type databases fast and scalable compared to relational SQL based databases? In: \textit{Quora} [online]. [cit. 2016-05-15]. Dostupné z: https://www.quora.com/What-makes-NoSQL-type-databases-fast-and-scalable-compared-to-relational-SQL-based-databases
+\bibitem{nosql-speed}What makes NoSQL type databases fast and scalable compared to relational SQL based databases? In: \textit{Quora} [online]. [cit. 2016-05-15]. Dostupné z:~https://www.quora.com/What-makes-NoSQL-type-databases-fast-and-scalable-compared-to-relational-SQL-based-databases
 
-\bibitem{aws}\textit{Amazon Web Services (AWS) - Cloud Computing Services} [online]. [cit. 2016-05-15]. Dostupné z: https://aws.amazon.com/
+\bibitem{aws}\textit{Amazon Web Services (AWS) - Cloud Computing Services} [online]. [cit. 2016-05-15]. Dostupné z:~https://aws.amazon.com/
 
-\bibitem{cron}CronHowto - Community Help Wiki. \textit{Official Ubuntu Documentation }[online]. [cit. 2016-05-15]. Dostupné z: https://help.ubuntu.com/community/CronHowto
+\bibitem{cron}CronHowto - Community Help Wiki. \textit{Official Ubuntu Documentation }[online]. [cit. 2016-05-15]. Dostupné z:~https://help.ubuntu.com/community/CronHowto
 
-\bibitem{event-scheduler}MySQL :: MySQL 5.7 Reference Manual :: 21.4 Using the Event Scheduler. \textit{MySQL :: Developer Zone} [online]. [cit. 2016-05-15]. Dostupné z: https://dev.mysql.com/doc/refman/5.7/en/event-scheduler.html
+\bibitem{event-scheduler}MySQL :: MySQL 5.7 Reference Manual :: 21.4 Using the Event Scheduler. \textit{MySQL :: Developer Zone} [online]. [cit. 2016-05-15]. Dostupné z:~https://dev.mysql.com/doc/refman/5.7/en/event-scheduler.html
 
-\bibitem{flask}\textit{Welcome | Flask (A~Python Microframework)} [online]. [cit. 2016-05-15]. Dostupné z: http://flask.pocoo.org/
+\bibitem{flask}\textit{Welcome | Flask (A~Python Microframework)} [online]. [cit. 2016-05-15]. Dostupné z:~http://flask.pocoo.org/
 
-\bibitem{django}\textit{The Web framework for perfectionists with deadlines | Django} [online]. [cit. 2016-05-15]. Dostupné z: https://www.djangoproject.com/
+\bibitem{django}\textit{The Web framework for perfectionists with deadlines | Django} [online]. [cit. 2016-05-15]. Dostupné z:~https://www.djangoproject.com/
 
-\bibitem{heroku}Cloud Application Platform | Heroku [online]. [cit. 2016-05-15]. Dostupné z: https://www.heroku.com/home
+\bibitem{heroku}Cloud Application Platform | Heroku [online]. [cit. 2016-05-15]. Dostupné z:~https://www.heroku.com/home
   
   
 \end{thebibliography}
@@ -1163,7 +1162,7 @@ Zajímavé by bylo také rozšíření systému o~další metody z~oblasti text 
 \rowcolor[HTML]{EFEFEF}
 \large \textbf{/wish/\{wish\_id\}/mentions}        &         &                 &        & \multicolumn{1}{l}{}                \\
 \rowcolor[HTML]{EFEFEF}
-\textbf{GET}          &         &                 &        & Uživatelé zmíněný v~přání                        \\
+\textbf{GET}          &         &                 &        & Uživatelé zmínění v~přání                        \\
 \multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam uživatelů zmíněných v~přání s~daným \textit{wish\_id}.}  } \\    
  & & & & \\
  Příklad odpovědi:
@@ -1189,7 +1188,7 @@ Zajímavé by bylo také rozšíření systému o~další metody z~oblasti text 
 \large \textbf{/wish/\{wish\_id\}/hashtags}        &         &                 &        & \multicolumn{1}{l}{}                \\
 \rowcolor[HTML]{EFEFEF}
 \textbf{GET}          &         &                 &        & Hashtagy použité v~přání                        \\
-\multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam hashtagů použitch v~přání s~daným \textit{wish\_id}.}  } \\   
+\multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam hashtagů použitých v~přání s~daným \textit{wish\_id}.}  } \\   
  & & & & \\
  Příklad odpovědi: 
 \end{tabular}
@@ -1437,16 +1436,14 @@ Zajímavé by bylo také rozšíření systému o~další metody z~oblasti text 
 \begin{figure}
 	\dirtree{%
 		.1 flask\_api\DTcomment{Zdrojové kódy pro webserver poskytující REST API}.
-		.2 run\_howto.txt\DTcomment{Instrukce pro spuštění webserveru}.
+		.2 readme.txt\DTcomment{Instrukce pro spuštění webserveru}.
 		.1 stream\_analysis\DTcomment{Zdrojové kódy pro systém na analýzu tweetů}.
 		.2 Tweets\_stream\_analysis-assembly-0.1.jar\DTcomment{Jar pro spuštění}.
-		.2 installation.txt\DTcomment{Instrukce pro přípravu systému}.
-		.2 run\_howto.txt\DTcomment{Instrukce pro spuštění}.
+		.2 install.txt\DTcomment{Instrukce pro přípravu systému}.
+		.2 readme.txt\DTcomment{Instrukce pro spuštění}.
 		.1 thesis\DTcomment{Zdrojové kódy tohoto textu}.
 		.1 web\DTcomment{zdrojové kódy webové aplikace}.
-		.1 db\_model.png\DTcomment{Obrázek struktury databáze}.
 		.1 db\_structure.sql\DTcomment{SQL kód pro inicializaci databáze}.
-		.1 db\_cred.txt\DTcomment{Soubor obsahující přístupové údaje k~databázi}.
 	}
 \end{figure}
 
