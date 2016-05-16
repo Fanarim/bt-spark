@@ -1,0 +1,12 @@
+REQUIREMENTS
+------------
+scala2.10
+Java 8
+sbt
+sbt assembly
+spark
+
+
+INSTALACE APACHE SPARK
+----------------------
+http://www.tutorialspoint.com/apache_spark/apache_spark_installation.htm

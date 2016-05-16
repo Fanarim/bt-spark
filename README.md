@@ -11,7 +11,7 @@ Současným trendem ve zpracování dat, zejména dat ve velkých objemech, je p
 
 
 ##Example website using provided API
-[Twitter Wishes](http://tweet-wishes.s3-website.eu-central-1.amazonaws.com/)
+[Twitter Wishes](http://tweetwishes.com)
 
 ##Available API endpoints:
 
@@ -51,3 +51,5 @@ Současným trendem ve zpracování dat, zejména dat ve velkých objemech, je p
 
 `http://twitter-wish-api.herokuapp.com/stats/general?from=[timestamp]&to=[timestamp]&density=[density]``
 - stats - number of tweets, english tweets, wishes and average sentiment in last 10 minutes or given time interval.
+
+Author: David Viktora, <viktoda2@fit.cvut.cz>, Faculty of Information Technology, Czech Technical University

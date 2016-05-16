@@ -39,27 +39,27 @@ $.getJSON( APIurl + 'user/' + userId + '/mentioned_in', function(data)
     var tweets = data.wishes;
     for (i = 0; i < tweets.length; i++) {
       if (tweets[i].sentiment == 2){
-        document.getElementById('mentioned_in_tweets').innerHTML += '<div class="well neutral"><a href="' + weburl + '/user.html?id="' +
+        document.getElementById('mentioned_in_tweets').innerHTML += '<div class="well neutral"><a href="' + weburl + '/user.html?id=' +
           tweets[i].author.id + '"><strong>' +
           tweets[i].author.username + '</a></strong>:<a href=' + weburl + 'wish.html?id=' + tweets[i].id + ">" + tweets[i].tweet_text + "</a></div>";
       } else if (tweets[i].sentiment <= 1) {
-        document.getElementById('mentioned_in_tweets').innerHTML += '<div class="well negativenegative"><a href="' + weburl + 'user.html?id="' +
+        document.getElementById('mentioned_in_tweets').innerHTML += '<div class="well negativenegative"><a href="' + weburl + 'user.html?id=' +
           tweets[i].author.id + '"><strong>' +
           tweets[i].author.username + '</a></strong>:<a href=' + weburl + 'wish.html?id=' + tweets[i].id + ">" + tweets[i].tweet_text + "</a></div>";
       } else if (tweets[i].sentiment >= 3) {
-        document.getElementById('mentioned_in_tweets').innerHTML += '<div class="well positivepositive"><a href="' + weburl + 'user.html?id="' +
+        document.getElementById('mentioned_in_tweets').innerHTML += '<div class="well positivepositive"><a href="' + weburl + 'user.html?id=' +
           tweets[i].author.id + '"><strong>' +
           tweets[i].author.username + '</a></strong>:<a href=' + weburl + 'wish.html?id=' + tweets[i].id + ">" + tweets[i].tweet_text + "</a></div>";
       } else if (tweets[i].sentiment > 2) {
-        document.getElementById('mentioned_in_tweets').innerHTML += '<div class="well positive"><a href="' + weburl + 'user.html?id="' +
+        document.getElementById('mentioned_in_tweets').innerHTML += '<div class="well positive"><a href="' + weburl + 'user.html?id=' +
           tweets[i].author.id + '"><strong>' +
           tweets[i].author.username + '</a></strong>:<a href=' + weburl + 'wish.html?id=' + tweets[i].id + ">" + tweets[i].tweet_text + "</a></div>";
       } else if (tweets[i].sentiment < 2) {
-        document.getElementById('mentioned_in_tweets').innerHTML += '<div class="well negative"><a href="' + weburl + 'user.html?id="' +
+        document.getElementById('mentioned_in_tweets').innerHTML += '<div class="well negative"><a href="' + weburl + 'user.html?id=' +
           tweets[i].author.id + '"><strong>' +
           tweets[i].author.username + '</a></strong>:<a href=' + weburl + 'wish.html?id=' + tweets[i].id + ">" + tweets[i].tweet_text + "</a></div>";
       } else {
-        document.getElementById('mentioned_in_tweets').innerHTML += '<div class="well neutral"><a href="' + weburl + 'user.html?id="' +
+        document.getElementById('mentioned_in_tweets').innerHTML += '<div class="well neutral"><a href="' + weburl + 'user.html?id=' +
           tweets[i].author.id + '"><strong>' +
           tweets[i].author.username + '</a></strong>:<a href=' + weburl + 'wish.html?id=' + tweets[i].id + ">" + tweets[i].tweet_text + "</a></div>";
       }

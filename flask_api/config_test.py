@@ -1,2 +1,2 @@
-SQLALCHEMY_DATABASE_URI = "mysql+pymysql://user_rw:tweetpass@tweet-wishes.cfwosdalcluk.eu-central-1.rds.amazonaws.com/tweet_wishes_test?charset=utf8mb4"
+SQLALCHEMY_DATABASE_URI = "mysql+pymysql://__user__:__password__@__database_url__/__database_name__?charset=utf8mb4"
 SQLALCHEMY_TRACK_MODIFICATIONS = False
