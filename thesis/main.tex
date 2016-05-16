@@ -136,7 +136,7 @@ sentiment analysis, REST API}
     	\label{fig:mapreduce}
 	\end{figure}
 	
-	Především v~posledních letech se objevují další komplexnější nástroje pro práci s~velkými daty. Tyto nástroje obvykle obsahují i další technologie, mimo jiné umožňující například správu počítačového clusteru a zajišťující konzistenci dat. Tyto frameworky principielně data zpracovávají dvěma různými způsoby -- jde o~tzv. batchové zpracování nebo o~zpracování streamové. 
+	Především v~posledních letech se objevují další komplexnější nástroje pro práci s~velkými daty. Tyto nástroje obvykle obsahují i další technologie, umožňující mimo jiné například správu počítačového clusteru a zajišťující konzistenci dat. Tyto frameworky principielně data zpracovávají dvěma různými způsoby -- jde o~tzv. batchové zpracování nebo o~zpracování streamové. 
 	
 \subsection{Batchové zpracování Big dat}
 	Batchové neboli dávkové zpracování je vhodné především pro takové úkoly, jejichž výsledky není nutné znát ihned. Data jsou nejprve po určitou dobu shromažďována a až poté je jednorázově spuštěna úloha pro jejich zpracování. Toto zpracování obvykle zabere relativně dlouhý čas. Zmiňovaný MapReduce se využívá právě pro batchové zpracování dat. 
@@ -146,7 +146,7 @@ sentiment analysis, REST API}
 	V~současné době jsou k~dispozici i další batchově zaměřené frameworky, které často dosahují lepších výsledků než Hadoop a mimojiné obvykle umožňují vytváření úloh na vyšší úrovni. Díky nim například není nutné přímo vytvářet mapovací a reduce funkci. Nejrozšířenějím je bezesporu Apache Spark\cite{spark-home}, kterému se budu podrobněji věnovat v~následujících sekcích. Oproti \mbox{Hadoopu} dosahuje především díky cachování a dalším vylepšením často několikanásobně kratší doby zpracování. Krom batchového zpracování umožňuje i práci s~proudy dat. 
 
 \subsection{Streamové zpracování}
-	V~praxi často potřebujeme velké objemy dat zpracovávat v~co nejkratším čase a ideálně na každý nový podnět co nejdříve zareagovat. Batchové zpracování je v~takovém případě nevhodné. Řešením je již zmiňované streamové zpracování, nebo také zpracování proudů dat. Vstupem do takového programu není fixní soubor dat, ale neustálý proud dat nových. Kdykoli program obdrží nový datový objekt, zjednodušeně ho začne okamžitě zpracovávat a mezivýsledky předávat mezi jednotlivými částmi programu nezávisle na dalších vstupech. Technologií umožňujících streamové zpracování velkých objemů dat je několik, ty nejzajímavější jsou ale Apache Spark, Apache Storm a Apache Flink. Každá z~těchto technologií funguje na trochu jiném principu a je vhodná pro jiné využití. 
+	V~praxi často potřebujeme velké objemy dat zpracovávat v~co nejkratším čase a ideálně na každý nový podnět co nejdříve zareagovat. Batchové zpracování je v~takovém případě nevhodné. Řešením je již zmiňované streamové zpracování, nebo také zpracování proudů dat. Vstupem do takového programu není fixní soubor dat, ale neustálý proud dat nových. Kdykoli program obdrží nový datový objekt, zjednodušeně ho začne okamžitě zpracovávat a mezivýsledky předávat mezi jednotlivými částmi programu nezávisle na dalších vstupech. Technologií umožňujících streamové zpracování velkých objemů dat je několik, těmi nejzajímavějšími jsou ale Apache Spark, Apache Storm a Apache Flink. Každá z~těchto technologií funguje na trochu jiném principu a je vhodná pro jiné využití. 
 	
 \begin{itemize}
 \item \textbf{Apache Flink} je nejnovějším frameworkem, který v~relativně velké míře konkuruje Sparku. Stejně jako Spark, podporuje Flink oba způsoby zpracování dat, primárně je ale zaměřený na streamy. Narozdíl od Sparku ale podporuje streamové zpracování v~pravém slova smyslu a lze s~ním tak dosáhnout výrazně kratší doby zpracování\cite{streaming-benchmark}. I~právě proto se předpokládá, že v~oblasti zpracování proudů dat v~budoucnu předstihne Spark\cite{flink-future}. Jeho další výhodou je například možnost využití existujících programů pro Storm či MapReduce. Hlavní nevýhodou je momentálně fakt, že je teprve v~počátcích svého vývoje a často se tak uživatel může setkat s~bugy či chybějící dokumentací. 
@@ -177,7 +177,7 @@ sentiment analysis, REST API}
 	
 \subsubsection{Spark core}
 \label{spark-core}
-	Hlavní komponentou Sparku je Spark Core, který zajišťuje všechny jeho základní funkcionality. jde například o~plánování úloh a základní vstupní a výstupní operace. Ostatní komponenty nad ním staví. Základním pojmem je zde tzv. Resilient Distributed Dataset, neboli RDD. RDD je zjednodušeně řeřeno téměř libovolná kolekce dat, nad kterou je možné provádět paralelní výpočty. Je navíc zajištěna jejich konzistence - při výpadku některého ze strojů mohou být ztracená data obnova pomocí informací na těch ostatních. 
+	Hlavní komponentou Sparku je Spark Core, který zajišťuje všechny jeho základní funkcionality. jde například o~plánování úloh a základní vstupní a výstupní operace. Ostatní komponenty nad ním staví. Základním pojmem je zde tzv. Resilient Distributed Dataset, neboli RDD. RDD je zjednodušeně řeřeno téměř libovolná kolekce dat, nad kterou je možné provádět paralelní výpočty. Je navíc zajištěna jejich konzistence - při výpadku některého ze strojů mohou být ztracená data obnovena pomocí informací na těch ostatních. 
 	
 	Kdykoli je na konkrétním RDD vykonána některá z~operací umožňujících paralelní zpracování, tzv. transformace (například map, filter nebo reduce), driver neboli počítač řídící ostatní počítače naplánuje její zpracování na všech počítačích v~clusteru. Ty poté vytvoří nová RDD s~výsledky. Operace na RDD jsou ale "lazy", což znamaná, že se neprovádějí dokud na RDD neaplikujeme nějakou akci. Akce je opakem transformace a jejím výsledkem není vytvoření nového RDD. Příkladem akce je vypsání obsahu RDD na standartní výstup. 
 
@@ -210,11 +210,11 @@ sentiment analysis, REST API}
 	
 
 \subsubsection{MLlib}
-	MLlib je framework určený pro strojové učení. Právě díky vlastnostem Sparku (především díky využívání operační paměti a distribuci výpočtů) poskytuje často lepší výsledky než klasické technologie pro machine learning\cite{MLlib}. Výhodou tohoto frameworku je to, že v~něm jsou již naimplementovány nejpoužívanější algoritmy. Není tak nutná jejich reimplementace uživatelem. 
+	MLlib je framework určený pro strojové učení. Právě díky vlastnostem Sparku, především pak díky využívání operační paměti a distribuci výpočtů, poskytuje často lepší výsledky než klasické technologie pro machine learning\cite{MLlib}. Výhodou tohoto frameworku je to, že v~něm jsou již naimplementovány nejpoužívanější algoritmy. Není tak nutná jejich reimplementace uživatelem. 
 
 	
 \subsubsection{Graphx}
-	GraphX je ve Sparku relativně novým modulem, který je určený obecně pro práci s~grafy a paralelními grafovými výpočty. Grafové výpočty získávají stále více pozornosti, jednoduchým příkladem je algoritmus PageRank, který stál u~zrodu moderního vyhledávání v~Google\cite{google-pagerank}. 
+	GraphX je ve Sparku relativně novým modulem, který je určený obecně pro práci s~grafy a paralelními grafovými výpočty. Grafové výpočty získávají stále více pozornosti, jednoduchým příkladem je algoritmus PageRank, který stál u~zrodu moderního vyhledávání společnosti Google\cite{google-pagerank}. 
 	
 
 
@@ -241,7 +241,7 @@ V~této kapitole se nejdříve v~sekci \ref{text-mining} věnuji dostupným meto
 	Text Clustering neboli shlukování textů je metoda umožňující seskupování podobných dokumentů. Místo do předem daných kategorií jsou tyto dokumenty přiřazovány na základě jejich podobnosti do dynamicky vytvářených skupin. I~zde je rozdělení dosaženo pomocí četnosti jednotlivých použítých slov. Každý dokument je obvykle přiřazen do jediné kategorie. 
 
 \subsection{Document Summarization}
-	Vytvářením krátkých shrnujících textů se zabývá metoda zvaná Document Summarization. Jednodušší varianta této metody funguje na principu výběru klíčových vět dokumentu a jejich správného seřazení. Ta složitější pak spočívá v~opravdu podrobném rozboru dokumentu, především pak v~jeho syntaktické analýze. Ná základě té pak dochází k~vytvoření kompletně nového textu shrnujícího text původní. Praktické provedení takové analýzy a následné vytvoření shrnutí je nicméně velice složité a nejsme tak prozatím obvykle schopni dosáhnout tak dobrých výsledků jako pomocí prvně zmíněné varianty\cite{summarization-quora}. 
+	Vytvářením krátkých shrnujících textů se zabývá metoda zvaná Document Summarization. Jednodušší varianta této metody funguje na principu výběru klíčových vět dokumentu a jejich správného seřazení. Ta složitější pak spočívá v~opravdu podrobném rozboru dokumentu, především pak v~jeho syntaktické analýze. Ná základě té pak dochází k~vytvoření kompletně nového textu shrnujícího obsahu textu původního. Praktické provedení takové analýzy a následné vytvoření shrnutí je nicméně velice složité a nejsme tak prozatím obvykle schopni dosáhnout tak dobrých výsledků jako pomocí prvně zmíněné varianty\cite{summarization-quora}. 
 
 
 \subsection{Sentiment Analysis}
@@ -278,12 +278,12 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 
 \subsubsection{Retweet}
 
-	Často používanou funkcionalitou Twitteru je možnost přeposlat zprávy někoho jiného neboli vytvořit tzv. retweet. Taková zpráva pak začíná písmeny RT označujícími právě retweet, za nimi pak následuje jméno původního autora zprávy. 
+	Často používanou funkcionalitou Twitteru je možnost přeposlat zprávy někoho jiného, neboli vytvořit tzv. retweet. Taková zpráva pak začíná písmeny RT označujícími právě retweet, za nimi pak následuje jméno původního autora zprávy. 
 
 
 \subsubsection{Hashtag}
 
-	Hashtag je řetězec začínající znakem \uv{\#}. Hashtagy vkládají samotní uživatelé do jimi publikovaných tweetů. Na základě použitého hashtagu je pak možno vyhledat i ostatní zprávy, které ho obsahují. Příkladem může být hashtag \#rio2016 používaný pro tweety týkající se nadcházejících olympijských her v~brazilském Rio de Janeiru. Dostupné hashtagy však nejsou nijak omezeny, použit může být libovolný řetězec. 
+	Hashtag je řetězec znaků začínající symbolem \uv{\#}. Hashtagy vkládají samotní uživatelé do jimi publikovaných tweetů. Na základě použitého hashtagu je pak možno vyhledat i ostatní zprávy, které ho obsahují. Příkladem může být hashtag \#rio2016 používaný pro tweety týkající se nadcházejících olympijských her v~brazilském Rio de Janeiru. Dostupné hashtagy však nejsou nijak omezeny, použit může být libovolný řetězec. 
 
 
 \subsubsection{Mention}
@@ -299,7 +299,7 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 	
 	Pro různé případy užití se hodí využít různá rozhraní. Klasický případ vužití RESTového API ukazuje obrázek \ref{fig:twitter_rest} -- uživatel navštíví webovou stránkou a chce zobrazit například údaje o~konkrétním uživateli. Server tento požadavek přijme a sám odešle požadavek na API poskytované Twitterem. Ten mu odpoví, server data zpracuje a vrátí je původnímu uživateli. 
 
-\begin{figure}[ht]
+\begin{figure}[h!]
    	\centering
    	\includegraphics[width=1\textwidth]{images/twitter-rest.png}
    	\caption{Schéma fungování klasického Twitter REST API\cite{twitter-rest-stream}}
@@ -308,7 +308,7 @@ Všechny tweety zveřejněné uživatelem jsou standartně viditelné pro všech
 
 	V~některých případech je ale vhodnější využít právě streaming API. Pokud nepotřebujeme okamžitě reagovat na jednotlivé požadavky uživatelů ale naopak chceme data zpracovávat kontinuelně, je streaming API jasnou volbou. Mimo jiné díky němu dosáhneme nižšího zatížení serveru, protože není nutné neustálne navazovat nová spojení. Tento princip je popsán na obrázku \ref{fig:twitter_streaming}. 
 
-\begin{figure}[ht]
+\begin{figure}[h!]
    	\centering
    	\includegraphics[width=1\textwidth]{images/twitter-streaming.png}
    	\caption{Schéma fungování Twitter Streaming API\cite{twitter-rest-stream}}
@@ -474,7 +474,7 @@ Put je metodou sloužící k~aktualizaci zdroje. Jde jistým způsobem o~kombina
 \end{lstlisting}
 	
 \subsection{API enpointy}
-	Kromě použití architektury REST je také nutné splnit všechny funkční požadavky definované v~sekci \ref{pozadavky}. Jelikož API data pouze zpřístupňuje ale nikterak je neupravuje, veškeré API endpointy budou využívat jen výše popsanou metodu GET. Podrobný popis implementovaných API endpointů je možné najít v~příloze \ref{appendix-api}. Zjednodušený popis je pak dostupný přímo zde: 
+	Kromě použití architektury REST je také nutné splnit všechny funkční požadavky definované v~sekci \ref{pozadavky}. Jelikož API data pouze zpřístupňuje ale neupravuje je, veškeré API endpointy budou využívat jen výše popsanou metodu GET. Podrobný popis implementovaných API endpointů je možné najít v~příloze \ref{appendix-api}. Zjednodušený popis je pak dostupný přímo zde: 
 	
 
 \begin{table}[h]
@@ -487,6 +487,7 @@ Put je metodou sloužící k~aktualizaci zdroje. Jde jistým způsobem o~kombina
 \textbf{from}         &         & timestamp       &        & od včetně                           \\
 \textbf{to}           &         & timestamp       &        & do vyjímaje                         \\
 \textbf{count}        &         & integer         &        & omezení počtu vrácených přání      \\
+ & & & & \\
 \end{tabular}
 \end{table}
 
@@ -499,6 +500,7 @@ Put je metodou sloužící k~aktualizaci zdroje. Jde jistým způsobem o~kombina
 \rowcolor[HTML]{EFEFEF}
 \textbf{GET}          &         &                 &        & Konkrétní přání                        \\
 \multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací stejné údaje jako \textit{/wish/}, ale pouze pro konkrétní přání s~daným \textit{wish\_id}.}  } \\  
+ & & & & \\
 \end{tabular}
 \end{table}
  
@@ -509,7 +511,8 @@ Put je metodou sloužící k~aktualizaci zdroje. Jde jistým způsobem o~kombina
 \large \textbf{/wish/\{wish\_id\}/mentions}        &         &                 &        & \multicolumn{1}{l}{}                \\
 \rowcolor[HTML]{EFEFEF}
 \textbf{GET}          &         &                 &        & Uživatelé zmíněný v~přání                        \\
-\multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam uživatelů zmíněných v~přání s~daným \textit{wish\_id}.}  } \\    
+\multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam uživatelů zmíněných v~přání s~daným \textit{wish\_id}.}  } \\  
+ & & & & \\  
 \end{tabular}
 \end{table}
 
@@ -521,6 +524,7 @@ Put je metodou sloužící k~aktualizaci zdroje. Jde jistým způsobem o~kombina
 \rowcolor[HTML]{EFEFEF}
 \textbf{GET}          &         &                 &        & Hashtagy použité v~přání                        \\
 \multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam hashtagů použitch v~přání s~daným \textit{wish\_id}.}  } \\    
+ & & & & \\
 \end{tabular}
 \end{table}
 
@@ -530,7 +534,8 @@ Put je metodou sloužící k~aktualizaci zdroje. Jde jistým způsobem o~kombina
 \large \textbf{/user/}        &         &                 &        & \multicolumn{1}{l}{}                \\
 \rowcolor[HTML]{EFEFEF}
 \textbf{GET}          &         &                 &        & Seznam uživatelů                        \\
-\multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam všech uživatelů, tedy autorů přání nebo uživatelů zmíněných v~některém z~nich. }  } \\   
+\multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam všech uživatelů, tedy autorů přání nebo uživatelů zmíněných v~některém z~nich. }  } \\  
+ & & & & \\ 
 \end{tabular}
 \end{table}
 
@@ -542,6 +547,7 @@ Put je metodou sloužící k~aktualizaci zdroje. Jde jistým způsobem o~kombina
 \rowcolor[HTML]{EFEFEF}
 \textbf{GET}          &         &                 &        & Konkrétní uživatel                        \\
 \multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací údaje o~konkrétním uživateli s~daným \textit{user\_id}. }  } \\  
+ & & & & \\
 \end{tabular}
 \end{table}
 
@@ -553,6 +559,7 @@ Put je metodou sloužící k~aktualizaci zdroje. Jde jistým způsobem o~kombina
 \rowcolor[HTML]{EFEFEF}
 \textbf{GET}          &         &                 &        & Přání daného uživatele                        \\
 \multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam přání uživatele s~daným \textit{user\_id}. }  } \\  
+ & & & & \\
 \end{tabular}
 \end{table}
 
@@ -563,6 +570,7 @@ Put je metodou sloužící k~aktualizaci zdroje. Jde jistým způsobem o~kombina
 \rowcolor[HTML]{EFEFEF}
 \textbf{GET}          &         &                 &        & Zmínění daného uživatele                        \\
 \multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam přání, ve kterých byl uživatel s~daným \textit{user\_id} zmíněn. }  } \\  
+ & & & & \\
 \end{tabular}
 \end{table}
 
@@ -574,6 +582,7 @@ Put je metodou sloužící k~aktualizaci zdroje. Jde jistým způsobem o~kombina
 \rowcolor[HTML]{EFEFEF}
 \textbf{GET}          &         &                 &        & Přání obsahující daný hashtag                       \\
 \multicolumn{5}{l}{\parbox[t]{12.8cm}{Vrací seznam přání, ve kterých byl použit daný \textit{hashtag}. }  } \\  
+ & & & & \\
 \end{tabular}
 \end{table}
 
@@ -587,6 +596,7 @@ Put je metodou sloužící k~aktualizaci zdroje. Jde jistým způsobem o~kombina
 \textbf{from}         &         & timestamp       &        & od včetně                           \\
 \textbf{to}           &         & timestamp       &        & do vyjímaje                         \\
 \textbf{count}        &         & integer         &        & omezení počtu vrácených uživatelů     \\ 
+ & & & & \\
 \end{tabular}
 \end{table}
 
@@ -601,6 +611,7 @@ Put je metodou sloužící k~aktualizaci zdroje. Jde jistým způsobem o~kombina
 \textbf{from}         &         & timestamp       &        & od včetně                           \\
 \textbf{to}           &         & timestamp       &        & do vyjímaje                         \\
 \textbf{count}        &         & integer         &        & omezení počtu vrácených hashtagů     \\
+ & & & & \\
 \end{tabular}
 \end{table}
 
@@ -615,8 +626,10 @@ Put je metodou sloužící k~aktualizaci zdroje. Jde jistým způsobem o~kombina
 \textbf{from}         &         & timestamp       &        & od včetně                           \\
 \textbf{to}           &         & timestamp       &        & do vyjímaje                         \\
 \textbf{density}        &         & "40s"/"20m"/"1d"         &        & hustota statistických dat   \\
+ & & & & \\
 \end{tabular}
 \end{table}
+
 
 
 \chapter{Implementace}
@@ -716,7 +729,7 @@ stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_general_40s", prop)
 	
 	Z~několika důvodů jsem však pro tuto práci zvolil klasickou relační databázi. Po vyfiltrování jednotlivých přání a jejich analýze nebudu pracovat s~tak velkými objemy dat, které by relační databáze nebyla schopna pojmout. Tato data navíc mezi sebou mají jasné vztahy, které je možné zanést do schématu databáze a usnadnit si tak práci s~nimi. Relační databáze jsou také využívány výrazně delší dobu a jsou vývojově vyspělejší. 
 	
-	Z~volně dostupných databázových řešení jsou nejrozšířenější především MySQL a PostgreSQL. Protože tato práce neklade na databázi žádné specifické požadavky, výběr konkrétní databáze je možné založit pouze na obecných parametrech. Protože má MySQL velikou základnu uživatelů a díky autorovým zkušenostem s~touto databází byla použita i v~rámci této práce. 
+	Z~volně dostupných databázových řešení jsou nejrozšířenější především MySQL a PostgreSQL. Protože tato práce neklade na databázi žádné specifické požadavky, výběr konkrétní databáze je možné založit pouze na obecných parametrech. Protože má MySQL větší základnu uživatelů a díky mým zkušenostem s~touto databází byla použita i v~rámci této práce. 
 	
 \subsection{Nasazení databáze}
 	Po výběru konkrétních databázových technologií byl potřeba zvolit vhodný způsob nasazení. Z~důvodů popsaných v~následující sekci nebyl k~nasazení použit vlastní linuxový server, nicméně jedna z~v~poslední době stále rozšířenějších cloudových služeb. 
@@ -744,7 +757,7 @@ stats.write.mode(SaveMode.Append).jdbc(DBUrl, "stats_general_40s", prop)
 	
 	CRON je unixový systémový démon zajišťující provádění uživatelem definovaných příkazů v~daném čase\cite{cron}. Stačilo by tedy napsat jednoduchý script, který by se připojil k~databázi a provedl sloučení dat. Tento skript by pak byl pomocí CRONu pravidelně spouštěn. Protože byl pro nasazení databáze zvolen Amazon RDS, nemáme přístup k~celému systému na kterém databáze běží, ale pouze k~samotné databázi. CRON by tedy vyžadoval další UNIXový systém a není proto vhodným řešením. 
 	
-	Event Scheduler\cite{event-scheduler} poskytovaný přímo jako součást MySQL je naopak řešením ideálním. Jeho využití je oproti CRONu omezenější, nicméně pro námi požadovanou agregaci dat je jeho funkcionalita postačující. Půjde navíc o~čistší řešení, protože bude operace modifikující databázi řešena přímo na její úrovni. 
+	Event Scheduler\cite{event-scheduler} poskytovaný přímo jako součást MySQL je naopak řešením ideálním. Možnosti jeho využití jsou oproti CRONu omezenější, nicméně pro námi požadovanou agregaci dat je jeho funkcionalita postačující. Půjde navíc o~čistší řešení, protože bude operace modifikující databázi řešena přímo na její úrovni. 
 	
 	Příkaz pro vytvoření eventu agregujího data z~tabulky \textit{stats\_general\_40s} do tabulky \textit{stats\_general\_20m} je k~dispozici jako zdrojový kód \ref{fig:mysql-event-agr}:
 
@@ -766,7 +779,7 @@ END;
 \end{lstlisting}
 
 
-Tento příkaz však provádí pouze slučování dat. Pro mazání dat starých bylo potřeba vytvořit další event popsaný ve zdrojovém kódu \ref{fig:mysql-event-del}. Ten zajišťuje mazání dat starších než 1 hodina v~tabulce \textit{stats\_general\_40s}:
+Tento příkaz však provádí pouze slučování dat. Pro mazání starých dat bylo potřeba vytvořit další event popsaný ve zdrojovém kódu \ref{fig:mysql-event-del}. Ten zajišťuje mazání dat starších než 1 hodina v~tabulce \textit{stats\_general\_40s}:
 
 \begin{lstlisting}[caption={MySQL Event provádějící smazání starých dat},label=fig:mysql-event-del][h]
 CREATE EVENT `stats_general_40s_clean` 
@@ -793,7 +806,7 @@ DO
 \end{itemize}
 
 \subsection{Ukázky implementace}
-Jednotlivé tabulky databáze jsou tedy pomocí ORM SQLAlchemy namapovány na třídy reprezentující objekty jako \textit{user} nebo \textit{tweetWish}. Příklad takového namapování tabulky user ukazuje zdrojový kód \ref{fig:user-orm}. Metodu \textit{json\_dump} bylo nutné naimplementovat pro všechny třídy. Ne všechny atributy jsou totiž implicitně serializovatelné a není je tak možné automaticky převádět na JSON. 
+Jednotlivé tabulky databáze jsou tedy pomocí ORM SQLAlchemy namapovány na třídy reprezentující objekty jako \textit{User} nebo \textit{TweetWish}. Příklad takového namapování tabulky \textit{User} ukazuje zdrojový kód \ref{fig:user-orm}. Metodu \textit{json\_dump} bylo nutné naimplementovat pro všechny třídy. Ne všechny atributy jsou totiž implicitně serializovatelné a není je tak možné automaticky převádět na JSON. 
 
 \begin{lstlisting}[caption={Ukázka použití ORM SQLAlchemy},label=fig:user-orm][h]
 class User(db.Model):
@@ -848,7 +861,7 @@ Konkrétní způsob nasazení aplikace se pak mírně liší pro každý z~podpo
 \begin{itemize}
 \item \textbf{requirements.txt} - seznam požadovaných knihoven pro Python vygenerovaný pomocí nástroje pip\footnote{Balíčkovací systém umožňující instalaci a správu knihoven pro Python}, konkrétně příkazem \textit{pip freeze}.
 \item \textbf{Procfile} - soubor určující jak a který soubor spustit po nahrání aplikace na Heroku
-\item \textbf{runtime.txt} - určení verze pythonu použité pro spuštění aplikace
+\item \textbf{runtime.txt} - určení verze Pythonu použité pro spuštění aplikace
 \end{itemize}
 
 Nahrání aplikace na Heroku může probíhat několika způsoby, tím základním je ale pooužití GITu. Samotným vytvoření aplikace pomocí Heroku Toolbeltu dojde k~přidání remote repozitáře. Do něj poté stačí nahrát změny pomocí příkazu \textit{git push} a Heroku již v~případě nalezení výše zmíněných souborů zařídí spuštění aplikace. 
@@ -875,7 +888,7 @@ Testovování je důležitou součástí vývoje každého software a jinak tomu
 
 \section{Test API endpointů}
 \label{api-testing}
-Při testování implementovaného API bylo použito rozšíření pro framework Flask zvané Flask-testing. To využívá knihovnu unittest, která je součástí standardní Python knihovny, a přidává několik funkcionalit zjednodušujících použití v~rámci Flasku. 
+Při testování implementovaného API bylo použito rozšíření pro framework Flask zvané \textit{Flask-testing}. To využívá knihovnu textit{unittest}, která je součástí standartní Python knihovny, a přidává několik funkcionalit zjednodušujících použití v~rámci Flasku. 
 
 Po vytvoření třídy dědící od třídy \textit{TestCase} je nejprve nutné vytvořit několik metod:
 
@@ -898,7 +911,7 @@ def test_user_detail(self):
 
 
 \section{Web prezentující výsledky analýzy}
-Vytvořenou webovou stránku je možné nalézt na adrese http://tweetwishes.com, pro její plnou funkcionalitu však musí být spuštěn i samotný systém pro analýzu tweetů běžící na lokálním počítači. Na webu jsou totiž v~reálném čase zobrazována nová přání, statistiky a další údaje. 
+Vytvořenou webovou stránku je možné nalézt na adrese \textit{http://tweetwishes.com}, pro její plnou funkcionalitu však musí být spuštěn i samotný systém pro analýzu tweetů běžící na lokálním počítači. Na webu jsou totiž v~reálném čase zobrazována nová přání, statistiky a další údaje. 
 
 Web využívá velkou část implementovaných API endpointů. Ukázka jejich praktického použití je nejlepším způsobem otestování jejich správného návrhu a funkčnosti. Některé komponenty webu jsou zobrazeny na obrázcích \ref{fig:web-last-tweets}, \ref{fig:web-detail} a \ref{fig:web-stats}. Obrázky některých stránek webu jako celku jsou pak k~dispozici v~příloze \ref{appendix-web}. 
 
@@ -933,7 +946,7 @@ Prováděná analýza vedla k~zajímavým výsledkům. Jak ukazuje tabulka \ref{
 \centering
 \begin{tabular}{|l|l|}
 \hline
-Datum            & Průměrný sentiment \\ \hline
+\textbf{Časový interval do}            & \textbf{Průměrný sentiment} \\ \hline
 13:21 & 1.7005 \\ \hline
 13:41 & 1.7711  \\ \hline
 14:01 & 1.6614 \\ \hline
@@ -948,19 +961,20 @@ Datum            & Průměrný sentiment \\ \hline
 17:01 & 1.8176 \\ \hline
 17:21 & 1.7561 \\ \hline
 17:41 & 1.7078 \\ \hline
+\textbf{Dlouhodobý průměr}& \textbf{1.7336}    \\ \hline
 \end{tabular}
-\caption{Průměrný sentiment za několik hodin ze dne 3.5. 2016}
+\caption{Vývoj sentimentu ve dvacetiminutových intervalech, 3.5. 2016}
 \label{sentiment-table}
 \end{table}
 
 \section{Využití systému}
 V~současném stavu je implementovaný systém určen především pro pobavení a prezentaci použitých technologií. Nabízí se však několik možných využítí, kterých by bylo možné dosáhnout jen drobnými úpravami tohoto systému. 
 
-Díky prováděné analýze sentimentu by mohlo jít obecně o~úlohy zabývající se tzv. opinion miningem -- díky analýze sentimentu příspěvků obsahujících dané výrazy či hashtagy by bylo možné například provádět předvolební průzkumy, hodnotit úspěšnost reklamní kampaně či určovat oblíbenost zvolených produktů a značek. 
+Mohlo by jít obecně o~úlohy zabývající se tzv. opinion miningem. Díky analýze sentimentu příspěvků obsahujících dané výrazy či hashtagy by bylo možné například provádět předvolební průzkumy, hodnotit úspěšnost reklamní kampaně či určovat oblíbenost zvolených produktů a značek. 
 
 
 \section{Možná budoucí vylepšení}
-Jedním z~hlavních vylepšení systému by bylo bezesporu jeho nasazení na počítačový cluster. K~tomu je celý systém připravený a díky dostupnému výkonu by stálo za zvážení zažádat o~přístup k~veškerým příspěvkům z~Twitteru pomocí služby Gnip popsané v~sekci \ref{twitter-api}. 
+Jedním z~hlavních vylepšení systému by bylo bezesporu jeho nasazení na počítačový cluster. K~tomu je celý systém připravený. Stálo by pak také za zvážení zažádat o~přístup k~veškerým příspěvkům z~Twitteru pomocí služby Gnip popsané v~sekci \ref{twitter-api}. 
 
 Nabízí se i několik funkčních vylepšení celého systému. Jedním z~nich je zobecnění tohoto systému, díky kterému by jeho využití nebylo omezeno na analýzů přání uživatelů, ale bylo by ho možné využívat například i pro výše zmíněné účely. Filtrované výrazy by byly zadány například do konfiguračního souboru. Až na přejmenování tabulek a proměnných by jiné výraznější zásahy do systému nebyly nutné. 
 
@@ -970,9 +984,9 @@ Zajímavé by bylo také rozšíření systému o~další metody z~oblasti text 
 
 
 \begin{conclusion}
-	Cílem této bakalářské práce byla implementace systému pro analýzu proudu dat v~reálném čase za použití frameworku Apache Spark. Analyzovanými daty pak měly být příspěvky ze sociální sítě Twitter, nad nimi měla být provedena některá z~rozšířených metod pro analýzu textu. Výsledky analýzy měly být ukládány do databáze a zpřístupněny pomocí REST API. 
+	Cílem této bakalářské práce byla implementace systému pro analýzu proudu dat v~reálném čase za použití frameworku Apache Spark. Nad příspěvky ze sociální sítě Twitter měla být provedena některá z~rozšířených metod pro analýzu textu. Výsledky této analýzy měly být posléze ukládány do databáze a zpřístupněny pomocí REST API. 
 	
-	V~rámci kapitoly \ref{data-processing} jsem se zabýval hlavně technologiemi pro zpracování velkých objemů dat. Ve druhé kapitole jsem zmínil některé z~nejpoužívanějších metod pro analýzu textu a zaměřil jsem se především na analýzu sentimentu, která je prováděna v~rámci implementovaného systému. Také jsem v~této kapitole seznámil čtenáře se sociální sítí Twitter a stanovil požadavky pro implementovaný systém. Na jejich základě jsem ve třetí kapitole navrh konkrétní funkcionality systému, včetně struktury databáze nebo požadovaných API endpointů. V~kaptitole \ref{implementace} jsem zvolil konkrétní technologie pro jednotlivé komponenty systému a popsal zajímavé části jejich implementace. Pro samotnou implementaci systému ve frameworku Apache Spark byl použit funkcionální  jazyk Scala, k~ukládání dat posloužila relační databáze MySQL. REST API pak bylo implementováno pomocí jazyka Python, konkrétně pomocí frameworku Flask. Systém byl také náležitě otestován jak popisuji v~kapitole~\ref{testovani}. 
+	V~rámci kapitoly \ref{data-processing} jsem se zabýval hlavně technologiemi pro zpracování velkých objemů dat. Ve druhé kapitole jsem zmínil některé z~nejpoužívanějších metod pro analýzu textu a zaměřil jsem se především na analýzu sentimentu, která je prováděna v~rámci implementovaného systému. Také jsem v~této kapitole seznámil čtenáře se sociální sítí Twitter a stanovil požadavky pro implementovaný systém. Na jejich základě jsem ve třetí kapitole navrhl konkrétní funkcionality systému, včetně struktury databáze nebo požadovaných API \mbox{endpointů}. V~kaptitole \ref{implementace} jsem zvolil konkrétní technologie pro jednotlivé komponenty systému a popsal některé části jejich implementace. Pro samotnou implementaci systému ve frameworku Apache Spark byl použit funkcionální  jazyk Scala, k~ukládání dat posloužila relační databáze MySQL. REST API pak bylo implementováno pomocí jazyka Python, konkrétně pomocí frameworku Flask. Systém byl také náležitě otestován jak popisuji v~kapitole~\ref{testovani}. 
 	
 	Zadání této práce považuji za splněné. Požadovaný systém byl úspěšně naimplementován, konkrétní dosažené výsledky a možnosti využití systému jsou podrobně rozebrány v~kapitole \ref{zhodnoceni}. 
 \end{conclusion}
